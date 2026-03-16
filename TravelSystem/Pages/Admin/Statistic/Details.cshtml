@@ -1,0 +1,61 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Admin.Statistic.DetailsModel
+
+<div class="container my-5">
+    <div class="d-flex align-items-center mb-4 gap-3">
+        <a asp-page="./Index" class="btn btn-outline-secondary">← Quay lại</a>
+        <h2 class="mb-0">Chi tiết đơn đặt</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="border-bottom pb-2">Thông tin đơn đặt</h4>
+                    <p><strong>Mã đơn:</strong> @Model.BookDetail.BookCode</p>
+                    <p><strong>Ngày đặt:</strong> @Model.BookDetail.BookDate?.ToString("dd/MM/yyyy")</p>
+                    <p><strong>Trạng thái:</strong> Đã hoàn thành</p>
+                    <p><strong>Số người lớn:</strong> @Model.BookDetail.NumberAdult</p>
+                    <p><strong>Số trẻ em:</strong> @Model.BookDetail.NumberChildren</p>
+                    <p><strong>Ghi chú:</strong> @Model.BookDetail.Note</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="border-bottom pb-2">Thông tin khách hàng</h4>
+                    <p><strong>Họ tên:</strong> @Model.BookDetail.FirstName @Model.BookDetail.LastName</p>
+                    <p><strong>Email:</strong> @Model.BookDetail.Gmail</p>
+                    <p><strong>Số điện thoại:</strong> @Model.BookDetail.Phone</p>
+                    <p><strong>User hệ thống:</strong> @(Model.UserInfo != null ? Model.UserInfo.FirstName + " " + Model.UserInfo.LastName : "N/A")</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="border-bottom pb-2">Thông tin tour</h4>
+                    <p><strong>Tên tour:</strong> @Model.Tour?.TourName</p>
+                    <p><strong>Điểm đi:</strong> @Model.Tour?.StartPlace</p>
+                    <p><strong>Điểm đến:</strong> @Model.Tour?.EndPlace</p>
+                    <p><strong>Ngày khởi hành:</strong> @Model.Tour?.StartDay?.ToString("dd/MM/yyyy")</p>
+                    <p><strong>Ngày kết thúc:</strong> @Model.Tour?.EndDay?.ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="border-bottom pb-2">Tài chính</h4>
+                    <p><strong>Tổng tiền đơn:</strong> @String.Format("{0:N0} đ", Model.BookDetail.TotalPrice)</p>
+                    <p><strong>Thuế VAT:</strong> @String.Format("{0:N0} đ", Model.TaxAmount)</p>
+                    <p><strong>Doanh thu thực nhận:</strong> @String.Format("{0:N0} đ", Model.FinalRevenue)</p>
+                    <p><strong>Voucher:</strong> @(Model.Voucher != null ? Model.Voucher.VoucherCode : "Không dùng")</p>
+                    <p><strong>Phương thức thanh toán:</strong> @Model.PaymentMethod?.MethodName</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

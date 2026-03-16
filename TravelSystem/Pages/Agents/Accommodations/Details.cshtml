@@ -1,0 +1,117 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Agents.Accommodations.DetailsModel
+
+<div class="container my-5">
+
+    @if (Model.Accommodation != null)
+    {
+        <div class="d-flex align-items-center mb-4 gap-3">
+            <a asp-page="./Index" class="btn btn-outline-secondary">
+                ← Quay lại
+            </a>
+        </div>
+
+        <h1 class="mb-4">@Model.Accommodation.Name</h1>
+
+        <div class="row">
+
+            <!-- LEFT -->
+            <div class="col-md-8">
+
+                @if (!string.IsNullOrEmpty(Model.Accommodation.Image))
+                {
+                    <img style="height:500px; width:100%; object-fit:cover;"
+                         src="~/@Model.Accommodation.Image"
+                         class="img-fluid mb-4 rounded shadow-sm"
+                         alt="@Model.Accommodation.Name" />
+                }
+                else
+                {
+                    <img style="height:500px; width:100%; object-fit:cover;"
+                         src="~/assets/img/placeholder.jpg"
+                         class="img-fluid mb-4 rounded shadow-sm"
+                         alt="Ảnh mặc định" />
+                }
+
+                <div class="mb-4">
+                    <h3 class="border-bottom pb-2">Mô tả khách sạn</h3>
+                    <p style="white-space: pre-line">@Model.Accommodation.Description</p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="border-bottom pb-2">Danh sách phòng</h3>
+
+                    @if (Model.Rooms.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Loại phòng</th>
+                                        <th>Số lượng phòng</th>
+                                        <th>Giá phòng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int stt = 0;
+                                    }
+                                    @foreach (var room in Model.Rooms)
+                                    {
+                                        stt++;
+                                        <tr>
+                                            <td>@stt</td>
+                                            <td>@room.RoomTypes</td>
+                                            <td>@room.NumberOfRooms</td>
+                                            <td>@String.Format("{0:N0} đ", room.PriceOfRoom)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            Khách sạn này hiện chưa có phòng nào.
+                        </div>
+                    }
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <h5 class="card-title">Thông tin khách sạn</h5>
+
+                        <p><strong>Tên khách sạn:</strong> @Model.Accommodation.Name</p>
+                        <p><strong>Địa chỉ:</strong> @Model.Accommodation.Address</p>
+                        <p><strong>Số điện thoại:</strong> @Model.Accommodation.Phone</p>
+                        <p><strong>Check-in:</strong> @(Model.Accommodation.CheckInTime?.ToString(@"HH\:mm"))</p>
+                        <p><strong>Check-out:</strong> @(Model.Accommodation.CheckOutTime?.ToString(@"HH\:mm"))</p>
+                        <p><strong>Dịch vụ:</strong> @Model.Accommodation.Service?.ServiceName</p>
+                        <p><strong>Số loại phòng:</strong> @Model.Rooms.Count</p>
+
+                        <div class="mt-3 d-grid gap-2">
+                            <a asp-page="./Edit" asp-route-id="@Model.Accommodation.AccommodationId"
+                               class="btn btn-success">
+                                Chỉnh sửa khách sạn
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">Không tìm thấy khách sạn!</div>
+    }
+
+</div>
