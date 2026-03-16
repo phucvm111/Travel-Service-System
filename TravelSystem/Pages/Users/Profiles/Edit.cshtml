@@ -1,0 +1,237 @@
+﻿@page
+@model TravelSystem.Pages.Users.Profiles.EditModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<style>
+    body {
+        background-image: url('/images/img_10.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+    }
+
+    .profile-container {
+        max-width: 860px;
+        margin: 80px auto;
+        background: rgba(255,255,255,0.95);
+        padding: 36px 40px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .profile-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #0d6efd;
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    /* ── 2 cột ── */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 24px;
+    }
+
+    /* Field chiếm cả 2 cột (gmail, password) */
+    .col-full {
+        grid-column: 1 / -1;
+    }
+
+    .field-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 18px;
+    }
+
+        .field-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .field-group .form-control {
+            width: 100%;
+        }
+
+    /* Lỗi hiện ngay dưới input */
+    .field-error {
+        color: #dc3545;
+        font-size: 12.5px;
+        margin-top: 4px;
+    }
+
+    /* Password eye */
+    .password-wrap {
+        position: relative;
+    }
+
+        .password-wrap input {
+            padding-right: 42px;
+        }
+
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #666;
+        font-size: 15px;
+    }
+
+        .toggle-password:hover {
+            color: #28a745;
+        }
+
+    /* Buttons */
+    .btn-group-center {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 10px;
+    }
+
+    .btn-save {
+        background: #28a745;
+        color: white;
+        padding: 10px 28px;
+        border-radius: 6px;
+        border: none;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+        .btn-save:hover {
+            background: #218838;
+        }
+
+    .btn-back {
+        background: #dc3545;
+        color: white;
+        padding: 10px 28px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 15px;
+    }
+
+        .btn-back:hover {
+            background: #c82333;
+            color: white;
+        }
+</style>
+
+<div class="profile-container">
+
+    <h2 class="profile-title">Chỉnh sửa thông tin cá nhân</h2>
+
+    <form method="post">
+        <input type="hidden" asp-for="User.UserId" />
+
+        <div class="form-grid">
+
+            @* ── Họ ── *@
+            <div class="field-group">
+                <label>Họ <span style="color:red">*</span></label>
+                <input asp-for="User.LastName" class="form-control" placeholder="Nhập họ" />
+                <span asp-validation-for="User.LastName" class="field-error"></span>
+            </div>
+
+            @* ── Tên ── *@
+            <div class="field-group">
+                <label>Tên <span style="color:red">*</span></label>
+                <input asp-for="User.FirstName" class="form-control" placeholder="Nhập tên" />
+                <span asp-validation-for="User.FirstName" class="field-error"></span>
+            </div>
+
+            @* ── Gmail — full width ── *@
+            <div class="field-group col-full">
+                <label>Gmail</label>
+                <input asp-for="User.Gmail" class="form-control" readonly />
+            </div>
+
+            @* ── Mật khẩu — full width ── *@
+            <div class="field-group col-full">
+                <label>Mật khẩu <span style="color:red">*</span></label>
+                <div class="password-wrap">
+                    <input asp-for="User.Password"
+                           id="password"
+                           type="password"
+                           class="form-control"
+                           value="@Model.User.Password" />
+                    <span class="toggle-password" onclick="togglePassword()">
+                        <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                    </span>
+                </div>
+                <span asp-validation-for="User.Password" class="field-error"></span>
+            </div>
+
+            @* ── Giới tính ── *@
+            <div class="field-group">
+                <label>Giới tính <span style="color:red">*</span></label>
+                <select asp-for="User.Gender" class="form-control">
+                    <option value="">-- Chọn giới tính --</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                </select>
+                <span asp-validation-for="User.Gender" class="field-error"></span>
+            </div>
+
+            @* ── Số điện thoại ── *@
+            <div class="field-group">
+                <label>Số điện thoại <span style="color:red">*</span></label>
+                <input asp-for="User.Phone" class="form-control" placeholder="0xxxxxxxxx" />
+                <span asp-validation-for="User.Phone" class="field-error"></span>
+            </div>
+
+            @* ── Ngày sinh ── *@
+            <div class="field-group">
+                <label>Ngày sinh <span style="color:red">*</span></label>
+                <input asp-for="User.Dob" type="date" class="form-control" />
+                <span asp-validation-for="User.Dob" class="field-error"></span>
+            </div>
+
+            @* ── Địa chỉ ── *@
+            <div class="field-group">
+                <label>Địa chỉ <span style="color:red">*</span></label>
+                <input asp-for="User.Address" class="form-control" placeholder="Nhập địa chỉ" />
+                <span asp-validation-for="User.Address" class="field-error"></span>
+            </div>
+
+        </div>
+
+        <div class="btn-group-center">
+            <input type="submit" value="Lưu" class="btn-save" />
+            <a asp-page="./Details" asp-route-id="@Model.User.UserId" class="btn-back">
+                Quay lại
+            </a>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function togglePassword() {
+            const input = document.getElementById("password");
+            const icon  = document.getElementById("eyeIcon");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+    </script>
+}

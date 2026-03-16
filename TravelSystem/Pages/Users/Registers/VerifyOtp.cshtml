@@ -1,0 +1,133 @@
+﻿@page
+@model TravelSystem.Pages.Users.Registers.VerifyOtpModel
+
+<style>
+    body {
+        background: url('/images/img_7.png') center/cover no-repeat fixed;
+    }
+
+    .wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        max-width: 1000px;
+        height: 500px;
+        margin: 80px auto 120px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .left {
+        padding: 60px 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        .left h2 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .left p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+    .input-wrapper {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            letter-spacing: 4px;
+        }
+
+    .btn-row {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-verify {
+        flex: 1;
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-verify:hover {
+            background: #218838;
+        }
+
+    .btn-back {
+        flex: 1;
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white;
+        }
+
+    .error-msg {
+        color: red;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .right {
+        background: url('/images/img_1.jpeg') center/cover no-repeat;
+    }
+</style>
+
+<div class="wrapper">
+    <div class="left">
+        <h2>Xác minh OTP</h2>
+        <p>Mã OTP đã được gửi đến email của bạn. Mã có hiệu lực trong <b>2 phút</b>.</p>
+        <form method="post">
+            <div class="input-wrapper">
+                <i class="fa-solid fa-key"></i>
+                <input asp-for="InputOtp" placeholder="Nhập mã OTP" maxlength="6" />
+            </div>
+            @if (Model.ErrorMessage != null)
+            {
+                <div class="error-msg">@Model.ErrorMessage</div>
+            }
+            <div class="btn-row mt-3">
+                <a href="/Users/Registers/Register" class="btn-back">← Quay lại</a>
+                <button type="submit" class="btn-verify">Xác minh →</button>
+            </div>
+        </form>
+    </div>
+    <div class="right"></div>
+</div>

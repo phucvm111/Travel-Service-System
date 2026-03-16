@@ -1,0 +1,173 @@
+﻿@page
+@model TravelSystem.Pages.Agents.Tours.IndexModel
+
+<div class="d-flex">
+    <div class="container-fluid p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Quản lý Tour</h2>
+            <a asp-page="./Create" class="btn btn-success">Tạo Tour</a>
+        </div>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <!-- FILTER -->
+        <div style="margin-bottom:20px">
+            <a asp-page="./Index" class="btn btn-secondary @(Model.Status == null ? "active" : "")">Tất cả</a>
+            <a asp-page="./Index" asp-route-status="1" class="btn btn-warning @(Model.Status == 1 ? "active" : "")">Sắp diễn ra</a>
+            <a asp-page="./Index" asp-route-status="2" class="btn btn-success @(Model.Status == 2 ? "active" : "")">Đang diễn ra</a>
+            <a asp-page="./Index" asp-route-status="3" class="btn btn-primary @(Model.Status == 3 ? "active" : "")">Hoàn thành</a>
+        </div>
+
+        <!-- TABLE -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên Tour</th>
+                    <th>Điểm bắt đầu</th>
+                    <th>Điểm đến</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int stt = (Model.PageNumber - 1) * 5;
+                }
+                @foreach (var item in Model.Tour)
+                {
+                    stt++;
+                    bool isBooked = Model.BookedTourIds.Contains(item.TourId);
+                    bool canEditDelete = item.Status == 1 && !isBooked;
+
+                    <tr>
+                        <td>@stt</td>
+                        <td style="max-width:250px">@item.TourName</td>
+                        <td>@item.StartPlace</td>
+                        <td>@item.EndPlace</td>
+                        <td>@item.StartDay?.ToString("dd/MM/yyyy")</td>
+                        <td>@item.EndDay?.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (item.Status == 1)
+                            {
+                                <span class="badge bg-warning text-dark">Sắp diễn ra</span>
+                            }
+                            else if (item.Status == 2)
+                            {
+                                <span class="badge bg-success">Đang diễn ra</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary">Hoàn thành</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-page="./Details" asp-route-id="@item.TourId"
+                               class="btn btn-info btn-sm">Chi tiết</a>
+
+                            @if (canEditDelete)
+                            {
+                                <a asp-page="./Edit" asp-route-id="@item.TourId"
+                                   class="btn btn-success btn-sm">Sửa</a>
+
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="confirmDelete(@item.TourId, '@item.TourName.Replace("'", "\'")')">
+                                    Xóa
+                                </button>
+                            }
+                            else if (item.Status == 1 && isBooked)
+                            {
+                                <span class="badge bg-secondary" title="Tour đã có khách đặt">Đã có booking</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- PAGINATION -->
+        <nav>
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        <a class="page-link"
+                           asp-page="./Index"
+                           asp-route-pageNumber="@i"
+                           asp-route-status="@Model.Status">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@* Form xóa ẩn — submit bằng SweetAlert2 *@
+<form id="deleteForm" method="post" style="display:none">
+    <input type="hidden" name="id" id="deleteTourId" />
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
+    <script>
+
+        // ── Popup xóa tour ──
+        function confirmDelete(id, name) {
+            Swal.fire({
+                title: `Bạn có chắc chắn muốn xóa tour "${name}"?`,
+                text: 'Tour sẽ bị xóa vĩnh viễn và không thể khôi phục!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteTourId').value = id;
+                    document.getElementById('deleteForm').action = '?handler=Delete&id=' + id;
+                    document.getElementById('deleteForm').submit();
+                }
+            });
+        }
+
+        @if (TempData["CreateSuccess"] != null)
+        {
+            <text>
+            Swal.fire({
+                title: 'Tạo tour thành công!',
+                text: 'Tour mới đã được thêm vào danh sách.',
+                icon: 'success',
+                confirmButtonColor: '#28a745',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false
+            });
+            </text>
+        }
+
+        // ── Popup cập nhật tour thành công ──
+        @if (TempData["EditSuccess"] != null)
+        {
+            <text>
+            Swal.fire({
+                title: 'Cập nhật tour thành công!',
+                text: 'Thông tin tour đã được lưu lại.',
+                icon: 'success',
+                confirmButtonColor: '#28a745',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false
+            });
+            </text>
+        }
+
+    </script>
+}

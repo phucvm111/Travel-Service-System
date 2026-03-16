@@ -1,0 +1,98 @@
+﻿@page
+@model TravelSystem.Pages.Users.Registers.RegisterModel
+<style>
+    body {
+        background: url('/images/img_7.png') center/cover no-repeat fixed;
+    }
+
+    .wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        max-width: 1000px;
+        height: 500px;
+        margin: auto;
+        margin-top: 80px;
+        background: white;
+        border-radius: 16px;
+        margin-bottom: 120px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .left {
+        padding: 60px 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        .left h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+        }
+
+    .input-wrapper {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+    .btn-register {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+    }
+
+        .btn-register:hover {
+            background: #218838;
+        }
+
+    .login {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .right {
+        background: url('/images/img_1.jpeg') center/cover no-repeat;
+    }
+</style>
+
+<div class="wrapper">
+    <div class="left">
+        <h2>Du lịch Việt Nam</h2>
+        <form method="post">
+            <div class="input-wrapper">
+                <i class="fa-regular fa-envelope"></i>
+                <input asp-for="Gmail" placeholder="Nhập gmail của bạn" />
+            </div>
+            <button class="btn-register">Đăng ký ngay →</button>
+        </form>
+        @if (Model.ErrorMessage != null)
+        {
+            <div style="color:red; margin-top:10px;">@Model.ErrorMessage</div>
+        }
+        <div class="login">
+            Đã có tài khoản? <a href="/Auths/Login">Đăng nhập</a>
+        </div>
+    </div>
+    <div class="right"></div>
+</div>
