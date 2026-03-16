@@ -1,0 +1,238 @@
+﻿@page
+@model TravelSystem.Pages.Agents.AgentProfiles.ProfileModel
+
+<style>
+    body {
+        background: #f4f6f9;
+    }
+
+    .profile-box {
+        max-width: 1100px;
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+
+    .card-section {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        padding: 30px;
+        margin-bottom: 24px;
+    }
+
+    .section-title {
+        color: #28a745;
+        font-size: 1.4rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .info-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .info-item {
+        flex: 1;
+        min-width: 200px;
+    }
+
+        .info-item label {
+            font-weight: 600;
+            margin-bottom: 2px;
+            display: block;
+            color: #555;
+            font-size: 0.85rem;
+        }
+
+        .info-item .val {
+            font-size: 1rem;
+            color: #222;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+    .img-row {
+        display: flex;
+        gap: 20px;
+        align-items: stretch;
+    }
+
+    .img-card {
+        flex: 1;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #dee2e6;
+        padding: 16px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .img-card h6 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .img-card img {
+            flex: 1;
+            width: 100%;
+            object-fit: contain;
+            border-radius: 6px;
+            min-height: 160px;
+            max-height: 220px;
+        }
+
+        .img-card .no-img {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            min-height: 160px;
+        }
+
+    .two-col {
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 24px;
+        align-items: start;
+    }
+</style>
+
+<div class="profile-box">
+
+    <div class="two-col">
+        <div class="card-section">
+            <div class="section-title">Thông tin đại lý du lịch</div>
+            <div class="info-row">
+                <div class="info-item">
+                    <label>Tên công ty</label>
+                    <div class="val">@(Model.Agent?.TravelAgentName ?? "—")</div>
+                </div>
+                <div class="info-item">
+                    <label>Email</label>
+                    <div class="val">@(Model.Agent?.TravelAgentGmail ?? "—")</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-item">
+                    <label>Số HotLine</label>
+                    <div class="val">@(Model.Agent?.HotLine ?? "—")</div>
+                </div>
+                <div class="info-item">
+                    <label>Địa chỉ</label>
+                    <div class="val">@(Model.Agent?.TravelAgentAddress ?? "—")</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-item">
+                    <label>Ngày thành lập</label>
+                    <div class="val">@(Model.Agent?.EstablishmentDate?.ToString("dd/MM/yyyy") ?? "—")</div>
+                </div>
+                <div class="info-item">
+                    <label>Mã số thuế</label>
+                    <div class="val">@(Model.Agent?.TaxCode ?? "—")</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-section" style="padding:20px">
+            <div class="img-card">
+                <h6>Giấy phép kinh doanh:</h6>
+                @if (!string.IsNullOrEmpty(Model.Agent?.BusinessLicense))
+                {
+                    <img src="/@Model.Agent.BusinessLicense" />
+                }
+                else
+                {
+
+                    <div class="no-img">Chưa có ảnh</div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <div class="card-section">
+            <div class="section-title">Người đại diện</div>
+            <div class="info-row">
+                <div class="info-item"><label>Họ</label><div class="val">@(Model.CurrentUser?.LastName ?? "—")</div></div>
+                <div class="info-item"><label>Tên</label><div class="val">@(Model.CurrentUser?.FirstName ?? "—")</div></div>
+            </div>
+            <div class="info-row">
+                <div class="info-item"><label>Số điện thoại</label><div class="val">@(Model.CurrentUser?.Phone ?? "—")</div></div>
+                <div class="info-item"><label>Ngày sinh</label><div class="val">@(Model.CurrentUser?.Dob?.ToString("dd/MM/yyyy") ?? "—")</div></div>
+            </div>
+            <div class="info-row">
+                <div class="info-item"><label>Địa chỉ</label><div class="val">@(Model.CurrentUser?.Address ?? "—")</div></div>
+                <div class="info-item"><label>Giới tính</label><div class="val">@(Model.CurrentUser?.Gender)</div></div>
+            </div>
+            <hr />
+            <div class="info-row">
+                <div class="info-item"><label>Số căn cước công dân</label><div class="val">@(Model.Agent?.RepresentativeIdcard ?? "—")</div></div>
+                <div class="info-item"><label>Ngày cấp CCCD</label><div class="val">@(Model.Agent?.DateOfIssue?.ToString("dd/MM/yyyy") ?? "—")</div></div>
+            </div>
+        </div>
+        <div class="card-section" style="padding:20px">
+            <div class="img-row">
+                <div class="img-card">
+                    <h6>CCCD mặt trước:</h6>
+                    @if (!string.IsNullOrEmpty(Model.Agent?.FrontIdcard))
+                    {
+                        <img src="/@Model.Agent.FrontIdcard" />
+                    }
+                    else
+                    {
+
+                        <div class="no-img">Chưa có ảnh</div>
+                    }
+                </div>
+                <div class="img-card">
+                    <h6>CCCD mặt sau:</h6>
+                    @if (!string.IsNullOrEmpty(Model.Agent?.BackIdcard))
+                    {
+                        <img src="/@Model.Agent.BackIdcard" />
+                    }
+                    else
+                    {
+
+                        <div class="no-img">Chưa có ảnh</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mb-4">
+        <a asp-page="./EditProfile" class="btn btn-success px-5 py-2 fs-6 fw-bold">
+            &#9998; Cập nhật thông tin
+        </a>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
+    <script>
+        @if (TempData["EditProfileSuccess"] != null)
+        {
+                <text>sessionStorage.setItem('editProfileSuccess', '@Html.Raw(TempData["EditProfileSuccess"])');</text>
+        }
+
+        const msg = sessionStorage.getItem('editProfileSuccess');
+        if (msg) {
+            sessionStorage.removeItem('editProfileSuccess');
+            Swal.fire({
+                title: 'Thành công!',
+                text: msg,
+                icon: 'success',
+                confirmButtonColor: '#28a745',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false
+            });
+        }
+    </script>
+}

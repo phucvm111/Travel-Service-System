@@ -1,0 +1,118 @@
+﻿@page
+@model TravelSystem.Pages.Users.Profiles.DetailsModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<style>
+
+    body {
+        background-image: url('/images/img_10.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+    }
+
+    .profile-container {
+        max-width: 800px;
+        margin: 100px auto;
+        background: rgba(255,255,255,0.95);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .profile-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #0d6efd;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-info {
+        margin-bottom: 12px;
+    }
+
+        .profile-info label {
+            font-weight: 600;
+            width: 150px;
+            display: inline-block;
+        }
+
+    .btn-edit {
+        background: #28a745;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .btn-back {
+        background: #dc3545;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .btn-group-center {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+</style>
+
+<div class="profile-container">
+
+    <h2 class="profile-title">Thông tin cá nhân</h2>
+
+    <div class="profile-info">
+        <label>Họ:</label> @Model.User.LastName
+    </div>
+
+    <div class="profile-info">
+        <label>Tên:</label> @Model.User.FirstName
+    </div>
+
+    <div class="profile-info">
+        <label>Email:</label> @Model.User.Gmail
+    </div>
+
+    <div class="profile-info">
+        <label>Mật khẩu:</label> ********
+    </div>
+
+    <div class="profile-info">
+        <label>Giới tính:</label> @Model.User.Gender
+    </div>
+
+    <div class="profile-info">
+        <label>Số điện thoại:</label> @Model.User.Phone
+    </div>
+
+    <div class="profile-info">
+        <label>Ngày sinh:</label> @Model.User.Dob
+    </div>
+
+    <div class="profile-info">
+        <label>Địa chỉ:</label> @Model.User.Address
+    </div>
+
+    <div class="btn-group-center">
+
+        <a asp-page="./Edit" asp-route-id="@Model.User.UserId" class="btn-edit">
+            Chỉnh sửa
+        </a>
+
+        <a asp-page="/Index" class="btn-back">
+            Trang chủ
+        </a>
+
+    </div>
+
+</div>

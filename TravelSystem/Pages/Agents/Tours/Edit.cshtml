@@ -1,0 +1,397 @@
+﻿@page
+@model TravelSystem.Pages.Agents.Tours.EditModel
+
+<style>
+    body {
+        background: #f4f6f9;
+    }
+
+    .create-box {
+        max-width: 1200px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .col {
+        flex: 1;
+    }
+
+    .preview-box {
+        width: 400px;
+        height: 260px;
+        border: 1px dashed #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: #fafafa;
+    }
+
+    #preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .service-box {
+        height: 120px;
+    }
+
+    .required {
+        color: red;
+        font-weight: bold;
+    }
+
+    .btn-clear-service {
+        margin-top: 6px;
+        font-size: 14px;
+        padding: 6px 16px;
+        background: #FFC107;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        color: #000;
+        font-weight: 500;
+    }
+
+        .btn-clear-service:hover {
+            background: #e0a800;
+        }
+</style>
+
+<div class="create-box">
+    <h2>Chỉnh Sửa Tour</h2>
+    <div class="d-flex align-items-center mb-4 gap-3">
+        <a asp-page="./Index" class="btn btn-outline-secondary">
+            ← Quay lại
+        </a>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Tour.TourId" />
+        <input type="hidden" asp-for="ExistingImage" id="existingImageInput" />
+
+        <div class="row">
+            <!-- Ảnh -->
+            <div class="col" style="max-width:420px">
+                <div class="preview-box">
+                    @if (!string.IsNullOrEmpty(Model.ExistingImage))
+                    {
+                        <img id="preview" src="/@Model.ExistingImage" style="display:block" />
+                    }
+                    else
+                    {
+                        <img id="preview" src="#" style="display:none" />
+                    }
+                </div>
+                <br>
+                <input type="file" asp-for="ImageFile" class="form-control" id="imageFileInput" onchange="uploadTempImage(event)" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <!-- Thông tin chính -->
+            <div class="col">
+                <div class="form-group">
+                    <label>Tên tour <span class="required">*</span></label>
+                    <input asp-for="Tour.TourName" class="form-control" />
+                    <span asp-validation-for="Tour.TourName" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Điểm bắt đầu <span class="required">*</span></label>
+                        <select asp-for="Tour.StartPlace" class="form-control" id="startProvince"
+                                data-current="@Model.Tour?.StartPlace">
+                            <option value="">Chọn tỉnh</option>
+                        </select>
+                        <span asp-validation-for="Tour.StartPlace" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Điểm đến <span class="required">*</span></label>
+                        <select asp-for="Tour.EndPlace" class="form-control" id="endPlaceSelect"
+                                onchange="filterServices()" data-current="@Model.Tour?.EndPlace">
+                            <option value="">Chọn điểm đến</option>
+                            @foreach (var p in Model.EndPlaces)
+                            {
+                                <option value="@p">@p</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Tour.EndPlace" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Ngày bắt đầu <span class="required">*</span></label>
+                        <input asp-for="Tour.StartDay" type="date" class="form-control" id="startDay" />
+                        <span asp-validation-for="Tour.StartDay" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Ngày kết thúc <span class="required">*</span></label>
+                        <input asp-for="Tour.EndDay" type="date" class="form-control" id="endDay" />
+                        <span asp-validation-for="Tour.EndDay" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Giá người lớn <span class="required">*</span></label>
+                        <input type="text" id="adultPriceDisplay" class="form-control" autocomplete="off" placeholder="Nhập giá" />
+                        <input type="hidden" asp-for="AdultPriceRaw" id="adultPriceHidden" />
+                        <span asp-validation-for="AdultPriceRaw" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Giá trẻ em <span class="required">*</span></label>
+                        <input type="text" id="childPriceDisplay" class="form-control" autocomplete="off" placeholder="Nhập giá" />
+                        <input type="hidden" asp-for="ChildrenPriceRaw" id="childPriceHidden" />
+                        <span asp-validation-for="ChildrenPriceRaw" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Số lượng <span class="required">*</span></label>
+                        <input type="text" id="quantityDisplay" class="form-control" autocomplete="off" placeholder="Nhập số lượng" />
+                        <input type="hidden" asp-for="QuantityRaw" id="quantityHidden" />
+                        <span asp-validation-for="QuantityRaw" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>Dịch vụ tour</h4>
+
+        <div class="row">
+            <div class="col">
+                <label>Nhà hàng</label>
+                <input type="hidden" name="SelectedRestaurants" value="" />
+                <select name="SelectedRestaurants" multiple class="form-control service-box" id="restaurantSelect">
+                    @foreach (var r in Model.Restaurants)
+                    {
+                        if (Model.SelectedRestaurants.Contains(r.RestaurantId))
+                        {
+                            <option value="@r.RestaurantId" data-address="@r.Address" selected>@r.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@r.RestaurantId" data-address="@r.Address">@r.Name</option>
+                        }
+                    }
+                </select>
+                <button type="button" class="btn-clear-service" onclick="clearSelect('restaurantSelect')">Xóa lựa chọn</button>
+            </div>
+            <div class="col">
+                <label>Khách sạn</label>
+                <input type="hidden" name="SelectedHotels" value="" />
+                <select name="SelectedHotels" multiple class="form-control service-box" id="hotelSelect">
+                    @foreach (var h in Model.Hotels)
+                    {
+                        if (Model.SelectedHotels.Contains(h.AccommodationId))
+                        {
+                            <option value="@h.AccommodationId" data-address="@h.Address" selected>@h.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@h.AccommodationId" data-address="@h.Address">@h.Name</option>
+                        }
+                    }
+                </select>
+                <button type="button" class="btn-clear-service" onclick="clearSelect('hotelSelect')">Xóa lựa chọn</button>
+            </div>
+            <div class="col">
+                <label>Giải trí</label>
+                <input type="hidden" name="SelectedEntertainments" value="" />
+                <select name="SelectedEntertainments" multiple class="form-control service-box" id="entertainmentSelect">
+                    @foreach (var e in Model.Entertainments)
+                    {
+                        if (Model.SelectedEntertainments.Contains(e.EntertainmentId))
+                        {
+                            <option value="@e.EntertainmentId" data-address="@e.Address" selected>@e.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@e.EntertainmentId" data-address="@e.Address">@e.Name</option>
+                        }
+                    }
+                </select>
+                <button type="button" class="btn-clear-service" onclick="clearSelect('entertainmentSelect')">Xóa lựa chọn</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Giới thiệu <span class="required">*</span></label>
+            <textarea asp-for="Tour.TourIntroduce" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Tour.TourIntroduce" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Lịch trình <span class="required">*</span></label>
+            <textarea asp-for="Tour.TourSchedule" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Tour.TourSchedule" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Bao gồm <span class="required">*</span></label>
+            <textarea asp-for="Tour.TourInclude" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Tour.TourInclude" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Không bao gồm <span class="required">*</span></label>
+            <textarea asp-for="Tour.TourNonInclude" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Tour.TourNonInclude" class="text-danger"></span>
+        </div>
+
+        <br>            
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-success" style="width:200px">Cập Nhật Tour</button>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        // 1. Upload ảnh tạm ngay khi chọn file
+        function uploadTempImage(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function () {
+                var img = document.getElementById("preview");
+                img.src = reader.result;
+                img.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+
+            var formData = new FormData();
+            formData.append("file", file);
+            fetch("?handler=TempUpload", {
+                method: "POST",
+                headers: { "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value },
+                body: formData
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (data && data.path) {
+                    document.getElementById("existingImageInput").value = data.path;
+                }
+            })
+            .catch(function (err) { console.error("Temp upload lỗi:", err); });
+        }
+
+        // 2. Format tiền VND
+        function formatMoney(raw) {
+            if (!raw) return "";
+            return Number(raw).toLocaleString("vi-VN");
+        }
+
+        function setupMoneyInput(displayId, hiddenId) {
+            var display = document.getElementById(displayId);
+            var hidden  = document.getElementById(hiddenId);
+            if (hidden.value) display.value = formatMoney(hidden.value.replace(/\D/g, ""));
+            display.addEventListener("input", function () {
+                var pos = this.selectionStart, oldLen = this.value.length;
+                var raw = this.value.replace(/\D/g, "");
+                if (raw === "") { this.value = ""; hidden.value = ""; return; }
+                this.value = formatMoney(raw); hidden.value = raw;
+                var newPos = pos + (this.value.length - oldLen);
+                this.setSelectionRange(newPos, newPos);
+            });
+        }
+
+        // 3. Số lượng nguyên
+        function setupIntInput(displayId, hiddenId) {
+            var display = document.getElementById(displayId);
+            var hidden  = document.getElementById(hiddenId);
+            if (hidden.value) display.value = hidden.value;
+            display.addEventListener("input", function () {
+                var raw = this.value.replace(/\D/g, "");
+                this.value = raw; hidden.value = raw;
+            });
+        }
+
+        setupMoneyInput("adultPriceDisplay", "adultPriceHidden");
+        setupMoneyInput("childPriceDisplay",  "childPriceHidden");
+        setupIntInput("quantityDisplay",      "quantityHidden");
+
+        // 4. Min date = ngày mai
+        (function () {
+            var d = new Date(); d.setDate(d.getDate() + 1);
+            var min = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+            document.getElementById("startDay").setAttribute("min", min);
+            document.getElementById("endDay").setAttribute("min", min);
+        })();
+
+        document.getElementById("startDay").addEventListener("change", function () {
+            document.getElementById("endDay").setAttribute("min", this.value);
+            if (document.getElementById("endDay").value < this.value)
+                document.getElementById("endDay").value = this.value;
+        });
+
+        // 5. Load tỉnh/thành
+        fetch("https://provinces.open-api.vn/api/p/")
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                var select  = document.getElementById("startProvince");
+                var current = select.getAttribute("data-current") || "";
+                data.forEach(function (p) {
+                    var opt = document.createElement("option");
+                    opt.value = p.name; opt.text = p.name;
+                    if (p.name === current) opt.selected = true;
+                    select.appendChild(opt);
+                });
+            });
+
+        // 6. Filter + restore khi load
+        function filterServices() {
+            var selected = document.getElementById("endPlaceSelect").value;
+            filterSelect("restaurantSelect",   selected);
+            filterSelect("hotelSelect",         selected);
+            filterSelect("entertainmentSelect", selected);
+        }
+
+        function filterSelect(selectId, address) {
+            var select = document.getElementById(selectId);
+            Array.from(select.options).forEach(function (opt) {
+                var optAddr = opt.getAttribute("data-address") || "";
+                if (!address || optAddr === address) {
+                    opt.style.display = "";
+                } else {
+                    opt.style.display = "none";
+                    opt.selected = false;
+                }
+            });
+        }
+
+        // 7. Xóa lựa chọn
+        function clearSelect(selectId) {
+            Array.from(document.getElementById(selectId).options)
+                .forEach(function (opt) { opt.selected = false; });
+        }
+
+        // 8. DOMContentLoaded: restore EndPlace + filter
+        document.addEventListener("DOMContentLoaded", function () {
+            var endSel = document.getElementById("endPlaceSelect");
+            var cur    = endSel.getAttribute("data-current") || "";
+            if (cur) {
+                Array.from(endSel.options).forEach(function (o) {
+                    if (o.value === cur) o.selected = true;
+                });
+            }
+            filterServices();
+        });
+
+    </script>
+}

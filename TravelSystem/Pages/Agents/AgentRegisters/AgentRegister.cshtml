@@ -1,0 +1,517 @@
+﻿@page
+@model TravelSystem.Pages.Agents.AgentRegisters.AgentRegisterModel
+
+<style>
+    body {
+        background: url('/images/img_7.png') center/cover no-repeat fixed;
+    }
+
+    .wrapper {
+        max-width: 900px;
+        margin: 60px auto 80px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        padding: 50px 60px;
+    }
+
+    .section-title {
+        color: #28a745;
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    .user-card {
+        background: #f0f7ff;
+        border: 1px solid #b8d9f5;
+        border-radius: 10px;
+        padding: 14px 20px;
+        margin-bottom: 28px;
+        display: flex;
+        gap: 30px;
+        align-items: center;
+    }
+
+        .user-card i {
+            font-size: 34px;
+            color: #007bff;
+        }
+
+        .user-card .info-item {
+            font-size: 14px;
+            color: #444;
+        }
+
+            .user-card .info-item strong {
+                color: #007bff;
+            }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .required {
+        color: red;
+        margin-left: 2px;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 4px;
+        display: block;
+    }
+
+    hr.section-divider {
+        border-color: #dee2e6;
+        margin: 30px 0 24px;
+    }
+
+    .upload-box {
+        border: 2px dashed #b8d9f5;
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.2s;
+        position: relative;
+        min-height: 110px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .upload-box:hover {
+            border-color: #28a745;
+        }
+
+        .upload-box input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+    .upload-preview {
+        max-height: 130px;
+        max-width: 100%;
+        border-radius: 6px;
+        margin-top: 8px;
+        display: none;
+        cursor: pointer;
+    }
+
+    .upload-icon {
+        font-size: 26px;
+        color: #b8d9f5;
+    }
+
+    .upload-label {
+        color: #888;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .temp-badge {
+        display: inline-block;
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffc107;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 2px 7px;
+        margin-top: 4px;
+    }
+
+    .btn-submit {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 11px 36px;
+        border-radius: 8px;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+        .btn-submit:hover {
+            background: #218838;
+        }
+
+        .btn-submit:disabled {
+            background: #6c9e72;
+            cursor: not-allowed;
+        }
+
+    .btn-back {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 11px 24px;
+        border-radius: 8px;
+        font-size: 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white;
+        }
+
+    .img-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.85);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .img-modal-overlay.show {
+            display: flex;
+        }
+
+        .img-modal-overlay img {
+            max-width: 90vw;
+            max-height: 88vh;
+            border-radius: 6px;
+        }
+
+        .img-modal-overlay .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 24px;
+            font-size: 32px;
+            color: white;
+            cursor: pointer;
+            line-height: 1;
+        }
+</style>
+
+<div class="wrapper">
+    <h2 class="text-center mb-1"><i class="fas fa-handshake me-2 text-success"></i>Đăng ký đại lý du lịch</h2>
+    <p class="text-center text-muted mb-4" style="font-size:14px">Nhập thông tin để hoàn tất đăng ký trở thành đối tác</p>
+
+    @if (Model.GeneralError != null)
+    {
+        <div class="alert alert-danger">@Model.GeneralError</div>
+    }
+
+    <div class="user-card">
+        <i class="fas fa-user-circle"></i>
+        <div>
+            <div class="info-item"><strong>Họ tên:</strong> @Model.UserFullName</div>
+            <div class="info-item"><strong>Gmail:</strong> @Model.UserGmail</div>
+            <div class="info-item"><strong>Điện thoại:</strong> @Model.UserPhone</div>
+        </div>
+    </div>
+
+    <form method="post" id="agentForm" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        @* ══════════════ THÔNG TIN ĐẠI LÝ ══════════════ *@
+        <div class="section-title"><i class="fas fa-building me-1"></i> Thông tin đại lý du lịch</div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-8">
+                <label class="form-label">Tên công ty <span class="required">*</span></label>
+                <input type="text" name="TravelAgentName" value="@Model.TravelAgentName"
+                       class="form-control" placeholder="Nhập tên công ty" />
+                @if (Model.ErrAgentName != null)
+                {
+                    <span class="error-message">@Model.ErrAgentName</span>
+                }
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Email công ty <span class="required">*</span></label>
+                <input type="text" name="TravelAgentGmail" value="@Model.TravelAgentGmail"
+                       class="form-control" placeholder="Nhập email công ty" />
+                @if (Model.ErrAgentGmail != null)
+                {
+                    <span class="error-message">@Model.ErrAgentGmail</span>
+                }
+            </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Số HotLine <span class="required">*</span></label>
+                <input type="text" name="HotLine" value="@Model.HotLine"
+                       class="form-control" placeholder="VD: 0901234567" />
+                @if (Model.ErrHotLine != null)
+                {
+                    <span class="error-message">@Model.ErrHotLine</span>
+                }
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Địa chỉ công ty <span class="required">*</span></label>
+                <input type="text" name="TravelAgentAddress" value="@Model.TravelAgentAddress"
+                       class="form-control" placeholder="Nhập địa chỉ công ty" />
+                @if (Model.ErrAgentAddress != null)
+                {
+                    <span class="error-message">@Model.ErrAgentAddress</span>
+                }
+            </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Ngày thành lập <span class="required">*</span></label>
+                <input type="date" name="EstablishmentDate" value="@Model.EstablishmentDate"
+                       class="form-control" />
+                @if (Model.ErrEstDate != null)
+                {
+                    <span class="error-message">@Model.ErrEstDate</span>
+                }
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Mã số thuế <span class="required">*</span></label>
+                <input type="text" name="TaxCode" value="@Model.TaxCode"
+                       class="form-control" placeholder="10 hoặc 13 chữ số" />
+                @if (Model.ErrTaxCode != null)
+                {
+                    <span class="error-message">@Model.ErrTaxCode</span>
+                }
+            </div>
+        </div>
+
+        @* ══════════════ NGƯỜI ĐẠI DIỆN ══════════════ *@
+        <hr class="section-divider" />
+        <div class="section-title"><i class="fas fa-id-card me-1"></i> Người đại diện</div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Số căn cước công dân <span class="required">*</span></label>
+                <input type="text" name="RepresentativeIdcard" value="@Model.RepresentativeIdcard"
+                       class="form-control" placeholder="Bắt đầu 0, đủ 12 số" />
+                @if (Model.ErrRepIdcard != null)
+                {
+                    <span class="error-message">@Model.ErrRepIdcard</span>
+                }
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Ngày cấp <span class="required">*</span></label>
+                <input type="date" name="DateOfIssue" value="@Model.DateOfIssue"
+                       class="form-control" />
+                @if (Model.ErrDateOfIssue != null)
+                {
+                    <span class="error-message">@Model.ErrDateOfIssue</span>
+                }
+            </div>
+        </div>
+
+        @* ══════════════ TÀI LIỆU XÁC THỰC ══════════════ *@
+        <hr class="section-divider" />
+        <div class="section-title"><i class="fas fa-file-alt me-1"></i> Tài liệu xác thực</div>
+
+        <div class="row g-3 mb-3">
+
+            @* ── Giấy phép kinh doanh ── *@
+            <div class="col-md-4">
+                <label class="form-label">Giấy phép kinh doanh <span class="required">*</span></label>
+                <div class="upload-box">
+                    <input type="file" name="BusinessLicenseFile" accept="image/*"
+                           onchange="previewImg(this,'prevBusiness','lblBusiness','icoBusiness')" />
+                    @if (!string.IsNullOrEmpty(Model.TempBusinessLicensePath))
+                    {
+                        <i id="icoBusiness" class="fas fa-file-alt upload-icon" style="display:none"></i>
+                        <span id="lblBusiness" class="upload-label" style="display:none">Nhấn để chọn ảnh</span>
+                        <img id="prevBusiness" class="upload-preview"
+                             src="@Model.TempBusinessLicensePath"
+                             style="display:block"
+                             onclick="openImgModal(this.src)" />
+                    }
+                    else
+                    {
+                        <i id="icoBusiness" class="fas fa-file-alt upload-icon"></i>
+                        <span id="lblBusiness" class="upload-label">Nhấn để chọn ảnh</span>
+                        <img id="prevBusiness" class="upload-preview" onclick="openImgModal(this.src)" />
+                    }
+                </div>
+                @if (!string.IsNullOrEmpty(Model.TempBusinessLicensePath) && Model.ErrBusinessLicense == null)
+                {
+                    <span class="temp-badge"><i class="fas fa-check-circle me-1"></i>Ảnh đã chọn (giữ nguyên hoặc chọn lại)</span>
+                }
+                @if (Model.ErrBusinessLicense != null)
+                {
+                    <span class="error-message">@Model.ErrBusinessLicense</span>
+                }
+            </div>
+
+            @* ── CCCD mặt trước ── *@
+            <div class="col-md-4">
+                <label class="form-label">CCCD mặt trước <span class="required">*</span></label>
+                <div class="upload-box">
+                    <input type="file" name="FrontIdcardFile" accept="image/*"
+                           onchange="previewImg(this,'prevFront','lblFront','icoFront')" />
+                    @if (!string.IsNullOrEmpty(Model.TempFrontIdcardPath))
+                    {
+                        <i id="icoFront" class="fas fa-id-card upload-icon" style="display:none"></i>
+                        <span id="lblFront" class="upload-label" style="display:none">Nhấn để chọn ảnh</span>
+                        <img id="prevFront" class="upload-preview"
+                             src="@Model.TempFrontIdcardPath"
+                             style="display:block"
+                             onclick="openImgModal(this.src)" />
+                    }
+                    else
+                    {
+                        <i id="icoFront" class="fas fa-id-card upload-icon"></i>
+                        <span id="lblFront" class="upload-label">Nhấn để chọn ảnh</span>
+                        <img id="prevFront" class="upload-preview" onclick="openImgModal(this.src)" />
+                    }
+                </div>
+                @if (!string.IsNullOrEmpty(Model.TempFrontIdcardPath) && Model.ErrFrontIdcard == null)
+                {
+                    <span class="temp-badge"><i class="fas fa-check-circle me-1"></i>Ảnh đã chọn (giữ nguyên hoặc chọn lại)</span>
+                }
+                @if (Model.ErrFrontIdcard != null)
+                {
+                    <span class="error-message">@Model.ErrFrontIdcard</span>
+                }
+            </div>
+
+            @* ── CCCD mặt sau ── *@
+            <div class="col-md-4">
+                <label class="form-label">CCCD mặt sau <span class="required">*</span></label>
+                <div class="upload-box">
+                    <input type="file" name="BackIdcardFile" accept="image/*"
+                           onchange="previewImg(this,'prevBack','lblBack','icoBack')" />
+                    @if (!string.IsNullOrEmpty(Model.TempBackIdcardPath))
+                    {
+                        <i id="icoBack" class="fas fa-id-card upload-icon" style="display:none"></i>
+                        <span id="lblBack" class="upload-label" style="display:none">Nhấn để chọn ảnh</span>
+                        <img id="prevBack" class="upload-preview"
+                             src="@Model.TempBackIdcardPath"
+                             style="display:block"
+                             onclick="openImgModal(this.src)" />
+                    }
+                    else
+                    {
+                        <i id="icoBack" class="fas fa-id-card upload-icon"></i>
+                        <span id="lblBack" class="upload-label">Nhấn để chọn ảnh</span>
+                        <img id="prevBack" class="upload-preview" onclick="openImgModal(this.src)" />
+                    }
+                </div>
+                @if (!string.IsNullOrEmpty(Model.TempBackIdcardPath) && Model.ErrBackIdcard == null)
+                {
+                    <span class="temp-badge"><i class="fas fa-check-circle me-1"></i>Ảnh đã chọn (giữ nguyên hoặc chọn lại)</span>
+                }
+                @if (Model.ErrBackIdcard != null)
+                {
+                    <span class="error-message">@Model.ErrBackIdcard</span>
+                }
+            </div>
+
+        </div>
+
+        @* ══════════════ SUBMIT ══════════════ *@
+        <hr class="section-divider" />
+
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            @if (Model.IsLoggedIn)
+            {
+                <a href="/Index" class="btn-back">
+                    <i class="fas fa-arrow-left me-1"></i> Quay lại
+                </a>
+            }
+            else
+            {
+                <a href="/Users/Registers/RegisterUser" class="btn-back">
+                    <i class="fas fa-arrow-left me-1"></i> Quay lại
+                </a>
+            }
+            <button type="submit" id="btnSave" class="btn-submit">
+                <i class="fas fa-check me-1"></i> Hoàn tất đăng ký
+            </button>
+        </div>
+    </form>
+</div>
+
+@* Modal phóng to ảnh *@
+<div class="img-modal-overlay" id="imgModal" onclick="closeImgModal()">
+    <span class="close-btn">&times;</span>
+    <img id="imgModalSrc" src="" alt="preview" />
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
+    <script>
+        document.getElementById('agentForm').addEventListener('submit', function () {
+            document.getElementById('btnSave').disabled = true;
+        });
+
+        function previewImg(input, previewId, labelId, iconId) {
+            if (!input.files || !input.files[0]) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const prev = document.getElementById(previewId);
+                prev.src = e.target.result;
+                prev.style.display = 'block';
+                document.getElementById(labelId).style.display = 'none';
+                document.getElementById(iconId).style.display = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function openImgModal(src) {
+            document.getElementById('imgModalSrc').src = src;
+            document.getElementById('imgModal').classList.add('show');
+            event.stopPropagation();
+        }
+
+        function closeImgModal() {
+            document.getElementById('imgModal').classList.remove('show');
+        }
+    </script>
+
+    @if (Model.RegisterSuccess)
+    {
+        @if (Model.IsLoggedIn)
+        {
+            <script>
+                Swal.fire({
+                    title: 'Đăng ký thành công!',
+                    text: 'Đăng ký đại lý thành công. Vui lòng đăng nhập lại để cập nhật quyền đại lý.',
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="fas fa-home"></i> Trang chủ',
+                    cancelButtonText: '<i class="fas fa-sign-in-alt"></i> Đăng nhập lại',
+                    allowOutsideClick: false,
+                    width: '700px',
+                    padding: '8em 2em'
+                }).then((result) => {
+                    window.location.href = result.isConfirmed ? '/' : '/Auths/Login';
+                });
+            </script>
+        }
+        else
+        {
+            <script>
+                Swal.fire({
+                    title: 'Đăng ký thành công!',
+                    text: 'Đăng ký đại lý thành công',
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: '<i class="fas fa-home"></i> Trang chủ',
+                    cancelButtonText: '<i class="fas fa-sign-in-alt"></i> Đăng nhập',
+                    allowOutsideClick: false,
+                    width: '700px',
+                    padding: '8em 2em'
+                }).then((result) => {
+                    window.location.href = result.isConfirmed ? '/' : '/Auths/Login';
+                });
+            </script>
+        }
+    }
+}

@@ -1,0 +1,161 @@
+﻿@page
+@model TravelSystem.Pages.Users.Tours.DetailsModel
+
+<div class="container my-5">
+
+@if (Model.Tour != null)
+{
+    @* ── Nút quay lại — giữ đúng trạng thái filter đã search ── *@
+    <div class="mb-4">
+        @{
+            var returnUrl = HttpContext.Request.Query["returnUrl"].ToString();
+        }
+        @if (!string.IsNullOrEmpty(returnUrl))
+        {
+            <a href="@returnUrl" class="btn btn-outline-secondary">
+                ← Quay lại kết quả tìm kiếm
+            </a>
+        }
+        else
+        {
+            <a asp-page="/Users/Tours/Search" class="btn btn-outline-secondary">
+                ← Quay lại tìm kiếm
+            </a>
+        }
+    </div>
+
+    <h1 class="text-center mb-4">@Model.Tour.TourName</h1>    
+
+    <div class="row">
+
+        <!-- LEFT -->
+        <div class="col-md-8">
+
+            <img style="height:500px;width:850px"
+                 src="~/@Model.Tour.Image"
+                 class="img-fluid mb-4" />
+
+            <!-- INTRO -->
+            <div class="mb-4">
+                <h3 class="border-bottom pb-2">Giới Thiệu Tour</h3>
+                <p>@Model.Tour.TourIntroduce</p>
+            </div>
+
+            <!-- SERVICES -->
+            <div class="mb-4">
+                <h3 class="border-bottom pb-2">Dịch Vụ</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Nhà hàng</h5>
+                        <ul>
+                        @foreach (var r in Model.RestaurantList)
+                        {
+                            <li>
+                                <a asp-page="/Restaurants/Details" asp-route-id="@r.ServiceId">@r.Name</a>
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Giải trí</h5>
+                        <ul>
+                        @foreach (var e in Model.EntertainmentList)
+                        {
+                            <li>
+                                <a asp-page="/Entertainments/Details" asp-route-id="@e.ServiceId">@e.Name</a>
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Khách sạn</h5>
+                        <ul>
+                        @foreach (var a in Model.AccommodationList)
+                        {
+                            <li>
+                                <a asp-page="/Accommodations/Details" asp-route-id="@a.ServiceId">@a.Name</a>
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHEDULE -->
+            <div class="mb-4">
+                <h3 class="border-bottom pb-2">Lịch Trình</h3>
+                <p style="white-space: pre-line">@Model.Tour.TourSchedule</p>
+            </div>
+
+            <!-- INCLUDE -->
+            <div class="mb-4">
+                <h3 class="border-bottom pb-2">Bao Gồm</h3>
+                <p style="white-space: pre-line">@Model.Tour.TourInclude</p>
+            </div>
+
+            <!-- NON INCLUDE -->
+            <div class="mb-4">
+                <h3 class="border-bottom pb-2">Không Bao Gồm</h3>
+                <p style="white-space: pre-line">@Model.Tour.TourNonInclude</p>
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Thông Tin Đặt Tour</h5>
+                    <p><strong>Khởi hành:</strong> @Model.Tour.StartDay</p>
+                    <p><strong>Kết thúc:</strong> @Model.Tour.EndDay</p>
+                    <p><strong>Thời gian:</strong> @Model.Tour.NumberOfDay ngày</p>
+                    <p><strong>Khởi hành từ:</strong> @Model.Tour.StartPlace</p>
+                    <p><strong>Điểm đến:</strong> @Model.Tour.EndPlace</p>
+                    <p><strong>Số chỗ còn:</strong> @Model.Tour.Quantity</p>
+                    <p><strong>Giá người lớn:</strong> @String.Format("{0:N0} đ", Model.Tour.AdultPrice)</p>
+                    <p><strong>Giá trẻ em:</strong> @String.Format("{0:N0} đ", Model.Tour.ChildrenPrice)</p>
+                    <p><strong>Đánh giá:</strong> @Model.Tour.Rate</p>
+                    <a class="btn btn-success w-100 mt-3"
+                       asp-page="/Bookings/Create"
+                       asp-route-tourId="@Model.Tour.TourId">
+                        Đặt ngay
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FEEDBACK -->
+    <div class="mt-5">
+        <h3 class="border-bottom pb-2">Đánh giá người dùng</h3>
+        @if (Model.Feedbacks.Count > 0)
+        {
+            @foreach (var fb in Model.Feedbacks)
+            {
+                <div class="card mb-3 p-3 shadow-sm">
+                    <div class="d-flex justify-content-between">
+                        <strong>@fb.User.FirstName</strong>
+                        <span>⭐ @fb.Rate</span>
+                    </div>
+                    <p class="text-muted">@fb.CreateDate</p>
+                    <p>@fb.Content</p>
+                    @if (!string.IsNullOrEmpty(fb.Image))
+                    {
+                        <img src="~/@fb.Image" width="150" />
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">Chưa có đánh giá nào</div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-warning text-center">Không tìm thấy tour!</div>
+}
+
+</div>

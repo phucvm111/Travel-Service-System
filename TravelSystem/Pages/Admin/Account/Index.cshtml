@@ -1,0 +1,278 @@
+﻿@page
+@model TravelSystem.Pages.Admin.Account.IndexModel
+
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    .content {
+        margin: 0 auto;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .action-btn {
+        margin-right: 5px;
+        padding: 4px 8px;
+        font-size: 0.875rem;
+    }
+
+    .filter-section {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .custom-select {
+        padding: 5px;
+        border-radius: 4px;
+        width: 200px;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 8px;
+    }
+
+    .status-active {
+        background-color: #28a745;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: none;
+        cursor: default;
+    }
+
+    .status-inactive {
+        background-color: #dc3545;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: none;
+        cursor: default;
+    }
+
+    .btn-detail {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    .btn-status {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Danh Sách Tài Khoản</h1>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <div>
+                <i class="fas fa-table me-1"></i>
+                Danh Sách Người Dùng
+            </div>
+            <div>
+                <a asp-page="/Admin/Account/Create" class="btn btn-success btn-sm action-btn">
+                    <i class="fas fa-user-plus me-1"></i> Thêm Quản trị viên
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="filter-section">
+                <div>
+                    <label for="roleFilter">Lọc theo Vai Trò:</label>
+                    <select id="roleFilter" class="custom-select">
+                        <option value="">Tất cả</option>
+                        <option value="Quản trị viên">Quản trị viên</option>
+                        <option value="Khách du lịch">Khách du lịch</option>
+                        <option value="Đại lý">Đại lý</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="statusFilter">Lọc theo Trạng Thái:</label>
+                    <select id="statusFilter" class="custom-select">
+                        <option value="">Tất cả</option>
+                        <option value="Hoạt động">Hoạt động</option>
+                        <option value="Dừng hoạt động">Dừng hoạt động</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="userTable" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Email</th>
+                            <th>Họ</th>
+                            <th>Tên</th>
+                            <th>Vai Trò</th>
+                            <th>Trạng Thái</th>
+                            <th>Chi tiết</th>
+                            <th>Đổi trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.UserList)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>@user.Gmail</td>
+                                <td>@user.FirstName</td>
+                                <td>@user.LastName</td>
+                                <td>
+                                    @switch (user.RoleId)
+                                    {
+                                        case 1:
+                                            @:Quản trị viên
+                                            break;
+                                        case 2:
+                                            @:Khách du lịch
+                                            break;
+                                        case 3:
+                                            @:Đại lý
+                                            break;
+                                        default:
+                                            @:Không xác định
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.Status == 1)
+                                    {
+                                        <button class="status-active" disabled>Hoạt động</button>
+                                    }
+                                    else if (user.Status == 0)
+                                    {
+                                        <button class="status-inactive" disabled>Dừng hoạt động</button>
+                                    }
+                                    else
+                                    {
+                                        @:Không xác định
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-page="/Admin/Account/Details" asp-route-id="@user.UserId"
+                                       class="btn btn-detail action-btn">Chi tiết</a>
+                                </td>
+                                <td>
+                                    <form method="post" asp-page-handler="ChangeStatus" style="display:inline">
+                                        <input type="hidden" name="userID" value="@user.UserId" />
+                                        <button type="submit"
+                                                class="btn btn-status action-btn changeStatusBtn"
+                                                @(user.RoleId == 1 ? "disabled" : "")>
+                                            Đổi trạng thái
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
+    <script>
+        $(document).ready(function () {
+            const table = $('#userTable').DataTable({
+                language: {
+                    search: "Tìm kiếm...",
+                    lengthMenu: "Hiển thị mục _MENU_ ",
+                    zeroRecords: "Không tìm thấy dữ liệu",
+                    info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ mục",
+                    infoEmpty: "Hiển thị từ 0 đến 0 của 0 mục",
+                    infoFiltered: "(lọc từ _MAX_ mục)",
+                    paginate: { previous: "Trước", next: "Tiếp" }
+                },
+                pageLength: 10,
+                lengthMenu: [5, 10, 20, 50],
+                responsive: true,
+                drawCallback: function (settings) {
+                    var api = this.api();
+                    var pageInfo = api.page.info();
+                    api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = pageInfo.start + i + 1;
+                    });
+                }
+            });
+
+            $('#roleFilter').on('change', function () {
+                const role = $(this).val().trim();
+                table.column(4).search(role ? '^' + role + '$' : '', true, false).draw();
+            });
+
+            $('#statusFilter').on('change', function () {
+                const status = $(this).val().trim();
+                table.column(5).search(status ? '^' + status + '$' : '', true, false).draw();
+            });
+
+            // SweetAlert confirm đổi trạng thái
+            $(document).on('click', '.changeStatusBtn:not([disabled])', function (e) {
+                e.preventDefault();
+                const form = $(this).closest('form');
+                const email = $(this).closest('tr').find('td:nth-child(2)').text();
+                Swal.fire({
+                    title: `Đổi trạng thái tài khoản?`,
+                    text: `Tài khoản: ${email}`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Thay đổi',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) form.submit();
+                });
+            });
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                    <text>
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: '@Html.Raw(TempData["SuccessMessage"])',
+                        icon: 'success',
+                        confirmButtonColor: '#28a745',
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false
+                    });
+                    </text>
+            }
+        });
+    </script>
+}

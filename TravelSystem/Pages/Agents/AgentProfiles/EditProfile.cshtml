@@ -1,0 +1,282 @@
+﻿@page
+@model TravelSystem.Pages.Agents.AgentProfiles.EditProfileModel
+
+<style>
+    body {
+        background: #f4f6f9;
+    }
+
+    .edit-box {
+        max-width: 1100px;
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+
+    .card-section {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        padding: 30px;
+        margin-bottom: 24px;
+    }
+
+    .section-title {
+        color: #28a745;
+        font-size: 1.4rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .two-col {
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .img-col {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .img-card {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #dee2e6;
+        padding: 16px;
+        text-align: center;
+        flex: 1;
+    }
+
+        .img-card h6 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .img-card img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .img-card .no-img {
+            color: #aaa;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+    .required {
+        color: red;
+    }
+
+    .readonly-field {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 7px 12px;
+        color: #555;
+    }
+</style>
+
+<div class="edit-box">
+    <form method="post" enctype="multipart/form-data">
+
+        <input type="hidden" asp-for="ExistingBusinessLicense" />
+        <input type="hidden" asp-for="ExistingFrontIdcard" />
+        <input type="hidden" asp-for="ExistingBackIdcard" />
+
+        <div class="two-col">
+            <div class="card-section">
+                <div class="section-title">Thông tin đại lý du lịch</div>
+
+                <div class="info-grid">
+                    <div class="form-group">
+                        <label>Tên công ty <span class="required">*</span></label>
+                        <input asp-for="TravelAgentName" class="form-control" />
+                        <span asp-validation-for="TravelAgentName" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Email <span class="required">*</span></label>
+                        <input asp-for="TravelAgentGmail" class="form-control" />
+                        <span asp-validation-for="TravelAgentGmail" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Số HotLine <span class="required">*</span></label>
+                        <input asp-for="HotLine" class="form-control" />
+                        <span asp-validation-for="HotLine" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Mã số thuế <span class="required">*</span></label>
+                        <input asp-for="TaxCode" class="form-control" />
+                        <span asp-validation-for="TaxCode" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group" style="grid-column:1/-1">
+                        <label>Địa chỉ <span class="required">*</span></label>
+                        <input asp-for="TravelAgentAddress" class="form-control" />
+                        <span asp-validation-for="TravelAgentAddress" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày thành lập <span class="required">*</span></label>
+                        <input asp-for="EstablishmentDateRaw" type="date" class="form-control" id="estDate" />
+                        <span asp-validation-for="EstablishmentDateRaw" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Giấy phép kinh doanh <span class="required">*</span></label>
+                        <input type="file" asp-for="BusinessLicenseFile" class="form-control"
+                               accept="image/*" onchange="previewImg(event,'prevLicense')" />
+                        <span asp-validation-for="BusinessLicenseFile" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-section" style="padding:20px">
+                <div class="img-card">
+                    <h6>Giấy phép kinh doanh:</h6>
+                    @if (!string.IsNullOrEmpty(Model.Agent?.BusinessLicense))
+                    {
+                        <img id="prevLicense" src="/@Model.Agent.BusinessLicense" />
+                    }
+                    else
+                    {
+                        <img id="prevLicense" src="#" style="display:none" />
+                        <div class="no-img">Chưa có ảnh</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="card-section">
+                <div class="section-title">Người đại diện</div>
+
+                <div class="info-grid mb-3">
+                    <div class="form-group">
+                        <label>Họ</label>
+                        <div class="readonly-field">@(Model.CurrentUser?.LastName ?? "—")</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tên</label>
+                        <div class="readonly-field">@(Model.CurrentUser?.FirstName ?? "—")</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <div class="readonly-field">@(Model.CurrentUser?.Phone ?? "—")</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày sinh</label>
+                        <div class="readonly-field">@(Model.CurrentUser?.Dob?.ToString("dd/MM/yyyy") ?? "—")</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <div class="readonly-field">@(Model.CurrentUser?.Address ?? "—")</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <div class="readonly-field">@(Model.CurrentUser?.Gender)</div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="info-grid">
+                    <div class="form-group">
+                        <label>Số CCCD <span class="required">*</span></label>
+                        <input asp-for="RepresentativeIdcard" class="form-control" />
+                        <span asp-validation-for="RepresentativeIdcard" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày cấp CCCD <span class="required">*</span></label>
+                        <input asp-for="DateOfIssueRaw" type="date" class="form-control" id="issueDate" />
+                        <span asp-validation-for="DateOfIssueRaw" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>CCCD mặt trước <span class="required">*</span></label>
+                        <input type="file" asp-for="FrontIdcardFile" class="form-control"
+                               accept="image/*" onchange="previewImg(event,'prevFront')" />
+                        <span asp-validation-for="FrontIdcardFile" class="text-danger small"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>CCCD mặt sau <span class="required">*</span></label>
+                        <input type="file" asp-for="BackIdcardFile" class="form-control"
+                               accept="image/*" onchange="previewImg(event,'prevBack')" />
+                        <span asp-validation-for="BackIdcardFile" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="img-col">
+                <div class="img-card">
+                    <h6>CCCD mặt trước:</h6>
+                    @if (!string.IsNullOrEmpty(Model.Agent?.FrontIdcard))
+                    {
+                        <img id="prevFront" src="/@Model.Agent.FrontIdcard" />
+                    }
+                    else
+                    {
+                        <img id="prevFront" src="#" style="display:none" />
+                        <div class="no-img">Chưa có ảnh</div>
+                    }
+                </div>
+                <div class="img-card">
+                    <h6>CCCD mặt sau:</h6>
+                    @if (!string.IsNullOrEmpty(Model.Agent?.BackIdcard))
+                    {
+                        <img id="prevBack" src="/@Model.Agent.BackIdcard" />
+                    }
+                    else
+                    {
+                        <img id="prevBack" src="#" style="display:none" />
+                        <div class="no-img">Chưa có ảnh</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mb-4">
+            <a asp-page="./Profile" class="btn btn-outline-secondary px-4">&#8592; Quay lại</a>
+            <button type="submit" class="btn btn-success px-5 fw-bold">Lưu thay đổi</button>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <script>
+        function previewImg(event, imgId) {
+            var file = event.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function () {
+                var img = document.getElementById(imgId);
+                img.src = reader.result;
+                img.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        }
+
+        (function () {
+            var today = new Date().toISOString().split("T")[0];
+            document.getElementById("estDate").setAttribute("max", today);
+            document.getElementById("issueDate").setAttribute("max", today);
+        })();
+    </script>
+}
