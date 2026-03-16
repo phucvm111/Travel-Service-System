@@ -1,0 +1,172 @@
+﻿@page
+@model TravelSystem.Pages.Agents.Accommodations.IndexModel
+
+<div class="container-fluid p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Quản lý khách sạn</h2>
+        <a asp-page="./Create" class="btn btn-success">Thêm khách sạn</a>
+    </div>
+
+    <form method="get" class="row g-2 mb-3">
+        <div class="col-md-4">
+            <input asp-for="SearchName" class="form-control" placeholder="Tìm theo tên khách sạn..." />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <a asp-page="./Index" class="btn btn-secondary">Xóa lọc</a>
+        </div>
+    </form>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên khách sạn</th>
+                <th>Địa chỉ</th>
+                <th>Số điện thoại</th>
+                <th>Giờ check-in</th>
+                <th>Giờ check-out</th>
+                <th>Dịch vụ</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int stt = (Model.PageNumber - 1) * 8;
+            }
+
+            @if (Model.Accommodations.Any())
+            {
+                @foreach (var item in Model.Accommodations)
+                {
+                    stt++;
+                    bool hasRoom = Model.AccommodationHasRooms.Contains(item.AccommodationId);
+
+                    <tr>
+                        <td>@stt</td>
+                        <td style="max-width:250px">@item.Name</td>
+                        <td>@item.Address</td>
+                        <td>@item.Phone</td>
+                        <td>@(item.CheckInTime?.ToString(@"HH\:mm"))</td>
+                        <td>@(item.CheckOutTime?.ToString(@"HH\:mm"))</td>
+                        <td>@item.Service?.ServiceName</td>
+                        <td>
+                            <a asp-page="./Details" asp-route-id="@item.AccommodationId"
+                               class="btn btn-info btn-sm">Chi tiết</a>
+
+                            <a asp-page="./Edit" asp-route-id="@item.AccommodationId"
+                               class="btn btn-success btn-sm">Sửa</a>
+
+                            @if (!hasRoom)
+                            {
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="confirmDelete(@item.AccommodationId, '@item.Name?.Replace("'", "\\'")')">
+                                    Xóa
+                                </button>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary" title="Khách sạn đã có phòng">Đã có phòng</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center">Không tìm thấy khách sạn nào.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                       asp-page="./Index"
+                       asp-route-pageNumber="@i"
+                       asp-route-searchName="@Model.SearchName">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<form id="deleteForm" method="post" style="display:none">
+    <input type="hidden" name="id" id="deleteAccommodationId" />
+    <input type="hidden" name="pageNumber" value="@Model.PageNumber" />
+    <input type="hidden" name="searchName" value="@Model.SearchName" />
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(id, name) {
+            Swal.fire({
+                title: `Bạn có chắc chắn muốn xóa khách sạn "${name}"?`,
+                text: 'Khách sạn sẽ bị xóa vĩnh viễn và không thể khôi phục!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteAccommodationId').value = id;
+                    document.getElementById('deleteForm').action = '?handler=Delete&id=' + id;
+                    document.getElementById('deleteForm').submit();
+                }
+            });
+        }
+
+        @if (TempData["CreateSuccess"] != null)
+        {
+                <text>
+                Swal.fire({
+                    title: 'Tạo khách sạn thành công!',
+                    text: 'Accommodation mới đã được thêm vào danh sách.',
+                    icon: 'success',
+                    confirmButtonColor: '#28a745',
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false
+                });
+                </text>
+        }
+
+        @if (TempData["EditSuccess"] != null)
+        {
+                <text>
+                Swal.fire({
+                    title: 'Cập nhật khách sạn thành công!',
+                    text: 'Thông tin accommodation đã được lưu lại.',
+                    icon: 'success',
+                    confirmButtonColor: '#28a745',
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false
+                });
+                </text>
+        }
+    </script>
+}

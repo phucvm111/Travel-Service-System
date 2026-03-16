@@ -1,0 +1,238 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Agents.Accommodations.EditModel
+
+<style>
+    body {
+        background: #f4f6f9;
+    }
+
+    .create-box {
+        max-width: 1100px;
+        margin: 40px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        color: #28A745;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .flex-top {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+    .image-column {
+        flex: 0 0 420px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-preview {
+        width: 400px;
+        height: 260px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px dashed #ccc;
+        background: #fafafa;
+    }
+
+    .form-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .row-2col {
+        display: flex;
+        gap: 16px;
+    }
+
+        .row-2col > .col {
+            flex: 1;
+        }
+
+    .field-error {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .required {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+
+<div class="create-box">
+    <h2>Chỉnh sửa khách sạn</h2>
+
+    <div class="d-flex align-items-center mb-4 gap-3">
+        <a asp-page="./Index" class="btn btn-outline-secondary">← Quay lại</a>
+    </div>
+
+    @foreach (var err in ViewData.ModelState[""]?.Errors
+        ?? Enumerable.Empty<Microsoft.AspNetCore.Mvc.ModelBinding.ModelError>())
+    {
+        <div class="alert alert-danger">@err.ErrorMessage</div>
+    }
+
+    <div id="formWrapper">
+        <form method="post" enctype="multipart/form-data" novalidate>
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="Accommodation.AccommodationId" value="@Model.Accommodation.AccommodationId" />
+            <input type="hidden" name="ExistingImage" id="existingImageHidden" value="@Model.ExistingImage" />
+
+            <div class="flex-top">
+
+                <div class="image-column">
+                    @if (!string.IsNullOrEmpty(Model.ExistingImage))
+                    {
+                        <img id="preview" class="image-preview"
+                             src="/@Model.ExistingImage" alt="Ảnh xem trước" />
+                    }
+                    else
+                    {
+                        <img id="preview" class="image-preview"
+                             src="~/assets/img/placeholder.jpg"
+                             onerror="this.style.visibility='hidden'"
+                             alt="Ảnh xem trước" />
+                    }
+
+                    <br />
+                    <input type="file" name="ImageFile" id="imageFileInput"
+                           class="form-control mt-2" accept="image/*"
+                           onchange="onImageChange(event)" />
+
+                    @if (ViewData.ModelState["ImageFile"]?.Errors.Count > 0)
+                    {
+                        <span class="field-error">
+                            @ViewData.ModelState["ImageFile"].Errors[0].ErrorMessage
+                        </span>
+                    }
+                </div>
+
+                <div class="form-column">
+
+                    <div class="form-group">
+                        <label>Tên khách sạn <span class="required">*</span></label>
+                        <input type="text" name="Accommodation.Name" class="form-control"
+                               value="@Model.Accommodation.Name"
+                               placeholder="Nhập tên khách sạn" />
+                        @if (ViewData.ModelState["Accommodation.Name"]?.Errors.Count > 0)
+                        {
+                            <span class="field-error">
+                                @ViewData.ModelState["Accommodation.Name"].Errors[0].ErrorMessage
+                            </span>
+                        }
+                    </div>
+
+                    <div class="row-2col">
+                        <div class="col">
+                            <label>Địa chỉ <span class="required">*</span></label>
+                            <input type="text" name="Accommodation.Address" class="form-control"
+                                   value="@Model.Accommodation.Address"
+                                   placeholder="Nhập địa chỉ khách sạn" />
+                            @if (ViewData.ModelState["Accommodation.Address"]?.Errors.Count > 0)
+                            {
+                                <span class="field-error">
+                                    @ViewData.ModelState["Accommodation.Address"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+
+                        <div class="col">
+                            <label>Số điện thoại <span class="required">*</span></label>
+                            <input type="text" name="Accommodation.Phone" class="form-control"
+                                   value="@Model.Accommodation.Phone"
+                                   placeholder="Nhập số điện thoại" />
+                            @if (ViewData.ModelState["Accommodation.Phone"]?.Errors.Count > 0)
+                            {
+                                <span class="field-error">
+                                    @ViewData.ModelState["Accommodation.Phone"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row-2col">
+                        <div class="col">
+                            <label>Giờ check-in <span class="required">*</span></label>
+                            <input type="time" name="Accommodation.CheckInTime" class="form-control"
+                                   value="@(Model.Accommodation.CheckInTime?.ToString(@"HH\:mm"))" />
+                            @if (ViewData.ModelState["Accommodation.CheckInTime"]?.Errors.Count > 0)
+                            {
+                                <span class="field-error">
+                                    @ViewData.ModelState["Accommodation.CheckInTime"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+
+                        <div class="col">
+                            <label>Giờ check-out <span class="required">*</span></label>
+                            <input type="time" name="Accommodation.CheckOutTime" class="form-control"
+                                   value="@(Model.Accommodation.CheckOutTime?.ToString(@"HH\:mm"))" />
+                            @if (ViewData.ModelState["Accommodation.CheckOutTime"]?.Errors.Count > 0)
+                            {
+                                <span class="field-error">
+                                    @ViewData.ModelState["Accommodation.CheckOutTime"].Errors[0].ErrorMessage
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Mô tả khách sạn <span class="required">*</span></label>
+                <textarea name="Accommodation.Description" class="form-control" rows="5"
+                          placeholder="Nhập mô tả khách sạn...">@Model.Accommodation.Description</textarea>
+                @if (ViewData.ModelState["Accommodation.Description"]?.Errors.Count > 0)
+                {
+                    <span class="field-error">
+                        @ViewData.ModelState["Accommodation.Description"].Errors[0].ErrorMessage
+                    </span>
+                }
+            </div>
+
+            <br />
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-success"
+                        style="width:220px; padding:10px 0">
+                    Cập nhật khách sạn
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function onImageChange(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById("preview");
+                img.src = e.target.result;
+                img.style.visibility = "visible";
+                document.getElementById("existingImageHidden").value = "";
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+}
