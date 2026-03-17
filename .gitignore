@@ -1,0 +1,17 @@
+## Visual Studio Temp Files
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## C# Temp Files
+*.exe
+*.pdb
+*.dll
+
+## OS Files
+Thumbs.db
+desktop.ini
