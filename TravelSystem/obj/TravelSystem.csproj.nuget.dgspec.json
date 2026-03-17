@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\cac-ki-fpt\\Kì 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj": {}
+    "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj": {}
   },
   "projects": {
-    "D:\\cac-ki-fpt\\Kì 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj": {
+    "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\cac-ki-fpt\\Kì 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
+        "projectUniqueName": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
         "projectName": "TravelSystem",
-        "projectPath": "D:\\cac-ki-fpt\\Kì 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\cac-ki-fpt\\Kì 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\obj\\",
+        "projectPath": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
+        "packagesPath": "C:\\Users\\Hung\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -90,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

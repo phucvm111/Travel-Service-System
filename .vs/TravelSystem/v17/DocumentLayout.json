@@ -1,201 +1,65 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\",
+  "WorkspaceRootPath": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\shared\\sidenavadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\sidenavadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\auths\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\auths\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\auths\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\auths\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\vat\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\vat\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\vat\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\vat\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\vat\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\vat\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\vat\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\vat\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\shared\\_layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\_layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\statistic\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\statistic\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\statistic\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\statistic\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\statistic\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\statistic\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\statistic\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\statistic\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\shared\\sidenavagent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\sidenavagent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\users\\tours\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\users\\tours\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\users\\tours\\search.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\users\\tours\\search.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\accommodations\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\accommodations\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\agentprofiles\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\agentprofiles\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\agentprofiles\\editprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\agentprofiles\\editprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\shared\\sidenavagent.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\sidenavagent.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\agentregisters\\agentregister.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\agentregisters\\agentregister.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\account\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\account\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\users\\wallets\\walletamount.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\users\\wallets\\walletamount.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\users\\wallets\\withdrawotp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\users\\wallets\\withdrawotp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\users\\wallets\\withdrawotp.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\users\\wallets\\withdrawotp.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\users\\wallets\\withdrawform.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\users\\wallets\\withdrawform.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\users\\wallets\\withdrawform.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\users\\wallets\\withdrawform.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\users\\wallets\\walletamount.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\users\\wallets\\walletamount.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\payment\\paymentwalletcancel.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\payment\\paymentwalletcancel.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\agentprofiles\\editprofile.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\agents\\tours\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\tours\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|c:\\users\\hung\\onedrive\\desktop\\prn_project\\travel-service-system\\travelsystem\\pages\\agents\\agentprofiles\\editprofile.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\agentprofiles\\editprofile.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -206,612 +70,201 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 10,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Index.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Index.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Index.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Index.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T17:42:20.242Z",
-              "EditorCaption": ""
+              "DocumentIndex": 5,
+              "Title": "WithdrawForm.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WithdrawForm.cshtml",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Users\\Wallets\\WithdrawForm.cshtml",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WithdrawForm.cshtml",
+              "RelativeToolTip": "TravelSystem\\Pages\\Users\\Wallets\\WithdrawForm.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-17T03:40:58.317Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "Error.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Error.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Error.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Error.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Error.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T17:41:13.11Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "_ViewStart.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\_ViewStart.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\_ViewStart.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\_ViewStart.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\_ViewStart.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T17:41:11.802Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Login.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Auths\\Login.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Auths\\Login.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Auths\\Login.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Auths\\Login.cshtml.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAA5wAAAAAAAAAAAAAAAAA==",
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Services\\EmailService.cs",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Services\\EmailService.cs",
+              "RelativeToolTip": "TravelSystem\\Pages\\Services\\EmailService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAowBQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T17:41:06.1Z",
+              "WhenOpened": "2026-03-17T03:29:16.218Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WithdrawOtp.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WithdrawOtp.cshtml.cs",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Users\\Wallets\\WithdrawOtp.cshtml.cs",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WithdrawOtp.cshtml.cs",
+              "RelativeToolTip": "TravelSystem\\Pages\\Users\\Wallets\\WithdrawOtp.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-17T03:26:45.29Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "WithdrawOtp.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WithdrawOtp.cshtml",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Users\\Wallets\\WithdrawOtp.cshtml",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WithdrawOtp.cshtml",
+              "RelativeToolTip": "TravelSystem\\Pages\\Users\\Wallets\\WithdrawOtp.cshtml",
+              "ViewState": "AgIAABwAAAAAAAAAAAAAAGgAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-17T03:25:00.818Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WalletAmount.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WalletAmount.cshtml",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Users\\Wallets\\WalletAmount.cshtml",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WalletAmount.cshtml",
+              "RelativeToolTip": "TravelSystem\\Pages\\Users\\Wallets\\WalletAmount.cshtml",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAFIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-16T15:10:41.601Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "_ViewImports.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\_ViewImports.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\_ViewImports.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\_ViewImports.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\_ViewImports.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T15:37:39.619Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Index.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Index.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Index.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Index.cshtml",
-              "ViewState": "AgIAAIsAAAAAAAAAAAAkwKsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T15:03:06.865Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Index.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Index.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Index.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Index.cshtml",
-              "ViewState": "AgIAAE4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:23:48.87Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SideNavAdmin.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\SideNavAdmin.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\SideNavAdmin.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\SideNavAdmin.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Shared\\SideNavAdmin.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:23:35.882Z",
-              "EditorCaption": ""
+              "Title": "WalletAmount.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WalletAmount.cshtml.cs",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Users\\Wallets\\WalletAmount.cshtml.cs",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WalletAmount.cshtml.cs",
+              "RelativeToolTip": "TravelSystem\\Pages\\Users\\Wallets\\WalletAmount.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T15:11:15.685Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAACcAAAAAAAAAAAAowDgAAABEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:23:39.835Z",
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\appsettings.json",
+              "RelativeDocumentMoniker": "TravelSystem\\appsettings.json",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\appsettings.json",
+              "RelativeToolTip": "TravelSystem\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAIwBEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-16T14:36:43.666Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "Create.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Create.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Create.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Create.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Create.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJ8AAAABAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "WithdrawForm.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WithdrawForm.cshtml.cs",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Users\\Wallets\\WithdrawForm.cshtml.cs",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Wallets\\WithdrawForm.cshtml.cs",
+              "RelativeToolTip": "TravelSystem\\Pages\\Users\\Wallets\\WithdrawForm.cshtml.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwBIAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T15:10:08.239Z"
+              "WhenOpened": "2026-03-17T03:42:28.143Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Statistic\\Index.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\Statistic\\Index.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Statistic\\Index.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\Statistic\\Index.cshtml",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACgAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T16:58:31.303Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Statistic\\Details.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\Statistic\\Details.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Statistic\\Details.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\Statistic\\Details.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T16:58:49.681Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Auths\\Login.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Auths\\Login.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Auths\\Login.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Auths\\Login.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:31:30.233Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\VAT\\Index.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\VAT\\Index.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\VAT\\Index.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\VAT\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAOIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T17:27:55.541Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\VAT\\Index.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\VAT\\Index.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\VAT\\Index.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\VAT\\Index.cshtml.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAqwG8AAAABAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "PaymentWalletCancel.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Payment\\PaymentWalletCancel.cshtml.cs",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Payment\\PaymentWalletCancel.cshtml.cs",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Payment\\PaymentWalletCancel.cshtml.cs",
+              "RelativeToolTip": "TravelSystem\\Pages\\Payment\\PaymentWalletCancel.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T17:31:42.32Z"
+              "WhenOpened": "2026-03-16T17:53:25.332Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml",
-              "ViewState": "AgIAABwAAAAAAAAAAAAkwDEAAABBAAAAAAAAAA==",
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "TravelSystem\\Pages\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAH0AAAAAAAAAAAAAAJEAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T17:32:33.302Z"
+              "WhenOpened": "2026-03-16T14:47:21.417Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "Create.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAkwDgAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T17:32:43.209Z"
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "TravelSystem\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\appsettings.Development.json",
+              "RelativeToolTip": "TravelSystem\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-16T14:36:41.702Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 11,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "TravelSystem\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "TravelSystem\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAEAAAAAAAAAAADwvyQAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-03-16T14:30:12.312Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml",
               "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml",
-              "ViewState": "AgIAAFECAAAAAAAAAAAkwHECAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAF0CAAAAAAAAAAAuwHECAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-03-16T12:29:07.899Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Edit.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Edit.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Edit.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Edit.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T15:06:41.353Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "_Layout.cshtml.css",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_Layout.cshtml.css",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\_Layout.cshtml.css",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_Layout.cshtml.css",
-              "RelativeToolTip": "TravelSystem\\Pages\\Shared\\_Layout.cshtml.css",
-              "ViewState": "AgIAABcAAAAAAAAAAAAswDAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2026-03-16T15:26:40.474Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Statistic\\Index.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\Statistic\\Index.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Statistic\\Index.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\Statistic\\Index.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T17:03:56.205Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "Details.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Statistic\\Details.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\Statistic\\Details.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Statistic\\Details.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\Statistic\\Details.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADoAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T17:09:18.466Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Details.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Details.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Details.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Details.cshtml",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAowHQAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T15:07:50.321Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "Delete.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Delete.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Delete.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Delete.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Delete.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T16:28:53.993Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Index.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Index.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Index.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Index.cshtml.cs",
-              "ViewState": "AgIAAHYAAAAAAAAAAAAqwI0AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T15:09:38.277Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "SideNavAgent.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAkwAgAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:55:48.315Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Delete.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Delete.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Delete.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Delete.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T15:08:00.158Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 38,
-              "Title": "Profile.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentProfiles\\Profile.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\AgentProfiles\\Profile.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentProfiles\\Profile.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\AgentProfiles\\Profile.cshtml",
-              "ViewState": "AgIAANgAAAAAAAAAAAAcwOsAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:51:44.666Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "Details.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Details.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Details.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Details.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Details.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T16:29:05.812Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Tours\\Details.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Users\\Tours\\Details.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Tours\\Details.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Users\\Tours\\Details.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T16:35:09.759Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "Search.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Tours\\Search.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Users\\Tours\\Search.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Users\\Tours\\Search.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Users\\Tours\\Search.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T16:35:08.897Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "Edit.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Edit.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Edit.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Edit.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Edit.cshtml.cs",
-              "ViewState": "AgIAAKkAAAAAAAAAAAAowMAAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T15:10:41.698Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 36,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Index.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Tours\\Index.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Index.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Tours\\Index.cshtml",
-              "ViewState": "AgIAAGYAAAAAAAAAAAAkwKIAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T12:29:13.479Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Create.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Accommodations\\Create.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Accommodations\\Create.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Accommodations\\Create.cshtml",
-              "ViewState": "AgIAAM0AAAAAAAAAAAAkwO0AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T15:06:29.141Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Program.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Program.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Program.cs",
-              "RelativeToolTip": "TravelSystem\\Program.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAtwCgAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T14:12:35.125Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 39,
-              "Title": "EditProfile.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml",
-              "ViewState": "AgIAAGwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:51:37.395Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 12,
               "Title": "Create.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml.cs",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml.cs",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml.cs",
               "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Tours\\Create.cshtml.cs",
-              "ViewState": "AgIAABEBAAAAAAAAAAAkwC8BAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAB0BAAAAAAAAAAAuwDEBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-16T12:28:56.391Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Edit.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Tours\\Edit.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Edit.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Tours\\Edit.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T15:58:03.14Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "Details.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Details.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Tours\\Details.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Details.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Tours\\Details.cshtml.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAmwEIAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T15:58:03.67Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 35,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Details.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Tours\\Details.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Details.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Tours\\Details.cshtml",
-              "ViewState": "AgIAAHwAAAAAAAAAAAAmwJwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:58:33.095Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 42,
-              "Title": "AgentRegister.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentRegisters\\AgentRegister.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\AgentRegisters\\AgentRegister.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentRegisters\\AgentRegister.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\AgentRegisters\\AgentRegister.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:51:54.323Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 40,
-              "Title": "SideNavAgent.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T15:34:30.763Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 41,
-              "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Index.cshtml.cs",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\Tours\\Index.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\Tours\\Index.cshtml.cs",
-              "RelativeToolTip": "TravelSystem\\Pages\\Agents\\Tours\\Index.cshtml.cs",
-              "ViewState": "AgIAAGcAAAAAAAAAAAAkwIEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T14:59:17.302Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 44,
-              "Title": "Privacy.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Privacy.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Privacy.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Privacy.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Privacy.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:23:51.325Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 45,
-              "Title": "_ValidationScriptsPartial.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:23:38.141Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 43,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Account\\Create.cshtml",
-              "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\Account\\Create.cshtml",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Account\\Create.cshtml",
-              "RelativeToolTip": "TravelSystem\\Pages\\Admin\\Account\\Create.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:31:56.068Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 47,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "TravelSystem\\appsettings.Development.json",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\appsettings.Development.json",
-              "RelativeToolTip": "TravelSystem\\appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-03-16T14:01:07.657Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 46,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\appsettings.json",
-              "RelativeDocumentMoniker": "TravelSystem\\appsettings.json",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\appsettings.json",
-              "RelativeToolTip": "TravelSystem\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-03-16T13:58:36.895Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 14,
               "Title": "EditProfile.cshtml.cs",
-              "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml.cs",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml.cs",
-              "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml.cs",
+              "ToolTip": "C:\\Users\\Hung\\OneDrive\\Desktop\\PRN_Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml.cs",
               "RelativeToolTip": "TravelSystem\\Pages\\Agents\\AgentProfiles\\EditProfile.cshtml.cs",
               "ViewState": "AgIAAC4AAAAAAAAAAAAkwDwAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
