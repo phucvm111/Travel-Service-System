@@ -40,6 +40,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWNjb3VudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/cac-ki-fpt/Kì 7/PRN222/Project/Travel-Service-System/TravelSystem/Pages/Admin/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/cac-ki-fpt/Kì 7/PRN222/Project/Travel-Service-System/TravelSystem/Pages/Admin/Statistic/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cU3RhdGlzdGljXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -86,6 +90,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/cac-ki-fpt/Kì 7/PRN222/Project/Travel-Service-System/TravelSystem/Pages/Agents/AgentRegisters/AgentRegister.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXEFnZW50UmVnaXN0ZXJzXEFnZW50UmVnaXN0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/cac-ki-fpt/Kì 7/PRN222/Project/Travel-Service-System/TravelSystem/Pages/Agents/DashBoard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXERhc2hCb2FyZFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/cac-ki-fpt/Kì 7/PRN222/Project/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Create.cshtml]
