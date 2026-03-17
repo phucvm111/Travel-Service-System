@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\agents\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\agents\\dashboard\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -29,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\auths\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\auths\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|solutionrelative:travelsystem\\pages\\admin\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2D16DC41-3330-4E2F-A320-CE729B57791B}|TravelSystem\\TravelSystem.csproj|d:\\cac-ki-fpt\\k\u00EC 7\\prn222\\project\\travel-service-system\\travelsystem\\pages\\admin\\dashboard\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -222,7 +222,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -238,7 +238,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Index.cshtml.cs",
               "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\DashBoard\\Index.cshtml.cs",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\DashBoard\\Index.cshtml.cs",
@@ -246,8 +246,7 @@
               "RelativeToolTip": "TravelSystem\\Pages\\Agents\\DashBoard\\Index.cshtml.cs",
               "ViewState": "AgIAADsAAAAAAAAAAAAYwFoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-17T09:13:08.267Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-17T09:13:08.267Z"
             },
             {
               "$type": "Document",
@@ -257,27 +256,27 @@
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Agents\\DashBoard\\Index.cshtml",
               "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Agents\\DashBoard\\Index.cshtml",
               "RelativeToolTip": "TravelSystem\\Pages\\Agents\\DashBoard\\Index.cshtml",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAYwFUAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-03-17T09:11:45.051Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\_Layout.cshtml",
               "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "TravelSystem\\Pages\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAJsAAAAAAAAAAAAkwLsAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAKQAAAAAAAAAAAAowLAAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-03-16T14:23:39.835Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "SideNavAgent.cshtml",
               "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml",
@@ -285,25 +284,24 @@
               "RelativeToolTip": "TravelSystem\\Pages\\Shared\\SideNavAgent.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:55:48.315Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-16T14:55:48.315Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 0,
               "Title": "Index.cshtml",
               "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Dashboard\\Index.cshtml",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Admin\\Dashboard\\Index.cshtml",
               "ToolTip": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Admin\\Dashboard\\Index.cshtml",
               "RelativeToolTip": "TravelSystem\\Pages\\Admin\\Dashboard\\Index.cshtml",
-              "ViewState": "AgIAAGMAAAAAAAAAAAAowHkAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAowCAAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-03-17T09:03:45.251Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "SideNavAdmin.cshtml",
               "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Shared\\SideNavAdmin.cshtml",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Shared\\SideNavAdmin.cshtml",
@@ -311,8 +309,7 @@
               "RelativeToolTip": "TravelSystem\\Pages\\Shared\\SideNavAdmin.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:23:35.882Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-16T14:23:35.882Z"
             },
             {
               "$type": "Document",
@@ -324,8 +321,7 @@
               "RelativeToolTip": "TravelSystem\\Pages\\Admin\\VAT\\Create.cshtml",
               "ViewState": "AgIAABwAAAAAAAAAAAAkwDEAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T17:32:33.302Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-16T17:32:33.302Z"
             },
             {
               "$type": "Document",
@@ -365,7 +361,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Login.cshtml.cs",
               "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Auths\\Login.cshtml.cs",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Auths\\Login.cshtml.cs",
@@ -373,8 +369,7 @@
               "RelativeToolTip": "TravelSystem\\Pages\\Auths\\Login.cshtml.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-16T17:41:06.1Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-16T17:41:06.1Z"
             },
             {
               "$type": "Document",
@@ -390,7 +385,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Login.cshtml",
               "DocumentMoniker": "D:\\cac-ki-fpt\\K\u00EC 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\Pages\\Auths\\Login.cshtml",
               "RelativeDocumentMoniker": "TravelSystem\\Pages\\Auths\\Login.cshtml",
@@ -398,8 +393,7 @@
               "RelativeToolTip": "TravelSystem\\Pages\\Auths\\Login.cshtml",
               "ViewState": "AgIAAJ8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-16T14:31:30.233Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-16T14:31:30.233Z"
             },
             {
               "$type": "Document",
@@ -411,8 +405,7 @@
               "RelativeToolTip": "TravelSystem\\Pages\\Admin\\Dashboard\\Index.cshtml.cs",
               "ViewState": "AgIAACEAAAAAAAAAAAAYwEAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-17T09:04:50.344Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-17T09:04:50.344Z"
             },
             {
               "$type": "Document",
