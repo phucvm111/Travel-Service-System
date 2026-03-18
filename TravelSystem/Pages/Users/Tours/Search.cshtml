@@ -144,10 +144,8 @@
                                 </p>
                                 <h4 class="text-danger">@String.Format("{0:N0} đ", tour.AdultPrice)</h4>
 
-                                @* Truyền returnUrl vào Details để nút quay lại hoạt động đúng *@
                                 <a asp-page="/Users/Tours/Details"
                                    asp-route-id="@tour.TourId"
-                                   asp-route-returnUrl="@returnUrl"
                                    class="btn btn-success">
                                     Xem chi tiết
                                 </a>

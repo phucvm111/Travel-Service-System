@@ -5,24 +5,11 @@
 
 @if (Model.Tour != null)
 {
-    @* ── Nút quay lại — giữ đúng trạng thái filter đã search ── *@
-    <div class="mb-4">
-        @{
-            var returnUrl = HttpContext.Request.Query["returnUrl"].ToString();
-        }
-        @if (!string.IsNullOrEmpty(returnUrl))
-        {
-            <a href="@returnUrl" class="btn btn-outline-secondary">
-                ← Quay lại kết quả tìm kiếm
-            </a>
-        }
-        else
-        {
-            <a asp-page="/Users/Tours/Search" class="btn btn-outline-secondary">
-                ← Quay lại tìm kiếm
-            </a>
-        }
-    </div>
+        <div class="mb-4">
+            <button onclick="history.back()" class="btn btn-outline-secondary">
+                ← Quay lại
+            </button>
+        </div>
 
     <h1 class="text-center mb-4">@Model.Tour.TourName</h1>    
 
