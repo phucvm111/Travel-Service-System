@@ -7347,23 +7347,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\admin\\.nuget\\packages\\": {},
+    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\cac-ki-fpt\\Kì 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
+      "projectUniqueName": "D:\\ki7_FPT\\PRN222\\PRN222_FinalProject\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
       "projectName": "TravelSystem",
-      "projectPath": "D:\\cac-ki-fpt\\Kì 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
-      "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-      "outputPath": "D:\\cac-ki-fpt\\Kì 7\\PRN222\\Project\\Travel-Service-System\\TravelSystem\\obj\\",
+      "projectPath": "D:\\ki7_FPT\\PRN222\\PRN222_FinalProject\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
+      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+      "outputPath": "D:\\ki7_FPT\\PRN222\\PRN222_FinalProject\\Travel-Service-System\\TravelSystem\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -7372,6 +7372,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

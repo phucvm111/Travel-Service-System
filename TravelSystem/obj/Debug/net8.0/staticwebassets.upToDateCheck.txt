@@ -20,6 +20,7 @@ wwwroot\images\registerAgent\bl4.jpg
 wwwroot\images\registerAgent\cccdBack.webp
 wwwroot\images\registerAgent\cccdFont.jpg
 wwwroot\images\registerAgent\e9758b7f-15cb-48d5-a92d-6d8effd47b06.png
+wwwroot\images\restaurants\e9187d4a-8ff9-4736-8b58-ec4deec01752_background3.png
 wwwroot\images\tour\15fc0982-7110-4ad9-b064-77eaf477f10d.png
 wwwroot\images\tour\1e9c98f9-99f2-4fab-bd68-9f65ad6ba6d4.png
 wwwroot\images\tour\715751a1-1aa3-4ad9-9fa8-3fd90ada15b0.png
