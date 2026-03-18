@@ -4,6 +4,9 @@ wwwroot\images\11.jpg
 wwwroot\images\12.jpg
 wwwroot\images\14.jpg
 wwwroot\images\accommodation\81033e00-0e4d-427d-8509-0deba0ae4476.jpg
+wwwroot\images\entertainments\345cb2a4-1f11-4629-8465-edf044027534.png
+wwwroot\images\entertainments\6f3f63c5-6349-4b23-a87d-055b9457f30a.png
+wwwroot\images\entertainments\bd579290-c5b0-476e-9a91-b7e64691b02a.png
 wwwroot\images\img_1.jpeg
 wwwroot\images\img_10.jpg
 wwwroot\images\img_2.jpg
