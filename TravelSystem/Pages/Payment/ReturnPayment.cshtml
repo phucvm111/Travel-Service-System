@@ -1,0 +1,68 @@
+﻿@page
+@model TravelSystem.Pages.Users.BookTours.ReturnPaymentModel
+@{
+    ViewData["Title"] = "Thanh toán thành công";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .success-container {
+        max-width: 1140px;
+        margin: 50px auto;
+        padding: 40px;
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: #555;
+    }
+</style>
+
+<div class="success-container">
+    @if (Model.BookDetail != null)
+    {
+        <h3 class="text-center text-success mb-5">
+            <i class="bi bi-check-circle-fill me-2"></i> Bạn đã thanh toán thành công đơn hàng
+        </h3>
+
+        <div class="row mb-4">
+            <div class="col-12 border-bottom pb-3 mb-3">
+                <p class="h5"><strong>Tên chuyến du lịch:</strong> @Model.Tour?.TourName</p>
+                <p class="text-muted small">Mã đơn hàng: #@Model.BookDetail.BookCode</p>
+            </div>
+
+            <div class="col-md-6">
+                <p><span class="info-label">Họ:</span> @Model.BookDetail.FirstName</p>
+                <p><span class="info-label">Ngày bắt đầu:</span> @Model.Tour?.StartDay?.ToString("dd/MM/yyyy")</p>
+                <p><span class="info-label">Số lượng người lớn:</span> @Model.BookDetail.NumberAdult</p>
+                <p><span class="info-label">Gmail:</span> @Model.BookDetail.Gmail</p>
+                <p><span class="info-label">Số điện thoại:</span> @Model.BookDetail.Phone</p>
+                <p class="h5 text-primary mt-3">
+                    <strong>Tổng tiền:</strong> @((Model.BookDetail.TotalPrice ?? 0).ToString("N0")) VNĐ
+                </p>
+            </div>
+
+            <div class="col-md-6">
+                <p><span class="info-label">Tên:</span> @Model.BookDetail.LastName</p>
+                <p><span class="info-label">Ngày kết thúc:</span> @Model.Tour?.EndDay?.ToString("dd/MM/yyyy")</p>
+                <p><span class="info-label">Số lượng trẻ em:</span> @Model.BookDetail.NumberChildren</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a asp-page="/Index" class="btn btn-success px-5 py-2">Quay lại trang chủ</a>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            Không tìm thấy thông tin đơn hàng. Vui lòng liên hệ hỗ trợ.
+        </div>
+    }
+</div>

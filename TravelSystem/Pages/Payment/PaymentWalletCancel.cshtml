@@ -1,0 +1,69 @@
+﻿@page
+@model TravelSystem.Pages.Payment.PaymentWalletCancelModel
+@{
+    ViewData["Title"] = "Thanh toán bị hủy";
+    Layout = "_Layout";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container-box {
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 40px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .title-cancel {
+        font-size: 24px;
+        font-weight: bold;
+        color: #dc3545;
+        margin-bottom: 20px;
+    }
+
+    .btn-home {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 12px 35px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        .btn-home:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+</style>
+
+<div class="container">
+    <div class="container-box">
+        <div class="title-cancel">
+            <i class="bi bi-x-circle-fill me-2"></i>Thanh Toán Đã Bị Hủy
+        </div>
+
+        <p class="lead">Giao dịch của bạn không thành công hoặc đã bị hủy bỏ.</p>
+        <p class="text-muted">Tiền chưa được trừ khỏi tài khoản của bạn (nếu có). Bạn có thể quay về ví để thực hiện lại giao dịch.</p>
+
+        <a asp-page="/Users/Wallets/WalletAmount" class="btn-home">
+            <i class="bi bi-arrow-left me-2"></i>Quay về Ví tiền
+        </a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
