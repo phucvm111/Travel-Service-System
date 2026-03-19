@@ -54,7 +54,7 @@
                         @if (roleId == 1)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-page="/Admin/Statistic/Index">
+                                <a class="nav-link" asp-page="/Admin/Dashboard/Index">">
                                     Bảng điều khiển
                                 </a>
                             </li>
@@ -63,7 +63,7 @@
                         @if (roleId == 3)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-page="/Agents/Tours/Index">
+                                <a class="nav-link" asp-page="/Agents/Dashboard/Index">
                                     Bảng điều khiển
                                 </a>
                             </li>
@@ -157,56 +157,51 @@
     </div>
 
 
-    <!-- FOOTER -->
-    <footer class="bg-dark text-light ">
-        <div class="container-fluid py-5">
+    <footer class="bg-dark text-light">
+    <div class="container py-5">
 
-            <div class="row">
+        <div class="row text-center justify-content-center">
 
-                <div class="col-md-3">
-                    <h5>Hỗ trợ</h5>
-
-                    <ul class="list-unstyled">
-                        <li>Chúng tôi</li>
-                        <li>Liên hệ</li>
-                        <li>FAQ</li>
-                        <li>Điều khoản</li>
-                    </ul>
-                </div>
-
-                <div class="col-md-3">
-                    <h5>Hợp tác</h5>
-
-                    <ul class="list-unstyled">
-                        <li>Đăng ký công ty</li>
-                        <li>Hướng dẫn hệ thống</li>
-                        <li>Chính sách hợp tác</li>
-                    </ul>
-                </div>
-
-                <div class="col-md-3">
-                    <h5>Liên hệ</h5>
-
-                    <p>Thạch Thất, Hà Nội</p>
-                </div>
-
-                <div class="col-md-3">
-                    <h5>Follow</h5>
-
-                    <i class="fab fa-facebook fs-4 me-2"></i>
-                    <i class="fab fa-youtube fs-4"></i>
-                </div>
-
+            <div class="col-md-3 mb-4">
+                <h5>Hỗ trợ</h5>
+                <ul class="list-unstyled">
+                    <li>Chúng tôi</li>
+                    <li>Liên hệ</li>
+                    <li>FAQ</li>
+                    <li>Điều khoản</li>
+                </ul>
             </div>
 
-            <hr class="border-secondary">
+            <div class="col-md-3 mb-4">
+                <h5>Hợp tác</h5>
+                <ul class="list-unstyled">
+                    <li>Đăng ký công ty</li>
+                    <li>Hướng dẫn hệ thống</li>
+                    <li>Chính sách hợp tác</li>
+                </ul>
+            </div>
 
-            <div class="text-center">
-                © 2026 GoViet. All Rights Reserved.
+            <div class="col-md-3 mb-4">
+                <h5>Liên hệ</h5>
+                <p>Thạch Thất, Hà Nội</p>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <h5>Follow</h5>
+                <i class="fab fa-facebook fs-4 me-2"></i>
+                <i class="fab fa-youtube fs-4"></i>
             </div>
 
         </div>
-    </footer>
+
+        <hr class="border-secondary">
+
+        <div class="text-center">
+            © 2026 GoViet. All Rights Reserved.
+        </div>
+
+    </div>
+</footer>
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

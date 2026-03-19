@@ -22,4 +22,5 @@ public partial class Service
     public virtual ICollection<TourServiceDetail> TourServiceDetails { get; set; } = new List<TourServiceDetail>();
 
     public virtual TravelAgent? TravelAgent { get; set; }
+    //public int? UserID { get; internal set; }
 }

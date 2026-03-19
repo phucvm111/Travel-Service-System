@@ -27,5 +27,12 @@ public partial class Entertainment
 
     public double? TicketPrice { get; set; }
 
+    public double? Rate { get; set; }  
+
+    public string? Status { get; set; }
+
+    public string? EntertainmentType { get; set; }
+
+
     public virtual Service? Service { get; set; }
 }
