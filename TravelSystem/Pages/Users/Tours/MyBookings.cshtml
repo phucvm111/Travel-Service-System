@@ -67,10 +67,10 @@
     <div class="row">
         <div class="col-md-3">
             <div class="sidebar">
-                <a asp-page="./MyBookings" asp-route-type="current" class="@(currentType == "current" ? "active" : "")">
+                <a asp-page="./MyBookings" asp-route-type="current" class="active">
                     <i class="bi bi-calendar-event me-2"></i>Chuyến đi sắp tới
                 </a>
-                <a asp-page="./MyBookings" asp-route-type="finished" class="@(currentType == "finished" ? "active" : "")">
+                <a asp-page="./FinishedBookings" asp-route-type="finished" asp-route-type="current">
                     <i class="bi bi-check2-circle me-2"></i>Đã hoàn thành
                 </a>
             </div>
