@@ -1,0 +1,144 @@
+﻿@page
+@model TravelSystem.Pages.Admin.Vouchers.IndexModel
+@{
+    ViewData["Title"] = "Quản lí thẻ khuyến mãi";
+}
+
+<h2 class="mb-4">Quản lí thẻ khuyến mãi</h2>
+
+<a asp-page="/Admin/Vouchers/Create" class="btn btn-success mb-3">
+    Thêm thẻ khuyến mãi
+</a>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label class="form-label">Tìm theo mã thẻ</label>
+        <input asp-for="SearchCode" class="form-control" placeholder="Nhập mã voucher..." />
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Trạng thái</label>
+        <select asp-for="FilterStatus" class="form-select">
+            <option value="">-- Tất cả trạng thái --</option>
+            <option value="1">Hoạt động</option>
+            <option value="0">Không hoạt động</option>
+        </select>
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary me-2">Lọc</button>
+        <a asp-page="/Admin/Vouchers/Index" class="btn btn-secondary">Xóa lọc</a>
+    </div>
+</form>
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>Mã thẻ</th>
+            <th>Tên thẻ</th>
+            <th>% giảm giá</th>
+            <th>Giảm tối đa</th>
+            <th>Giá tối thiểu áp dụng</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th>Số lượng</th>
+            <th>Trạng thái</th>
+            <th style="width: 320px;">Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.VoucherList != null && Model.VoucherList.Any())
+        {
+            foreach (var item in Model.VoucherList)
+            {
+                <tr>
+                    <td>@item.VoucherId</td>
+                    <td>@item.VoucherCode</td>
+                    <td>@item.VoucherName</td>
+                    <td>@item.PercentDiscount</td>
+                    <td>@item.MaxDiscountAmount</td>
+                    <td>@item.MinAmountApply</td>
+                    <td>@item.StartDate</td>
+                    <td>@item.EndDate</td>
+                    <td>@item.Quantity</td>
+                    <td>
+                        @if (item.Status == 1)
+                        {
+                            <span class="badge bg-success">Hoạt động</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Không hoạt động</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a asp-page="/Admin/Vouchers/Details"
+                               asp-route-id="@item.VoucherId"
+                               class="btn btn-sm btn-info text-white">
+                                Chi tiết
+                            </a>
+
+                            <a asp-page="/Admin/Vouchers/Edit"
+                               asp-route-id="@item.VoucherId"
+                               class="btn btn-sm btn-primary">
+                                Sửa
+                            </a>
+
+                            <form method="post"
+                                  asp-page-handler="ToggleStatus"
+                                  style="display:inline;"
+                                  onsubmit="return confirmToggleStatus(@item.Status)">
+                                <input type="hidden" name="id" value="@item.VoucherId" />
+                                <input type="hidden" name="searchCode" value="@Model.SearchCode" />
+                                <input type="hidden" name="filterStatus" value="@Model.FilterStatus" />
+
+                                @if (item.Status == 1)
+                                {
+                                    <button type="submit" class="btn btn-sm btn-warning">
+                                        Vô hiệu hóa
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        Kích hoạt
+                                    </button>
+                                }
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="11" class="text-center text-muted">Không có voucher nào.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function confirmToggleStatus(currentStatus) {
+            if (currentStatus === 1) {
+                return confirm("Bạn có chắc chắn muốn vô hiệu hóa voucher này?");
+            } else {
+                return confirm("Bạn có chắc chắn muốn kích hoạt voucher này?");
+            }
+        }
+    </script>
+}
