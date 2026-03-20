@@ -4,12 +4,9 @@
 <!-- HERO -->
 <div class="container-fluid position-relative p-0">
     <div class="container-fluid py-5 mb-5 hero-header">
-
         <div class="container py-5">
             <div class="row justify-content-center py-5">
-
                 <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
-
                     <h1 class="display-3 text-white mb-3">
                         Tận hưởng chuyến đi với chúng tôi
                     </h1>
@@ -19,9 +16,7 @@
                     </p>
 
                     <div class="position-relative w-75 mx-auto">
-
                         <form method="get" asp-page="/Users/Tours/Search">
-
                             <input class="form-control border-0 rounded-pill w-100 py-3 ps-4 pe-5"
                                    type="text"
                                    name="destination"
@@ -31,40 +26,26 @@
                                     style="margin-top:7px;">
                                 Tìm kiếm
                             </button>
-
                         </form>
-
                     </div>
-
                 </div>
-
             </div>
         </div>
-
     </div>
 </div>
 
-
 <!-- ABOUT -->
-
 <div class="container-xxl py-5">
-
     <div class="container">
-
         <div class="row g-5">
-
             <div class="col-lg-6">
-
                 <img class="img-fluid w-100"
-                     src="images/11.jpg"
+                     src="/images/11.jpg"
                      style="object-fit:cover" />
-
             </div>
 
             <div class="col-lg-6">
-
                 <h6 class="section-title text-primary">Chúng tôi</h6>
-
                 <h1 class="mb-4">
                     Chào mừng <span class="text-primary">GoViet</span>
                 </h1>
@@ -77,134 +58,121 @@
                 <p>
                     Đặt tour nhanh chóng, so sánh dễ dàng, hỗ trợ tận tâm.
                 </p>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 
-
 <!-- TOUR LIST -->
-
 <div class="container-xxl py-5">
-
     <div class="container">
-
         <div class="text-center">
             <h6 class="section-title text-primary">Chuyến đi</h6>
             <h1 class="mb-5">Gợi ý cho bạn</h1>
         </div>
 
         <div class="row">
-
-            @foreach (var tour in Model.TopTour)
+            @if (Model.TopTour != null && Model.TopTour.Any())
             {
-                <div class="col-md-4 mb-4">
+                @foreach (var tour in Model.TopTour)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <img style="height:300px; object-fit:cover"
+                                 src="@(string.IsNullOrWhiteSpace(tour.Image) ? "/images/11.jpg" : tour.Image)"
+                                 class="card-img-top" />
 
-                    <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">@tour.TourName</h5>
 
-                        <img style="height:300px"
-                             src="@(tour.Image)"
-                             class="card-img-top" />
+                                <p class="card-text">
+                                    <i class="fas fa-clock"></i>
+                                    Khởi hành: @(tour.StartDay?.ToString("dd/MM/yyyy"))
+                                    <br />
 
-                        <div class="card-body d-flex flex-column">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    @tour.StartPlace
+                                    <br />
 
-                            <h5 class="card-title">
-                                @tour.TourName
-                            </h5>
+                                    <i class="fas fa-users"></i>
+                                    Số chỗ còn: @tour.Quantity
+                                </p>
 
-                            <p class="card-text">
+                                <div class="d-flex justify-content-between mt-auto align-items-center">
+                                    <span class="price text-danger fw-bold">
+                                        Giá từ: @String.Format("{0:N0} đ", tour.AdultPrice)
+                                    </span>
 
-                                <i class="fas fa-clock"></i>
-                                Khởi hành: @tour.StartDay
-                                <br>
-
-                                <i class="fas fa-map-marker-alt"></i>
-                                @tour.StartPlace
-                                <br>
-
-                                <i class="fas fa-users"></i>
-                                Số chỗ còn: @tour.Quantity
-
-                            </p>
-
-                            <div class="d-flex justify-content-between mt-auto">
-
-                                <span class="price">
-                                    Giá từ: @String.Format("{0:N0} đ", tour.AdultPrice)
-                                </span>
-
-                                <a asp-page="/Users/Tours/Details"
-                                   asp-route-id="@tour.TourId"
-                                   class="btn btn-success">
-                                    Xem chi tiết
-                                </a>
-
+                                    <a asp-page="/Users/Tours/Details"
+                                       asp-route-id="@tour.TourId"
+                                       class="btn btn-success">
+                                        Xem chi tiết
+                                    </a>
+                                </div>
                             </div>
-
                         </div>
-
                     </div>
-
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center text-muted">
+                    Chưa có tour nào.
                 </div>
             }
-
         </div>
-
     </div>
-
 </div>
 
-
 <!-- FEEDBACK -->
-
 <div class="container-xxl py-5">
-
     <div class="container">
-
         <div class="text-center">
-
-            <h6 class="section-title text-primary">
-                Đánh giá
-            </h6>
-
-            <h1 class="mb-5">
-                Đánh giá gần nhất
-            </h1>
-
+            <h6 class="section-title text-primary">Đánh giá</h6>
+            <h1 class="mb-5">Đánh giá gần nhất</h1>
         </div>
 
         <div class="row">
-
-            @foreach (var fb in Model.RecentFeedbacks)
+            @if (Model.RecentFeedbacks != null && Model.RecentFeedbacks.Any())
             {
-                <div class="col-md-4 mb-3">
+                @foreach (var fb in Model.RecentFeedbacks)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="card text-center p-3 h-100 shadow-sm border-0">
+                            <img class="rounded-circle mx-auto mb-3"
+                                 style="width:80px;height:80px;object-fit:cover"
+                                 src="@(string.IsNullOrWhiteSpace(fb.Image) ? "/images/11.jpg" : fb.Image)" />
 
-                    <div class="card text-center p-3">
+                            <h5>@(fb.User != null ? (fb.User.FirstName + " " + fb.User.LastName) : "Người dùng")</h5>
 
-                        <img class="rounded-circle mx-auto"
-                             style="width:80px;height:80px"
-                             src="@(fb.Image)" />
+                            <p class="text-muted" style="min-height:72px;">
+                                @(string.IsNullOrWhiteSpace(fb.Content) ? "Chưa có nội dung phản hồi." : fb.Content)
+                            </p>
 
-                        <h5>@fb.User.FirstName</h5>
-
-                        <p>@fb.Content</p>
-
-                        <p>
-                            <i class="fas fa-star text-warning"></i>
-                            @fb.Rate
-                        </p>
-
+                            <p class="mb-0">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= Convert.ToInt32(fb.Rate ?? 0))
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star text-warning"></i>
+                                    }
+                                }
+                                <span class="ms-2 fw-bold">(@(fb.Rate ?? 0))</span>
+                            </p>
+                        </div>
                     </div>
-
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center text-muted">
+                    Chưa có phản hồi nào.
                 </div>
             }
-
         </div>
-
     </div>
-
 </div>
