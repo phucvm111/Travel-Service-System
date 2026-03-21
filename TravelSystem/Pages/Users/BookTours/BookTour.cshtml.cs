@@ -119,7 +119,8 @@ namespace TravelSystem.Pages.Users.BookTours
                 string mailBody = $"Xác nhận đặt tour {Tour.TourName} thành công. Tổng tiền: {FinalAmount:N0} VNĐ";
                 await _emailService.SendAsync(Email, "GoViet - Xác nhận đặt tour", mailBody, true);
 
-                return RedirectToPage("/Payment/ReturnPayment", new { bookCode });
+                // Trong file BookTour.cshtml.cs đoạn thanh toán ví
+                return RedirectToPage("/Payment/ReturnPayment", new { bookCode = bookCode, method = "wallet" });
             }
             else // Thanh toán PayOS
             {

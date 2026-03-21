@@ -161,12 +161,13 @@
                     </div>
                 }
 
+                @* --- Phần phân trang sửa lại --- *@
                 <nav class="mt-4">
                     <ul class="pagination justify-content-center">
                         @for (int i = 1; i <= Model.TotalPages; i++)
                         {
-                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                <a class="page-link" asp-route-page="@i" asp-route-type="@currentType">@i</a>
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a class="page-link" asp-route-PageNumber="@i">@i</a>
                             </li>
                         }
                     </ul>

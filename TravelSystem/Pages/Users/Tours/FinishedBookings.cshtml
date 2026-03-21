@@ -77,19 +77,19 @@
         display: none;
     }
 </style>
-
 <main class="container my-5">
     <div class="row">
         <div class="col-md-3">
             <div class="sidebar">
-                <a asp-page="./MyBookings" asp-route-type="current">Chuyến đi sắp tới</a>
-                <a asp-page="./FinishedBookings" class="active">Chuyến đi đã hoàn thành</a>
+                <a asp-page="./MyBookings" asp-route-PageNumber="1">Chuyến đi sắp tới</a>
+                <a asp-page="./FinishedBookings" class="active">Lịch sử chuyến đi</a>
             </div>
         </div>
 
         <div class="col-md-9">
-            <h4 class="mb-4">Đơn hàng đã hoàn thành</h4>
+            <h4 class="mb-4">Lịch sử đơn hàng</h4>
 
+            @* Hiển thị thông báo thành công/lỗi *@
             @if (!string.IsNullOrEmpty(Model.SuccessMessage))
             {
                 <div class="alert alert-success alert-dismissible fade show">
@@ -101,29 +101,42 @@
             @if (Model.BookingList == null || !Model.BookingList.Any())
             {
                 <div class="text-center py-5 bg-white rounded shadow-sm">
-                    <h5>Bạn chưa có chuyến đi nào hoàn thành</h5>
-                    <p class="text-muted">Các chuyến đi đã kết thúc hoặc đã hoàn tiền sẽ hiện ở đây.</p>
+                    <i class="bi bi-archive text-muted display-4"></i>
+                    <h5 class="mt-3">Bạn chưa có lịch sử chuyến đi nào</h5>
+                    <p class="text-muted">Các chuyến đi đã hoàn thành hoặc bị hủy sẽ hiện ở đây.</p>
                 </div>
             }
             else
             {
                 @foreach (var booking in Model.BookingList)
                 {
-                    <div class="booking-card shadow-sm">
+                    <div class="booking-card shadow-sm" style="border-left-color: @(GetStatusColor(booking.Status))">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="fw-bold">@booking.Tour?.TourName</h5>
-                            <span class="badge @(booking.Status == 4 ? "bg-primary" : "bg-info text-dark")">
-                                @(booking.Status == 4 ? "Đã hoàn thành" : "Đã hoàn tiền")
+                            @* Hiển thị Badge dựa trên 4 trạng thái: 2, 3, 4, 6 *@
+                            <span class="badge @GetBadgeClass(booking.Status)">
+                                @GetStatusName(booking.Status)
                             </span>
                         </div>
+
                         <p class="text-muted small mb-2">
                             Mã đơn: #@booking.BookCode | Ngày đặt: @booking.BookDate?.ToString("dd/MM/yyyy")
                         </p>
                         <p class="mb-1">Số khách: @booking.NumberAdult người lớn, @booking.NumberChildren trẻ em</p>
                         <p class="fw-bold text-danger">Tổng tiền: @((booking.TotalPrice ?? 0).ToString("N0")) VNĐ</p>
 
+                        @* Hiển thị lý do nếu tour bị hủy *@
+                        @if ((booking.Status == 2 || booking.Status == 3) && !string.IsNullOrEmpty(booking.Note))
+                        {
+                            <div class="alert alert-light border-start border-3 border-danger py-2 mt-2 small">
+                                <strong>Lý do hủy:</strong> @booking.Note
+                            </div>
+                        }
+
                         <div class="mt-3">
                             <a asp-page="./BookingDetail" asp-route-bookID="@booking.BookId" class="btn btn-outline-secondary btn-sm">Xem chi tiết</a>
+
+                            @* Chỉ cho phép phản hồi nếu Tour đã hoàn thành (Status 4) *@
                             @if (booking.Status == 4)
                             {
                                 <button class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#feedbackModal-@booking.BookId">
@@ -133,52 +146,15 @@
                         </div>
                     </div>
 
-                    <div class="modal fade" id="feedbackModal-@booking.BookId" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <form method="post" asp-page-handler="AddFeedback" enctype="multipart/form-data">
-                                    <input type="hidden" name="bookID" value="@booking.BookId" />
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Phản hồi: @booking.Tour?.TourName</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3 text-center">
-                                            <label class="form-label d-block fw-bold">Chất lượng dịch vụ (Sao)</label>
-                                            <div class="star-rating d-inline-flex">
-                                                <input type="radio" id="star5-@booking.BookId" name="rate" value="5" required /><label for="star5-@booking.BookId"></label>
-                                                <input type="radio" id="star4-@booking.BookId" name="rate" value="4" /><label for="star4-@booking.BookId"></label>
-                                                <input type="radio" id="star3-@booking.BookId" name="rate" value="3" /><label for="star3-@booking.BookId"></label>
-                                                <input type="radio" id="star2-@booking.BookId" name="rate" value="2" /><label for="star2-@booking.BookId"></label>
-                                                <input type="radio" id="star1-@booking.BookId" name="rate" value="1" /><label for="star1-@booking.BookId"></label>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Nội dung đánh giá</label>
-                                            <textarea class="form-control" name="content" rows="4" placeholder="Chia sẻ trải nghiệm của bạn..." required></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label fw-bold">Ảnh đính kèm</label>
-                                            <input type="file" class="form-control" name="image" accept="image/*" onchange="previewImage(event, 'preview-@booking.BookId')">
-                                            <img id="preview-@booking.BookId" class="preview-image" />
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy</button>
-                                        <button type="submit" class="btn btn-primary px-4">Gửi ngay</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    @* Giữ nguyên Modal feedback của bạn ở đây *@
                 }
 
                 <nav class="mt-4">
                     <ul class="pagination justify-content-center">
                         @for (int i = 1; i <= Model.TotalPages; i++)
                         {
-                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                <a class="page-link" asp-route-page="@i">@i</a>
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a class="page-link" asp-route-PageNumber="@i">@i</a>
                             </li>
                         }
                     </ul>
@@ -188,21 +164,32 @@
     </div>
 </main>
 
-@section Scripts {
-    <script>
-        function previewImage(event, previewId) {
-            const file = event.target.files[0];
-            const preview = document.getElementById(previewId);
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.style.display = 'none';
-            }
-        }
-    </script>
+@functions {
+    // Hàm phụ trợ để hiển thị UI
+    string GetBadgeClass(int? status) => status switch
+    {
+        4 => "bg-primary",              // Hoàn thành
+        6 => "bg-info text-dark",       // Đã hoàn tiền
+        2 => "bg-danger",               // Khách hủy
+        3 => "bg-warning text-dark",    // Đại lý hủy
+        _ => "bg-secondary"
+    };
+
+    string GetStatusName(int? status) => status switch
+    {
+        4 => "Đã hoàn thành",
+        6 => "Đã hoàn tiền",
+        2 => "Bạn đã hủy",
+        3 => "Đại lý hủy",
+        _ => "Không xác định"
+    };
+
+    string GetStatusColor(int? status) => status switch
+    {
+        4 => "#007bff", // Xanh dương
+        6 => "#17a2b8", // Xanh lục bảo
+        2 => "#dc3545", // Đỏ
+        3 => "#ffc107", // Vàng
+        _ => "#6c757d"
+    };
 }

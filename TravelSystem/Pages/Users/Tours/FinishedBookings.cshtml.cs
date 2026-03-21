@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using TravelSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TravelSystem.Pages.Users.BookTours
 {
@@ -17,30 +17,37 @@ namespace TravelSystem.Pages.Users.BookTours
         }
 
         public List<BookDetail> BookingList { get; set; } = new();
-        public int CurrentPage { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int PageNumber { get; set; } = 1; // Sử dụng BindProperty để giữ trạng thái phân trang
+
         public int TotalPages { get; set; }
 
         [TempData] public string SuccessMessage { get; set; }
         [TempData] public string ErrorMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int page = 1)
+        public async Task<IActionResult> OnGetAsync()
         {
             var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null) return RedirectToPage("/Auths/Login");
 
             const int pageSize = 5;
-            CurrentPage = page;
 
+            // Lọc các tour kết thúc: 4: Hoàn thành, 6: Đã hoàn tiền, 2: Khách hủy, 3: Đại lý hủy
             var query = _context.BookDetails
                 .Include(b => b.Tour)
-                .Where(b => b.UserId == userId && (b.Status == 4 || b.Status == 6)); // 4: Hoàn thành, 6: Đã hoàn tiền
+                .Where(b => b.UserId == userId && (b.Status == 4 || b.Status == 6 || b.Status == 2 || b.Status == 3))
+                .AsQueryable();
 
             int totalItems = await query.CountAsync();
             TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
+            if (PageNumber < 1) PageNumber = 1;
+            if (TotalPages > 0 && PageNumber > TotalPages) PageNumber = TotalPages;
+
             BookingList = await query
                 .OrderByDescending(b => b.BookDate)
-                .Skip((CurrentPage - 1) * pageSize)
+                .Skip((PageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -84,7 +91,7 @@ namespace TravelSystem.Pages.Users.BookTours
 
                 SuccessMessage = "Gửi phản hồi thành công!";
             }
-            catch (Exception)
+            catch
             {
                 ErrorMessage = "Có lỗi xảy ra khi gửi phản hồi.";
             }

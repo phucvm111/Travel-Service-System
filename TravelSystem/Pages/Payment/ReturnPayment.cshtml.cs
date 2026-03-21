@@ -16,22 +16,51 @@ namespace TravelSystem.Pages.Users.BookTours
 
         public BookDetail BookDetail { get; set; }
         public Tour Tour { get; set; }
+        public string DisplayMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(long bookCode)
+        // Nhận tham số: bookCode (từ cả 2), status (từ PayOS), method (từ Wallet)
+        public async Task<IActionResult> OnGetAsync(long bookCode, string status, string method)
         {
-            // Tìm thông tin đặt tour dựa trên mã bookCode truyền từ URL về
+            // 1. Tìm thông tin đặt tour kèm theo Tour data
             BookDetail = await _context.BookDetails
+                .Include(b => b.Tour)
                 .FirstOrDefaultAsync(b => b.BookCode == bookCode);
 
-            if (BookDetail != null)
+            if (BookDetail == null)
             {
-                // Sau khi thanh toán PayOS thành công, cập nhật trạng thái đơn hàng (ví dụ: status 2 là đã thanh toán)
-                BookDetail.Status = 2;
+                return RedirectToPage("/Index");
+            }
 
-                Tour = await _context.Tours
-                    .FirstOrDefaultAsync(t => t.TourId == BookDetail.TourId);
+            Tour = BookDetail.Tour;
 
+            // 2. Kiểm tra nguồn thanh toán
+            if (method == "wallet")
+            {
+                // Thanh toán ví đã xử lý trừ tiền ở trang trước, ở đây chỉ hiển thị
+                DisplayMessage = "Bạn đã thanh toán thành công bằng ví GoViet";
+                // Đảm bảo status là 1 (Đã thanh toán)
+                if (BookDetail.Status != 1)
+                {
+                    BookDetail.Status = 1;
+                    await _context.SaveChangesAsync();
+                }
+            }
+            else if (status == "PAID" || status == "NOPAY")
+            {
+                // Thanh toán PayOS thành công
+                DisplayMessage = "Bạn đã thanh toán thành công đơn hàng qua PayOS";
+                BookDetail.Status = 1; // Gán về 1 (Đã thanh toán) thay vì 2
                 await _context.SaveChangesAsync();
+            }
+            else if (status == "CANCELLED")
+            {
+                // Người dùng bấm hủy trên cổng PayOS
+                return RedirectToPage("/Payment/CancelPayment");
+            }
+            else
+            {
+                // Trường hợp nạp tiền hoặc lỗi không xác định
+                DisplayMessage = "Thông tin chi tiết đơn hàng";
             }
 
             return Page();
