@@ -1,0 +1,132 @@
+﻿@page
+@model TravelSystem.Pages.Users.Feedbacks.CreateModel
+@{
+    ViewData["Title"] = "Phản hồi chuyến đi";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .feedback-box {
+        background: #fff;
+        border-radius: 14px;
+        padding: 30px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .tour-info {
+        background: #fdfdfd;
+        border-left: 5px solid #f50057;
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 24px;
+    }
+
+    .rating-stars {
+        display: flex;
+        gap: 8px;
+    }
+
+    .star {
+        font-size: 36px;
+        color: #ccc;
+        cursor: pointer;
+    }
+
+        .star.active {
+            color: #ffc107;
+        }
+</style>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="feedback-box">
+
+                <h3 class="fw-bold mb-4">Phản hồi chuyến đi</h3>
+
+                @if (Model.Booking != null)
+                {
+                    <div class="tour-info">
+                        <h5 class="text-primary fw-bold">@Model.Booking.Tour?.TourName</h5>
+                        <p class="mb-1 text-muted">
+                            Ngày đặt: @Model.Booking.BookDate?.ToString("dd/MM/yyyy")
+                        </p>
+                        <p class="mb-0 text-muted">
+                            @Model.Booking.NumberAdult người lớn, @Model.Booking.NumberChildren trẻ em
+                        </p>
+                    </div>
+                }
+
+                <form method="post" enctype="multipart/form-data">
+
+                    <input type="hidden" asp-for="Feedback.BookId" />
+                    <input type="hidden" asp-for="Feedback.UserId" />
+
+                    <!-- ⭐ RATING -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Đánh giá</label>
+
+                        <div id="ratingStars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <input type="radio" asp-for="Feedback.Rate" value="@i" id="star-@i" hidden />
+                                <span class="star" data-value="@i">★</span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- CONTENT -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nội dung</label>
+                        <textarea asp-for="Feedback.Content" class="form-control" rows="5"></textarea>
+                    </div>
+
+                    <!-- IMAGE -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ảnh minh họa</label>
+                        <input type="file" name="UploadImage" class="form-control" />
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">Gửi phản hồi</button>
+
+                        <a asp-page="/Users/BookTours/MyBookings"
+                           asp-route-type="finished"
+                           class="btn btn-secondary">
+                            Quay lại
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const stars = document.querySelectorAll(".star");
+        const radios = document.querySelectorAll("input[name='Feedback.Rate']");
+
+        stars.forEach(star => {
+            star.addEventListener("click", function () {
+                const value = this.dataset.value;
+
+                radios.forEach(r => {
+                    if (r.value === value) r.checked = true;
+                });
+
+                stars.forEach(s => {
+                    s.classList.remove("active");
+                    if (s.dataset.value <= value) {
+                        s.classList.add("active");
+                    }
+                });
+            });
+        });
+    </script>
+}
