@@ -22,7 +22,6 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Pages\Agents\Rooms\" />
 		<Folder Include="wwwroot\images\" />
 	</ItemGroup>
 </Project>

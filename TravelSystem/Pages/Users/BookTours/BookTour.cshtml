@@ -1,29 +1,48 @@
-﻿@page "{tourId:int}"
+﻿
+@page "{tourId:int}"
 @model TravelSystem.Pages.Users.BookTours.BookTourModel
 @{
     Layout = "_Layout";
 }
 
 <style>
-    .tour-description { 
-        white-space: pre-line; 
+    .tour-description {
+        white-space: pre-line;
     }
-    .voucher-tile:hover { 
-        background-color: #f8f9fa; 
-        cursor: pointer; 
+
+    .voucher-tile:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
     }
-    .btn-qty { 
+
+    .btn-qty {
         width: 2.5rem;
     }
 
-    .form-control-qty { 
-        text-align: center; 
+    .form-control-qty {
+        text-align: center;
     }
-    .scrollable-voucher-list { 
-        max-height: 300px; 
-        overflow-y: auto; 
-        border: 1px solid #ccc; 
-        border-radius: 4px; 
+
+    .scrollable-voucher-list {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .voucher-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 12px;
+    }
+
+    .voucher-info {
+        flex: 1;
+    }
+
+    .voucher-actions {
+        flex-shrink: 0;
     }
 </style>
 
@@ -150,8 +169,9 @@
     </div>
 </form>
 
+<!-- Modal chọn voucher -->
 <div class="modal fade" id="voucherModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Chọn mã giảm giá</h5>
@@ -161,18 +181,127 @@
                 <div class="list-group scrollable-voucher-list">
                     @foreach (var v in Model.VoucherList)
                     {
-                        <label class="list-group-item voucher-tile">
-                            <input type="radio" name="vRadio" value="@v.VoucherId"
-                                   data-code="@v.VoucherCode" data-pct="@v.PercentDiscount"
-                                   data-max="@v.MaxDiscountAmount" data-min="@v.MinAmountApply" class="form-check-input me-2">
-                            <strong>@v.VoucherCode</strong> - @v.VoucherName
-                            <br><small>Hết hạn: @v.EndDate?.ToString("dd/MM/yyyy") | Giảm @v.PercentDiscount%</small>
-                        </label>
+                        <div class="list-group-item">
+                            <div class="voucher-item-row">
+                                <label class="voucher-info mb-0">
+                                    <input type="radio" name="vRadio" value="@v.VoucherId"
+                                           data-code="@v.VoucherCode"
+                                           data-name="@v.VoucherName"
+                                           data-description="@v.Description"
+                                           data-pct="@v.PercentDiscount"
+                                           data-max="@v.MaxDiscountAmount"
+                                           data-min="@v.MinAmountApply"
+                                           data-start="@v.StartDate?.ToString("dd/MM/yyyy")"
+                                           data-end="@v.EndDate?.ToString("dd/MM/yyyy")"
+                                           data-quantity="@v.Quantity"
+                                           data-status="@(v.Status == 1 ? "Hoạt động" : "Không hoạt động")"
+                                           class="form-check-input me-2">
+
+                                    <strong>@v.VoucherCode</strong> - @v.VoucherName
+                                    <br>
+                                    <small>Hết hạn: @v.EndDate?.ToString("dd/MM/yyyy") | Giảm @v.PercentDiscount%</small>
+                                </label>
+
+                                <div class="voucher-actions">
+                                    <button type="button"
+                                            class="btn btn-outline-primary btn-sm"
+                                            onclick="showVoucherDetail(this)"
+                                            data-id="@v.VoucherId"
+                                            data-code="@v.VoucherCode"
+                                            data-name="@v.VoucherName"
+                                            data-description="@v.Description"
+                                            data-pct="@v.PercentDiscount"
+                                            data-max="@v.MaxDiscountAmount"
+                                            data-min="@v.MinAmountApply"
+                                            data-start="@v.StartDate?.ToString("dd/MM/yyyy")"
+                                            data-end="@v.EndDate?.ToString("dd/MM/yyyy")"
+                                            data-quantity="@v.Quantity"
+                                            data-status="@(v.Status == 1 ? "Hoạt động" : "Không hoạt động")">
+                                        Chi tiết
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" onclick="applyVoucher()">Áp dụng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal chi tiết voucher -->
+<div class="modal fade" id="voucherDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-sm">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết thẻ khuyến mãi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center fw-bold">
+                        Chi tiết thẻ khuyến mãi
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Mã thẻ:</div>
+                            <div class="col-sm-8" id="detailVoucherCode"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Tên thẻ:</div>
+                            <div class="col-sm-8" id="detailVoucherName"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Mô tả:</div>
+                            <div class="col-sm-8" id="detailVoucherDescription"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Phần trăm khuyến mãi:</div>
+                            <div class="col-sm-8" id="detailVoucherPercent"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Giảm tối đa:</div>
+                            <div class="col-sm-8" id="detailVoucherMax"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Giá tối thiểu áp dụng:</div>
+                            <div class="col-sm-8" id="detailVoucherMin"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Ngày bắt đầu:</div>
+                            <div class="col-sm-8" id="detailVoucherStart"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Ngày kết thúc:</div>
+                            <div class="col-sm-8" id="detailVoucherEnd"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Số lượng:</div>
+                            <div class="col-sm-8" id="detailVoucherQuantity"></div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold">Trạng thái:</div>
+                            <div class="col-sm-8" id="detailVoucherStatus"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -184,6 +313,10 @@
         const childrenPrice = @(Model.Tour.ChildrenPrice ?? 0);
         const vatRate = @(Model.ActiveVat?.VatRate ?? 0);
         const maxQuantity = @Model.Tour.Quantity;
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('vi-VN').format(value) + ' đ';
+        }
 
         function changeQty(id, delta) {
             const el = document.getElementById(id.toLowerCase() + 'Count');
@@ -246,6 +379,22 @@
             document.getElementById('selectedVoucherId').value = "";
             document.querySelectorAll('input[name="vRadio"]').forEach(r => r.checked = false);
             updatePrices();
+        }
+
+        function showVoucherDetail(button) {
+            document.getElementById('detailVoucherCode').innerText = button.dataset.code || '';
+            document.getElementById('detailVoucherName').innerText = button.dataset.name || '';
+            document.getElementById('detailVoucherDescription').innerText = button.dataset.description || '';
+            document.getElementById('detailVoucherPercent').innerText = (button.dataset.pct || 0) + '%';
+            document.getElementById('detailVoucherMax').innerText = formatCurrency(button.dataset.max || 0);
+            document.getElementById('detailVoucherMin').innerText = formatCurrency(button.dataset.min || 0);
+            document.getElementById('detailVoucherStart').innerText = button.dataset.start || '';
+            document.getElementById('detailVoucherEnd').innerText = button.dataset.end || '';
+            document.getElementById('detailVoucherQuantity').innerText = button.dataset.quantity || '';
+            document.getElementById('detailVoucherStatus').innerText = button.dataset.status || '';
+
+            const detailModal = new bootstrap.Modal(document.getElementById('voucherDetailModal'));
+            detailModal.show();
         }
 
         window.onload = updatePrices;
