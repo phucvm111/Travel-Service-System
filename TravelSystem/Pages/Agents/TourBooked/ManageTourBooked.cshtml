@@ -1,0 +1,238 @@
+﻿@page
+@model TravelSystem.Pages.Agents.TourBooked.ManageTourBookedModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Quản lý đặt chuyến đi";
+}
+
+<style>
+    .status-btn {
+        width: 100%;
+        font-size: 12px;
+        padding: 4px;
+        border-radius: 15px;
+        border: none;
+        color: white;
+        pointer-events: none;
+        display: inline-block;
+    }
+
+    /* Định nghĩa màu sắc dựa trên status của bạn */
+    .bg-status-1 {
+        background-color: #198754;
+    }
+    /* Đã thanh toán - Success */
+    .bg-status-2 {
+        background-color: #ffc107;
+        color: #000;
+    }
+    /* Du khách hủy - Warning */
+    .bg-status-3 {
+        background-color: #dc3545;
+    }
+    /* Hủy bởi đại lý - Danger */
+    .bg-status-4 {
+        background-color: #0dcaf0;
+    }
+    /* Hoàn thành - Info */
+    .bg-status-5 {
+        background-color: #6c757d;
+    }
+    /* Yêu cầu hoàn tiền - Secondary */
+    .bg-status-6 {
+        background-color: #f0ad4e;
+    }
+    /* Hủy bởi du khách */
+    .bg-status-7 {
+        background-color: #d9534f;
+    }
+    /* Chưa thanh toán */
+
+    table th {
+        background-color: #f8f9fa;
+        text-align: center;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    table td {
+        font-size: 13px;
+        vertical-align: middle;
+    }
+</style>
+
+<div class="container-fluid px-4 mt-4">
+    <h1 class="fw-bold mb-4">Quản lí đặt chuyến đi</h1>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            @* Khi lọc, luôn reset về trang 1 *@
+            <form method="get" class="row g-3 align-items-center">
+                <input type="hidden" name="PageNumber" value="1" />
+
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fa fa-search text-muted"></i></span>
+                        <input type="text" asp-for="SearchName" class="form-control border-start-0 ps-0" placeholder="Tìm theo tên khách hàng...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select asp-for="StatusType" class="form-select" onchange="this.form.submit()">
+                        <option value="">- Tất cả trạng thái -</option>
+                        <option value="1">Đã thanh toán</option>
+                        <option value="2">Du khách hủy</option>
+                        <option value="3">Hủy bởi đại lí</option>
+                        <option value="4">Hoàn thành chuyến đi</option>
+                        <option value="5">Đã yêu cầu hoàn tiền</option>
+                        <option value="6">Hủy bởi du khách</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Lọc dữ liệu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.ListBookDetail != null && Model.ListBookDetail.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover shadow-sm bg-white">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên chuyến đi</th>
+                        <th>Tên khách hàng</th>
+                        <th>Ngày đặt</th>
+                        <th>Mã giảm giá</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = Model.StartIndex;
+                    }
+                    @foreach (var item in Model.ListBookDetail)
+                    {
+                        <tr>
+                            <td class="text-center">@(i++)</td>
+                            <td class="fw-bold">@item.Tour?.TourName</td>
+                            <td>@item.FirstName @item.LastName</td>
+                            <td class="text-center">@item.BookDate?.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center">@(item.Voucher?.VoucherCode ?? "Không có")</td>
+                            <td class="text-end fw-bold text-danger">@((item.TotalPrice ?? 0).ToString("N0")) VNĐ</td>
+                            <td>
+                                <div class="status-btn bg-status-@item.Status text-center">
+                                    @GetStatusString(item.Status)
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex gap-1 justify-content-center">
+                                    <a asp-page="./DetailTourBooked" asp-route-id="@item.BookId" class="btn btn-sm btn-outline-primary">Chi tiết</a>
+                                    @if (item.Status == 1)
+                                    {
+                                        <button class="btn btn-sm btn-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#cancelModal-@item.BookId">
+                                            Hủy
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+
+                        @* Modal hủy tour *@
+                        <div class="modal fade" id="cancelModal-@item.BookId" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="post" asp-page-handler="Cancel">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-danger">Xác nhận hủy chuyến đi</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            <input type="hidden" name="bookID" value="@item.BookId" />
+                                            <p class="text-dark">Bạn có chắc muốn hủy đơn của <strong>@item.FirstName @item.LastName</strong>?</p>
+                                            <div class="mb-3">
+                                                <label class="form-label text-dark fw-bold">Lý do hủy (tối thiểu 10 ký tự):</label>
+                                                <textarea name="reason" class="form-control" rows="3" required minlength="10" placeholder="Nhập lý do đại lý hủy tour..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                            <button type="submit" class="btn btn-danger">Hủy ngay</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @* PHẦN PHÂN TRANG: Sửa asp-route-page thành asp-route-PageNumber *@
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-page="./ManageTourBooked"
+                       asp-route-PageNumber="@(Model.PageNumber - 1)"
+                       asp-route-SearchName="@Model.SearchName"
+                       asp-route-StatusType="@Model.StatusType">Trang trước</a>
+                </li>
+
+                @for (int p = 1; p <= Model.TotalPages; p++)
+                {
+                    <li class="page-item @(p == Model.PageNumber ? "active" : "")">
+                        <a class="page-link"
+                           asp-page="./ManageTourBooked"
+                           asp-route-PageNumber="@p"
+                           asp-route-SearchName="@Model.SearchName"
+                           asp-route-StatusType="@Model.StatusType">@p</a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-page="./ManageTourBooked"
+                       asp-route-PageNumber="@(Model.PageNumber + 1)"
+                       asp-route-SearchName="@Model.SearchName"
+                       asp-route-StatusType="@Model.StatusType">Trang sau</a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <div class="alert alert-dark text-center py-4">
+            <i class="bi bi-info-circle me-2"></i> Hiện chưa có đơn đặt chuyến đi nào phù hợp.
+            <br />
+            <a asp-page="./ManageTourBooked" asp-route-PageNumber="1" class="btn btn-link mt-2">Quay lại danh sách chính</a>
+        </div>
+    }
+</div>
+
+@functions {
+    string GetStatusString(int? status) => status switch
+    {
+        1 => "Đã thanh toán",
+        2 => "Du khách huỷ",
+        3 => "Hủy bởi đại lí",
+        4 => "Hoàn thành chuyến đi",
+        5 => "Đã yêu cầu hoàn tiền",
+        6 => "Hủy bởi du khách",
+        7 => "Chưa thanh toán",
+        _ => "Không xác định"
+    };
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (Request.Query["cancel"] == "true")
+    {
+        <script>Swal.fire('Thành công', 'Đã hủy đơn hàng và thông báo cho khách!', 'success');</script>
+    }
+}

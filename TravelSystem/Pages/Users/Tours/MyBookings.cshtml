@@ -67,10 +67,10 @@
     <div class="row">
         <div class="col-md-3">
             <div class="sidebar">
-                <a asp-page="./MyBookings" asp-route-type="current" class="@(currentType == "current" ? "active" : "")">
+                <a asp-page="./MyBookings" asp-route-type="current" class="active">
                     <i class="bi bi-calendar-event me-2"></i>Chuyến đi sắp tới
                 </a>
-                <a asp-page="./MyBookings" asp-route-type="finished" class="@(currentType == "finished" ? "active" : "")">
+                <a asp-page="./FinishedBookings" asp-route-type="finished" asp-route-type="current">
                     <i class="bi bi-check2-circle me-2"></i>Đã hoàn thành
                 </a>
             </div>
@@ -161,12 +161,13 @@
                     </div>
                 }
 
+                @* --- Phần phân trang sửa lại --- *@
                 <nav class="mt-4">
                     <ul class="pagination justify-content-center">
                         @for (int i = 1; i <= Model.TotalPages; i++)
                         {
-                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                <a class="page-link" asp-route-page="@i" asp-route-type="@currentType">@i</a>
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a class="page-link" asp-route-PageNumber="@i">@i</a>
                             </li>
                         }
                     </ul>

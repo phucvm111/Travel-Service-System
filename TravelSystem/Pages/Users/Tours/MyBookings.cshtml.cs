@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using TravelSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TravelSystem.Pages.Users.BookTours
 {
@@ -15,42 +15,36 @@ namespace TravelSystem.Pages.Users.BookTours
         }
 
         public List<BookDetail> BookingList { get; set; } = new();
-        public int CurrentPage { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int PageNumber { get; set; } = 1;
+
         public int TotalPages { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int page = 1, string type = "current")
+        public async Task<IActionResult> OnGetAsync()
         {
             var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null) return RedirectToPage("/Auths/Login");
 
             const int pageSize = 5;
-            CurrentPage = page;
 
-            // Truy vấn dữ liệu nạp kèm thông tin Tour
             var query = _context.BookDetails
                 .Include(b => b.Tour)
-                .Where(b => b.UserId == userId);
-
-            // Phân loại: Sắp tới (1, 5, 7) hoặc Đã xong (4, 6)
-            if (type == "finished")
-            {
-                query = query.Where(b => b.Status == 4 || b.Status == 6);
-            }
-            else
-            {
-                query = query.Where(b => b.Status == 1 || b.Status == 5 || b.Status == 7);
-            }
+                .Where(b => b.UserId == userId && (b.Status == 1 || b.Status == 5 || b.Status == 7))
+                .AsQueryable();
 
             int totalItems = await query.CountAsync();
             TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
+            if (PageNumber < 1) PageNumber = 1;
+            if (TotalPages > 0 && PageNumber > TotalPages) PageNumber = TotalPages;
+
             BookingList = await query
                 .OrderByDescending(b => b.BookDate)
-                .Skip((CurrentPage - 1) * pageSize)
+                .Skip((PageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            ViewData["Type"] = type;
             return Page();
         }
 
@@ -59,18 +53,16 @@ namespace TravelSystem.Pages.Users.BookTours
             var booking = await _context.BookDetails.FindAsync(bookID);
             if (booking == null) return RedirectToPage(new { cancelSuccess = "false" });
 
-            var cancelRequest = new RequestCancel
+            _context.RequestCancels.Add(new RequestCancel
             {
                 BookId = bookID,
                 UserId = booking.UserId ?? 0,
                 Reason = reason,
                 RequestDate = DateOnly.FromDateTime(DateTime.Now),
                 Status = "PENDING"
-            };
+            });
 
-            booking.Status = 5;
-
-            _context.RequestCancels.Add(cancelRequest);
+            booking.Status = 5; // Chờ hoàn tiền
             await _context.SaveChangesAsync();
 
             return RedirectToPage(new { cancelSuccess = "true" });
