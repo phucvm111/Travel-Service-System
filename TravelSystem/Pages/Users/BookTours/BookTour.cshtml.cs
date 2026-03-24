@@ -31,10 +31,10 @@ namespace TravelSystem.Pages.Users.BookTours
         [BindProperty] public int Adult { get; set; } = 1;
         [BindProperty] public int Children { get; set; } = 0;
         [BindProperty] public string Note { get; set; }
-        [BindProperty] public int IsOther { get; set; } // Khớp với int? trong Model
+        [BindProperty] public int IsOther { get; set; } 
         [BindProperty] public int PaymentMethodID { get; set; }
         [BindProperty] public int? SelectedVoucherId { get; set; }
-        [BindProperty] public double FinalAmount { get; set; } // Đổi sang double cho khớp Model
+        [BindProperty] public double FinalAmount { get; set; } 
 
         public string ErrorMessage { get; set; }
 
@@ -66,20 +66,18 @@ namespace TravelSystem.Pages.Users.BookTours
 
             await LoadData(tourId);
 
-            // 1. Validate sơ bộ
             if (string.IsNullOrEmpty(FirstName)) ErrorMessage = "Vui lòng nhập đầy đủ thông tin.";
             if (!string.IsNullOrEmpty(ErrorMessage)) return Page();
 
             long bookCode = GenerateRandomBookCode();
             string description = $"PayTour{bookCode}".Substring(0, Math.Min(20, $"PayTour{bookCode}".Length));
 
-            // 2. Khởi tạo đối tượng dựa đúng theo Model BookDetail bạn gửi
             var newBooking = new BookDetail
             {
                 UserId = userId,
                 TourId = tourId,
                 VoucherId = SelectedVoucherId,
-                BookDate = DateOnly.FromDateTime(DateTime.Now), // Lưu ngày đặt
+                BookDate = DateOnly.FromDateTime(DateTime.Now),
                 NumberAdult = Adult,
                 NumberChildren = Children,
                 FirstName = FirstName,
@@ -87,16 +85,18 @@ namespace TravelSystem.Pages.Users.BookTours
                 Phone = Phone,
                 Gmail = Email,
                 Note = Note,
-                IsBookedForOther = IsOther, // Sử dụng kiểu int (0 hoặc 1)
+                IsBookedForOther = IsOther,
                 TotalPrice = FinalAmount,
                 BookCode = bookCode,
                 PaymentMethodId = PaymentMethodID,
-                Status = (PaymentMethodID == 1) ? 1 : 7 // 1: Đã thanh toán (Ví), 7: Chờ (PayOS)
+                Status = (PaymentMethodID == 1) ? 1 : 7
             };
 
-            // 3. Xử lý Logic
-            if (PaymentMethodID == 1) // Thanh toán bằng Ví
+
+            if (PaymentMethodID == 1)
             {
+                using var transaction = await _con.Database.BeginTransactionAsync();
+
                 var wallet = await _con.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
                 if (wallet == null || wallet.Balance < (decimal)FinalAmount)
                 {
@@ -114,7 +114,22 @@ namespace TravelSystem.Pages.Users.BookTours
                     Tour.Quantity -= (Adult + Children);
                 }
 
+                var history = new TransactionHistory
+                {
+                    UserId = userId.Value,
+                    Amount = (decimal)FinalAmount,
+                    TransactionType = "PURCHASE", // Loại giao dịch thanh toán
+                    Description = $"Thanh toán đặt tour: {Tour.TourName} (Mã: {bookCode})",
+                    AmountAfterTransaction = wallet.Balance,
+                    TransactionDate = DateTime.Now
+                };
+                _con.TransactionHistories.Add(history);
+
+                // Lưu tất cả thay đổi
                 await _con.SaveChangesAsync();
+
+                // Xác nhận hoàn tất transaction
+                await transaction.CommitAsync();
 
                 string mailBody = $"Xác nhận đặt tour {Tour.TourName} thành công. Tổng tiền: {FinalAmount:N0} VNĐ";
                 await _emailService.SendAsync(Email, "GoViet - Xác nhận đặt tour", mailBody, true);
