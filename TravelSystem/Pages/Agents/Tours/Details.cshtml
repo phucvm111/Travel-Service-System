@@ -38,7 +38,7 @@
                                 @foreach (var r in Model.RestaurantList)
                                 {
                                     <li>
-                                        <a asp-page="/Restaurants/Details" asp-route-id="@r.ServiceId">
+                                        <a asp-page="/Agents/Restaurants/Detail" asp-route-id="@r.ServiceId" >
                                             @r.Name
                                         </a>
                                     </li>
@@ -52,7 +52,7 @@
                                 @foreach (var e in Model.EntertainmentList)
                                 {
                                     <li>
-                                        <a asp-page="/Entertainments/Details" asp-route-id="@e.ServiceId">
+                                        <a asp-page="/Agents/Entertainments/Detail" asp-route-id="@e.ServiceId">
                                             @e.Name
                                         </a>
                                     </li>

@@ -24,18 +24,19 @@ namespace TravelSystem.Pages.Users.Feedbacks
         [BindProperty]
         public IFormFile? UploadImage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int bookID)
+        public async Task<IActionResult> OnGetAsync(int bookingId)
         {
             var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null) return RedirectToPage("/Auths/Login");
 
             Booking = await _context.BookDetails
                 .Include(b => b.Tour)
-                .FirstOrDefaultAsync(b => b.BookId == bookID && b.UserId == userId);
+                .FirstOrDefaultAsync(b => b.BookId == bookingId && b.UserId == userId);
 
-            if (Booking == null) return RedirectToPage("/Users/BookTours/MyBookings");
+            if (Booking == null)
+                return RedirectToPage("/Users/Tours/FinishedBookings");
 
-            Feedback.BookId = bookID;
+            Feedback.BookId = bookingId;
             Feedback.UserId = userId.Value;
 
             return Page();
@@ -50,11 +51,14 @@ namespace TravelSystem.Pages.Users.Feedbacks
             Feedback.CreateDate = DateTime.Now;
             Feedback.Status = 1;
 
-            // Upload ảnh
             if (UploadImage != null)
             {
+                var folder = Path.Combine(_env.WebRootPath, "images", "feedback");
+                if (!Directory.Exists(folder))
+                    Directory.CreateDirectory(folder);
+
                 var fileName = Guid.NewGuid() + Path.GetExtension(UploadImage.FileName);
-                var path = Path.Combine(_env.WebRootPath, "images/feedback", fileName);
+                var path = Path.Combine(folder, fileName);
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
@@ -65,13 +69,13 @@ namespace TravelSystem.Pages.Users.Feedbacks
             }
             else
             {
-                Feedback.Image = "/images/11.jpg"; // default
+                Feedback.Image = "/images/11.jpg";
             }
 
             _context.Feedbacks.Add(Feedback);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Users/Tours/MyBookings", new { type = "finished" });
+            return RedirectToPage("/Users/Tours/FinishedBookings");
         }
     }
 }
