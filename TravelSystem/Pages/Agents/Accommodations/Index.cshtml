@@ -5,7 +5,14 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Quản lý khách sạn</h2>
-        <a asp-page="./Create" class="btn btn-success">Thêm khách sạn</a>
+
+        <div class="d-flex gap-2">
+            <a asp-page="./Create" class="btn btn-success">Thêm khách sạn</a>
+
+            <a asp-page="/Agents/Room/Index" class="btn btn-primary">
+                Quản lý phòng
+            </a>
+        </div>
     </div>
 
     <form method="get" class="row g-2 mb-3">
@@ -68,23 +75,39 @@
                         <td>@(item.CheckOutTime?.ToString(@"HH\:mm"))</td>
                         <td>@item.Service?.ServiceName</td>
                         <td>
-                            <a asp-page="./Details" asp-route-id="@item.AccommodationId"
-                               class="btn btn-info btn-sm">Chi tiết</a>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a asp-page="./Details"
+                                   asp-route-id="@item.AccommodationId"
+                                   class="btn btn-info btn-sm">
+                                    Chi tiết
+                                </a>
 
-                            <a asp-page="./Edit" asp-route-id="@item.AccommodationId"
-                               class="btn btn-success btn-sm">Sửa</a>
+                                <a asp-page="./Edit"
+                                   asp-route-id="@item.AccommodationId"
+                                   class="btn btn-success btn-sm">
+                                    Sửa
+                                </a>
 
-                            @if (!hasRoom)
-                            {
-                                <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="confirmDelete(@item.AccommodationId, '@item.Name?.Replace("'", "\\'")')">
-                                    Xóa
-                                </button>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary" title="Khách sạn đã có phòng">Đã có phòng</span>
-                            }
+                                <a asp-page="/Agents/Room/Create"
+                                   asp-route-accommodationId="@item.AccommodationId"
+                                   class="btn btn-primary btn-sm">
+                                    Tạo phòng
+                                </a>
+
+                                @if (!hasRoom)
+                                {
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete(@item.AccommodationId, '@item.Name?.Replace("'", "\\'")')">
+                                        Xóa
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary align-self-center" title="Khách sạn đã có phòng">
+                                        Đã có phòng
+                                    </span>
+                                }
+                            </div>
                         </td>
                     </tr>
                 }
@@ -143,30 +166,30 @@
 
         @if (TempData["CreateSuccess"] != null)
         {
-                <text>
-                Swal.fire({
-                    title: 'Tạo khách sạn thành công!',
-                    text: 'Accommodation mới đã được thêm vào danh sách.',
-                    icon: 'success',
-                    confirmButtonColor: '#28a745',
-                    confirmButtonText: 'OK',
-                    allowOutsideClick: false
-                });
-                </text>
+                        <text>
+                        Swal.fire({
+                            title: 'Tạo khách sạn thành công!',
+                            text: 'Accommodation mới đã được thêm vào danh sách.',
+                            icon: 'success',
+                            confirmButtonColor: '#28a745',
+                            confirmButtonText: 'OK',
+                            allowOutsideClick: false
+                        });
+                        </text>
         }
 
         @if (TempData["EditSuccess"] != null)
         {
-                <text>
-                Swal.fire({
-                    title: 'Cập nhật khách sạn thành công!',
-                    text: 'Thông tin accommodation đã được lưu lại.',
-                    icon: 'success',
-                    confirmButtonColor: '#28a745',
-                    confirmButtonText: 'OK',
-                    allowOutsideClick: false
-                });
-                </text>
+                        <text>
+                        Swal.fire({
+                            title: 'Cập nhật khách sạn thành công!',
+                            text: 'Thông tin accommodation đã được lưu lại.',
+                            icon: 'success',
+                            confirmButtonColor: '#28a745',
+                            confirmButtonText: 'OK',
+                            allowOutsideClick: false
+                        });
+                        </text>
         }
     </script>
 }

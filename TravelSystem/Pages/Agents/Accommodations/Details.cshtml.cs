@@ -15,7 +15,7 @@ namespace TravelSystem.Pages.Agents.Accommodations
         }
 
         public Accommodation Accommodation { get; set; } = default!;
-        public List<Room> Rooms { get; set; } = new();
+        public List<TravelSystem.Models.Room> Rooms { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
