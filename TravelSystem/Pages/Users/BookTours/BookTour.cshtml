@@ -330,8 +330,11 @@
         function updatePrices() {
             const a = parseInt(document.getElementById('adultCount').value);
             const c = parseInt(document.getElementById('childrenCount').value);
-            const total = (a * adultPrice) + (c * childrenPrice);
+            
+            // 1. Tính tổng tiền gốc (Base Price)
+            const totalBase = (a * adultPrice) + (c * childrenPrice);
 
+            // Kiểm tra số lượng chỗ
             if ((a + c) > maxQuantity) {
                 document.getElementById('slotWarning').style.display = 'block';
                 document.getElementById('btnSubmit').disabled = true;
@@ -340,25 +343,45 @@
                 document.getElementById('btnSubmit').disabled = false;
             }
 
-            let discount = 0;
-            const v = document.querySelector('input[name="vRadio"]:checked');
-            if (v) {
-                const min = parseFloat(v.dataset.min);
-                if (total >= min) {
-                    discount = Math.min(total * parseFloat(v.dataset.pct) / 100, parseFloat(v.dataset.max));
+            // 2. Tính số tiền giảm giá từ Voucher
+            let discountAmt = 0;
+            const selectedV = document.querySelector('input[name="vRadio"]:checked');
+            
+            if (selectedV) {
+                const minApply = parseFloat(selectedV.dataset.min);
+                // Chỉ giảm giá nếu tổng gốc đạt mức tối thiểu
+                if (totalBase >= minApply) {
+                    const pct = parseFloat(selectedV.dataset.pct);
+                    const maxD = parseFloat(selectedV.dataset.max);
+                    
+                    discountAmt = totalBase * (pct / 100);
+                    // Không được giảm quá mức tối đa của Voucher
+                    if (discountAmt > maxD) discountAmt = maxD;
+                } else {
+                    // Nếu không đủ điều kiện thì tự động gỡ voucher hoặc báo lỗi
+                    alert("Đơn hàng chưa đạt mức tối thiểu " + minApply.toLocaleString() + "đ để dùng mã này.");
+                    removeVoucher();
+                    return;
                 }
             }
 
-            const afterDiscount = total - discount;
-            const vatAmt = afterDiscount * vatRate / 100;
-            const final = afterDiscount + vatAmt;
+            // 3. Tính thuế VAT trên giá đã giảm
+            const priceAfterDiscount = totalBase - discountAmt;
+            const vatAmt = priceAfterDiscount * (vatRate / 100);
 
+            // 4. Tổng cuối cùng
+            const finalAmount = priceAfterDiscount + vatAmt;
+
+            // 5. Hiển thị lên giao diện
             const fmt = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
-            document.getElementById('totalPriceDisplay').innerText = fmt.format(total);
-            document.getElementById('discountDisplay').innerText = '- ' + fmt.format(discount);
+            
+            document.getElementById('totalPriceDisplay').innerText = fmt.format(totalBase);
+            document.getElementById('discountDisplay').innerText = '- ' + fmt.format(discountAmt);
             document.getElementById('vatPriceDisplay').innerText = `Phí VAT (${vatRate}%): ` + fmt.format(vatAmt);
-            document.getElementById('finalPriceDisplay').innerText = fmt.format(final);
-            document.getElementById('finalAmountInput').value = final;
+            document.getElementById('finalPriceDisplay').innerText = fmt.format(finalAmount);
+            
+            // Cập nhật vào input hidden để gửi lên Server
+            document.getElementById('finalAmountInput').value = finalAmount;
         }
 
         function applyVoucher() {
@@ -368,7 +391,12 @@
                 document.getElementById('v-code').innerText = v.dataset.code;
                 document.getElementById('voucher-applied').classList.remove('d-none');
                 document.getElementById('voucher-section').classList.add('d-none');
-                bootstrap.Modal.getInstance(document.getElementById('voucherModal')).hide();
+                
+                // Đóng modal
+                const modalEl = document.getElementById('voucherModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                
                 updatePrices();
             }
         }
@@ -377,7 +405,8 @@
             document.getElementById('voucher-applied').classList.add('d-none');
             document.getElementById('voucher-section').classList.remove('d-none');
             document.getElementById('selectedVoucherId').value = "";
-            document.querySelectorAll('input[name="vRadio"]').forEach(r => r.checked = false);
+            const checkedRadio = document.querySelector('input[name="vRadio"]:checked');
+            if (checkedRadio) checkedRadio.checked = false;
             updatePrices();
         }
 
