@@ -30,7 +30,6 @@ namespace TravelSystem.Pages.Agents.Tours
         [BindNever] public string? ChildrenPriceRaw { get; set; }
         [BindNever] public string? QuantityRaw { get; set; }
 
-        // Lưu lại ảnh đã upload ở lần submit trước (như Java dùng session imagePath)
         [BindNever] public string? ExistingImage { get; set; }
 
         // ── Danh sách dịch vụ / điểm đến để render select ────────────────────

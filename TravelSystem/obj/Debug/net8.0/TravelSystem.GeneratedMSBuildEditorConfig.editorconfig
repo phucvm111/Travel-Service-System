@@ -17,125 +17,125 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = TravelSystem
 build_property.RootNamespace = TravelSystem
-build_property.ProjectDir = D:\Desktop\Travel-Service-System\TravelSystem\
+build_property.ProjectDir = D:\Desktop\ki 7\PRN222\Travel-Service-System (2)\Travel-Service-System\TravelSystem\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\Desktop\Travel-Service-System\TravelSystem
+build_property.MSBuildProjectDirectory = D:\Desktop\ki 7\PRN222\Travel-Service-System (2)\Travel-Service-System\TravelSystem
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Admin/Account/Create.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Admin/Account/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWNjb3VudFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Admin/Account/Details.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Admin/Account/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWNjb3VudFxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Admin/Account/Index.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Admin/Account/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQWNjb3VudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Agents/AgentProfiles/EditProfile.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Agents/AgentProfiles/EditProfile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXEFnZW50UHJvZmlsZXNcRWRpdFByb2ZpbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Agents/AgentProfiles/Profile.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Agents/AgentProfiles/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXEFnZW50UHJvZmlsZXNcUHJvZmlsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Agents/AgentRegisters/AgentRegister.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Agents/AgentRegisters/AgentRegister.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXEFnZW50UmVnaXN0ZXJzXEFnZW50UmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Create.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXFRvdXJzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Details.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXFRvdXJzXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Edit.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXFRvdXJzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Index.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Agents/Tours/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbnRzXFRvdXJzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Auths/Login.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Auths/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aHNcTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Auths/Logout.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Auths/Logout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aHNcTG9nb3V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Error.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Index.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Privacy.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Shared/SideNavAdmin.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Shared/SideNavAdmin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNpZGVOYXZBZG1pbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Shared/SideNavAgent.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Shared/SideNavAgent.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXFNpZGVOYXZBZ2VudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Users/Profiles/Details.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Users/Profiles/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcUHJvZmlsZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Users/Profiles/Edit.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Users/Profiles/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcUHJvZmlsZXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Users/Registers/Register.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Users/Registers/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcUmVnaXN0ZXJzXFJlZ2lzdGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Users/Registers/RegisterUser.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Users/Registers/RegisterUser.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcUmVnaXN0ZXJzXFJlZ2lzdGVyVXNlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Users/Registers/VerifyOtp.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Users/Registers/VerifyOtp.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcUmVnaXN0ZXJzXFZlcmlmeU90cC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Users/Tours/Details.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Users/Tours/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcVG91cnNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Users/Tours/Search.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Users/Tours/Search.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcVG91cnNcU2VhcmNoLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/_ViewImports.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/_ViewStart.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Desktop/Travel-Service-System/TravelSystem/Pages/Shared/_Layout.cshtml]
+[D:/Desktop/ki 7/PRN222/Travel-Service-System (2)/Travel-Service-System/TravelSystem/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-ckn733nwpl

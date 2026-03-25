@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rjmxpV0ZCEA=",
+  "dgSpecHash": "5t8/hEoluOo=",
   "success": true,
-  "projectFilePath": "D:\\Desktop\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
+  "projectFilePath": "D:\\Desktop\\ki 7\\PRN222\\Travel-Service-System (2)\\Travel-Service-System\\TravelSystem\\TravelSystem.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Nhat Anh\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Nhat Anh\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
