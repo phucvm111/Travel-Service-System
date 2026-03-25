@@ -43,7 +43,20 @@
                         <a class="nav-link" asp-page="/Index">Trang chủ</a>
                     </li>
 
-                    @if (roleId == 2)
+                    @if (roleId == 2 )
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Users/Profiles/UpdateTourist">
+                                Xác thực thông tin
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Agents/AgentRegisters/AgentRegister">
+                                Trở thành đối tác
+                            </a>
+                        </li>
+                    }
+                    @if (roleId == 5)
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Agents/AgentRegisters/AgentRegister">

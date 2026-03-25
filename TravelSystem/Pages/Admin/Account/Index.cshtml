@@ -103,6 +103,9 @@
                 <a asp-page="/Admin/Account/Create" class="btn btn-success btn-sm action-btn">
                     <i class="fas fa-user-plus me-1"></i> Thêm Quản trị viên
                 </a>
+                <a asp-page="/Admin/Account/CreateStaff" class="btn btn-success btn-sm action-btn">
+                    <i class="fas fa-user-plus me-1"></i> Thêm Nhân viên
+                </a>
             </div>
         </div>
 
@@ -115,6 +118,7 @@
                         <option value="Quản trị viên">Quản trị viên</option>
                         <option value="Khách du lịch">Khách du lịch</option>
                         <option value="Đại lý">Đại lý</option>
+                        <option value="Nhân viên">Nhân viên</option>
                     </select>
                 </div>
                 <div>
@@ -156,10 +160,14 @@
                                             @:Quản trị viên
                                             break;
                                         case 2:
+                                        case 5:
                                             @:Khách du lịch
                                             break;
                                         case 3:
                                             @:Đại lý
+                                            break;
+                                        case 4:
+                                            @:Nhân viên
                                             break;
                                         default:
                                             @:Không xác định

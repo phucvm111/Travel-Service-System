@@ -1,156 +1,436 @@
 ﻿@page "{id:int}"
 @model TravelSystem.Pages.Agents.Tours.DetailsModel
 
-<div class="container my-5">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
+<style>
+    .tour-header-wrapper {
+        position: relative;
+        margin-bottom: 30px;
+        padding-top: 10px;
+    }
+
+    .btn-back {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        background: #fff;
+        border: 1px solid #ddd;
+        color: #333;
+        padding: 6px 15px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 14px;
+        z-index: 10;
+    }
+
+    .tour-title-main {
+        text-align: center;
+        font-weight: 800;
+        font-size: 2.2rem;
+        color: #212529;
+        margin: 0 auto;
+        padding: 0 120px;
+    }
+
+    .tour-img-main {
+        width: 100%;
+        height: 450px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-bottom: 25px;
+    }
+
+    .section-header {
+        border-bottom: 1px solid #eee;
+        margin: 30px 0 15px;
+        padding-bottom: 10px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .content-area {
+        margin-bottom: 25px;
+        line-height: 1.7;
+        color: #444;
+    }
+
+    .departure-slider-container {
+        padding: 0 40px;
+        position: relative;
+        margin: 20px 0;
+        overflow: hidden;
+    }
+
+    .departure-slider {
+        width: 100%;
+    }
+
+    .departure-slider .slick-list { overflow: hidden; }
+
+    .departure-slider .slick-track {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch;
+    }
+
+    .departure-slider .slick-slide {
+        height: inherit !important;
+        display: flex !important;
+    }
+
+    .departure-slider .slick-slide > div {
+        width: 100%;
+        display: flex;
+    }
+
+    .departure-item {
+        width: 100%;
+        min-height: 100px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 15px 10px;
+        margin: 0 10px;
+        text-align: center;
+        background: #fff;
+        transition: all 0.3s ease;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .departure-item.active {
+        border: 2px solid #198754;
+        background-color: #f0fff4;
+        transform: translateY(-2px);
+    }
+
+    .dep-date {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95rem;
+    }
+
+    .dep-icon {
+        color: #198754;
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+    }
+
+    .slick-prev, .slick-next {
+        width: 35px;
+        height: 35px;
+        background: #198754 !important;
+        border-radius: 50%;
+        z-index: 2;
+    }
+
+    .slick-prev:before, .slick-next:before {
+        font-size: 20px;
+        opacity: 1;
+        color: white;
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+    }
+
+    .slick-prev:before { content: '\f053'; }
+    .slick-next:before { content: '\f054'; }
+    .slick-prev { left: -5px; }
+    .slick-next { right: -5px; }
+
+    .service-link {
+        color: #0d6efd !important;
+        text-decoration: underline !important;
+        font-weight: 500;
+    }
+
+    .sticky-sidebar {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 20px;
+        z-index: 100;
+    }
+
+    .booking-card {
+        border-radius: 12px;
+        border: 1px solid #eee;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        background: #fff;
+        padding: 25px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 0.95rem;
+    }
+
+    .info-row label {
+        font-weight: 600;
+        color: #666;
+    }
+
+    .price-red {
+        color: #d9534f !important;
+        font-weight: 800 !important;
+        font-size: 1.1rem;
+    }
+
+    .feedback-card {
+        background: #fff;
+        border: 1px solid #f0f0f0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        transition: 0.3s;
+    }
+
+    .feedback-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        border-color: #e0e0e0;
+    }
+
+    .fb-user-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .fb-avatar {
+        width: 45px;
+        height: 45px;
+        background: #e8f5e9;
+        color: #198754;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        margin-right: 12px;
+        font-size: 1.2rem;
+    }
+
+    .fb-details h6 {
+        margin: 0;
+        font-weight: 700;
+        color: #212529;
+    }
+
+    .fb-date { font-size: 0.8rem; color: #999; }
+    .fb-rating { color: #ffc107; font-size: 0.9rem; }
+
+    .fb-content {
+        color: #444;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-top: 10px;
+    }
+
+    .fb-image {
+        border-radius: 8px;
+        margin-top: 12px;
+        cursor: zoom-in;
+        transition: 0.2s;
+    }
+
+    @@media (max-width: 768px) {
+        .tour-title-main { font-size: 1.6rem; padding: 0 70px; }
+        .tour-img-main { height: 280px; }
+    }
+</style>
+
+<div class="container my-4">
     @if (Model.Tour != null)
     {
-        <div class="d-flex align-items-center mb-4 gap-3">
-            <a asp-page="./Index" class="btn btn-outline-secondary">
-                ← Quay lại
+        <div class="tour-header-wrapper">
+            <a asp-page="./Index" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại
             </a>
-
+            <h1 class="tour-title-main">@Model.Tour.TourName</h1>
         </div>
-        <h1 class="mb-0">@Model.Tour.TourName</h1>
-        <div class="row">
 
+        <div class="row">
             <!-- LEFT -->
             <div class="col-md-8">
+                <img src="~/@Model.Tour.Image" class="tour-img-main shadow-sm" />
 
-                <img style="height:500px;width:850px"
-                     src="~/@Model.Tour.Image"
-                     class="img-fluid mb-4" />
-
-                <!-- INTRO -->
-                <div class="mb-4">
-                    <h3 class="border-bottom pb-2">Giới Thiệu Tour</h3>
-                    <p>@Model.Tour.TourIntroduce</p>
+                <div class="content-area">
+                    <h4 class="section-header">Giới Thiệu Tour</h4>
+                    <p style="white-space: pre-line">@Model.Tour.TourIntroduce</p>
                 </div>
 
-                <!-- SERVICES -->
-                <div class="mb-4">
-                    <h3 class="border-bottom pb-2">Dịch Vụ</h3>
-                    <div class="row">
-
-                        <div class="col-md-4">
-                            <h5>Nhà hàng</h5>
-                            <ul>
-                                @foreach (var r in Model.RestaurantList)
-                                {
-                                    <li>
-                                        <a asp-page="/Agents/Restaurants/Detail" asp-route-id="@r.ServiceId" >
-                                            @r.Name
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
+                <!-- Departure Slider -->
+                <div class="content-area">
+                    <h4 class="section-header">Lịch Khởi Hành</h4>
+                    <div class="departure-slider-container">
+                        <div class="departure-slider">
+                            @foreach (var dep in Model.Departures)
+                            {
+                                <div class="departure-item"
+                                     onclick="updateInfoCard(this, '@dep.StartDate', '@dep.EndDate', '@dep.Capacity', '@dep.AvailableSeat', '@dep.AdultPrice', '@dep.ChildPrice', '@(Model.Feedbacks.Any() ? Math.Round(Model.Feedbacks.Average(f => f.Rate ?? 0), 1) : 0)')">
+                                    <span class="dep-icon"><i class="fa-regular fa-calendar-check"></i></span>
+                                    <span class="dep-date">@dep.StartDate</span>
+                                    <small class="text-muted">đến @dep.EndDate</small>
+                                </div>
+                            }
                         </div>
-
-                        <div class="col-md-4">
-                            <h5>Giải trí</h5>
-                            <ul>
-                                @foreach (var e in Model.EntertainmentList)
-                                {
-                                    <li>
-                                        <a asp-page="/Agents/Entertainments/Detail" asp-route-id="@e.ServiceId">
-                                            @e.Name
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-
-                        <div class="col-md-4">
-                            <h5>Khách sạn</h5>
-                            <ul>
-                                @foreach (var a in Model.AccommodationList)
-                                {
-                                    <li>
-                                        <a asp-page="/Accommodations/Details" asp-route-id="@a.ServiceId">
-                                            @a.Name
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-
                     </div>
                 </div>
 
-                <!-- SCHEDULE -->
-                <div class="mb-4">
-                    <h3 class="border-bottom pb-2">Lịch Trình</h3>
+                <!-- Services -->
+                <div class="content-area">
+                    <h4 class="section-header">Dịch Vụ Đi Kèm</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6 class="fw-bold text-success"><i class="fa-solid fa-utensils me-2"></i>Nhà hàng</h6>
+                            <ul class="ps-3">
+                                @foreach (var s in Model.RestaurantList)
+                                {
+                                    <li><a asp-page="/Agents/Restaurants/Detail" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="fw-bold text-primary"><i class="fa-solid fa-masks-theater me-2"></i>Giải trí</h6>
+                            <ul class="ps-3">
+                                @foreach (var s in Model.EntertainmentList)
+                                {
+                                    <li><a asp-page="/Agents/Entertainments/Detail" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="fw-bold text-warning"><i class="fa-solid fa-hotel me-2"></i>Khách sạn</h6>
+                            <ul class="ps-3">
+                                @foreach (var s in Model.AccommodationList)
+                                {
+                                    <li><a asp-page="/Accommodations/Details" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-area">
+                    <h4 class="section-header">Lịch Trình</h4>
                     <p style="white-space: pre-line">@Model.Tour.TourSchedule</p>
                 </div>
 
-                <!-- INCLUDE -->
-                <div class="mb-4">
-                    <h3 class="border-bottom pb-2">Bao Gồm</h3>
+                <div class="content-area">
+                    <h4 class="section-header">Bao Gồm</h4>
                     <p style="white-space: pre-line">@Model.Tour.TourInclude</p>
                 </div>
 
-                <!-- NON INCLUDE -->
-                <div class="mb-4">
-                    <h3 class="border-bottom pb-2">Không Bao Gồm</h3>
+                <div class="content-area">
+                    <h4 class="section-header">Không Bao Gồm</h4>
                     <p style="white-space: pre-line">@Model.Tour.TourNonInclude</p>
                 </div>
 
+                <!-- Feedbacks -->
+                <div class="feedback-container mt-4">
+                    <h4 class="section-header">Đánh giá từ khách hàng</h4>
+                    @if (Model.Feedbacks != null && Model.Feedbacks.Count > 0)
+                    {
+                        @foreach (var fb in Model.Feedbacks)
+                        {
+                            <div class="feedback-card">
+                                <div class="fb-user-info">
+                                    <div class="fb-avatar">
+                                        @(string.IsNullOrEmpty(fb.Book?.User?.FirstName) ? "U" : fb.Book.User.FirstName.Substring(0, 1).ToUpper())
+                                    </div>
+                                    <div class="fb-details">
+                                        <h6>@fb.Book?.User?.FirstName @fb.Book?.User?.LastName</h6>
+                                        <div class="fb-rating">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fa-@(i <= fb.Rate ? "solid" : "regular") fa-star"></i>
+                                            }
+                                            <span class="fb-date ms-2">@fb.CreateDate?.ToString("dd/MM/yyyy")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fb-content">@fb.Content</div>
+                                @if (!string.IsNullOrEmpty(fb.Image))
+                                {
+                                    <img src="~/@fb.Image" class="fb-image" width="120" />
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-light border text-center py-4">
+                            <i class="fa-solid fa-comment-slash d-block mb-2 fs-3 text-muted"></i>
+                            Chưa có đánh giá nào cho tour này.
+                        </div>
+                    }
+                </div>
             </div>
 
             <!-- RIGHT -->
             <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-
-                        <h5 class="card-title">Thông Tin Tour</h5>
-
-                        <p><strong>Khởi hành:</strong> @Model.Tour.StartDay</p>
-                        <p><strong>Kết thúc:</strong> @Model.Tour.EndDay</p>
-                        <p><strong>Thời gian:</strong> @Model.Tour.NumberOfDay ngày</p>
-                        <p><strong>Khởi hành từ:</strong> @Model.Tour.StartPlace</p>
-                        <p><strong>Điểm đến:</strong> @Model.Tour.EndPlace</p>
-                        <p><strong>Số chỗ còn:</strong> @Model.Tour.Quantity</p>
-                        <p><strong>Giá người lớn:</strong> @String.Format("{0:N0} đ", Model.Tour.AdultPrice)</p>
-                        <p><strong>Giá trẻ em:</strong> @String.Format("{0:N0} đ", Model.Tour.ChildrenPrice)</p>
-                        <p><strong>Đánh giá:</strong> ⭐ @Model.Tour.Rate</p>
-
+                <div class="sticky-sidebar">
+                    <div class="booking-card">
+                        <h5 class="fw-bold mb-4 text-center">Thông Tin Tour</h5>
+                        <div class="info-row"><label>Khởi hành:</label><span id="txt-start" class="fw-bold">--</span></div>
+                        <div class="info-row"><label>Kết thúc:</label><span id="txt-end">--</span></div>
+                        <div class="info-row"><label>Thời gian:</label><span>@Model.Tour.NumberOfDay ngày</span></div>
+                        <div class="info-row"><label>Khởi hành từ:</label><span>@Model.Tour.StartPlace</span></div>
+                        <div class="info-row"><label>Điểm đến:</label><span>@Model.Tour.EndPlace</span></div>
+                        <div class="info-row"><label>Tổng số chỗ:</label><span id="txt-total-seat" class="fw-bold">--</span></div>
+                        <div class="info-row"><label>Số chỗ còn:</label><span id="txt-seat" class="text-success fw-bold">--</span></div>
+                        <div class="info-row"><label>Giá người lớn:</label><span id="txt-adult" class="price-red">--</span></div>
+                        <div class="info-row"><label>Giá trẻ em:</label><span id="txt-child" class="price-red">--</span></div>
+                        <div class="info-row"><label>Đánh giá:</label><span id="txt-rate" class="text-warning fw-bold">--</span></div>
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <!-- FEEDBACK -->
-        <div class="mt-5">
-            <h3 class="border-bottom pb-2">Đánh giá người dùng</h3>
-
-            @if (Model.Feedbacks.Count > 0)
-            {
-                @foreach (var fb in Model.Feedbacks)
-                {
-                    <div class="card mb-3 p-3 shadow-sm">
-                        <div class="d-flex justify-content-between">
-                            <strong>@fb.User.FirstName</strong>
-                            <span>⭐ @fb.Rate</span>
-                        </div>
-                        <p class="text-muted">@fb.CreateDate</p>
-                        <p>@fb.Content</p>
-                        @if (!string.IsNullOrEmpty(fb.Image))
-                        {
-                            <img src="~/@fb.Image" width="150" />
-                        }
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="alert alert-info">Chưa có đánh giá nào</div>
-            }
         </div>
     }
     else
     {
         <div class="alert alert-warning text-center">Không tìm thấy tour!</div>
     }
-
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.departure-slider').slick({
+                infinite: false,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                arrows: true,
+                dots: false,
+                rows: 1,
+                responsive: [
+                    { breakpoint: 992, settings: { slidesToShow: 2, rows: 1 } },
+                    { breakpoint: 576, settings: { slidesToShow: 1, rows: 1 } }
+                ]
+            });
+
+            // Tự động chọn ngày đầu tiên
+            $('.departure-item').first().click();
+        });
+
+        function updateInfoCard(el, start, end, totalSeat, seat, adult, child, rate) {
+            $('.departure-item').removeClass('active');
+            $(el).addClass('active');
+
+            document.getElementById('txt-start').innerText = start;
+            document.getElementById('txt-end').innerText = end;
+            document.getElementById('txt-total-seat').innerText = totalSeat;
+            document.getElementById('txt-seat').innerText = seat;
+            document.getElementById('txt-adult').innerText = Number(adult).toLocaleString() + " đ";
+            document.getElementById('txt-child').innerText = Number(child).toLocaleString() + " đ";
+            document.getElementById('txt-rate').innerText = rate + "/5 ⭐";
+        }
+    </script>
+}

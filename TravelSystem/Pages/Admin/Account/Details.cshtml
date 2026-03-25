@@ -82,6 +82,14 @@
         padding: 4px 12px;
         border-radius: 20px;
     }
+
+    .img-thumb {
+        width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
 </style>
 
 <div class="container-fluid px-4 py-5">
@@ -89,13 +97,14 @@
 
     <div class="detail-card">
         <div class="detail-card-header">
-            <i class="fas fa-user fa-lg"></i>
-            Thông Tin Người Dùng
+            <i class="fas fa-user-shield fa-lg"></i>
+            Quản Lý Thông Tin: @Model.User.FirstName @Model.User.LastName
         </div>
         <div class="card-body">
 
+            @* --- 1. THÔNG TIN CHUNG (Đã bỏ Status) --- *@
             <div class="detail-section">
-                <h4>Thông Tin Chung</h4>
+                <h4>Thông Tin Cơ Bản</h4>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <span class="info-label">Email:</span>
@@ -103,31 +112,15 @@
                     </div>
                     <div class="col-md-6">
                         <span class="info-label">Vai Trò:</span>
-                        <span class="info-value">
-                            @switch (Model.User.RoleId)
-                            {
-                                case 1:
-                                    @:Quản trị viên
-                                    break;
-                                case 2:
-                                    @:Khách du lịch
-                                    break;
-                                case 3:
-                                    @:Đại lý
-                                    break;
-                                default:
-                                    @:Không xác định
-                                    break;
-                            }
-                        </span>
+                        <span class="badge bg-primary">@Model.User.Role?.RoleName</span>
                     </div>
                     <div class="col-md-6">
-                        <span class="info-label">Họ:</span>
-                        <span class="info-value"> @Model.User.LastName</span>
+                        <span class="info-label">Họ & Tên:</span>
+                        <span class="info-value"> @Model.User.LastName @Model.User.FirstName</span>
                     </div>
                     <div class="col-md-6">
-                        <span class="info-label">Tên:</span>
-                        <span class="info-value"> @Model.User.FirstName</span>
+                        <span class="info-label">Số Điện Thoại:</span>
+                        <span class="info-value"> @Model.User.Phone</span>
                     </div>
                     <div class="col-md-6">
                         <span class="info-label">Ngày Sinh:</span>
@@ -137,30 +130,64 @@
                         <span class="info-label">Giới Tính:</span>
                         <span class="info-value"> @Model.User.Gender</span>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <span class="info-label">Địa Chỉ:</span>
                         <span class="info-value"> @Model.User.Address</span>
                     </div>
-                    <div class="col-md-6">
-                        <span class="info-label">Số Điện Thoại:</span>
-                        <span class="info-value"> @Model.User.Phone</span>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="info-label">Ngày Tạo:</span>
-                        <span class="info-value"> @Model.User.CreateAt?.ToString("dd/MM/yyyy")</span>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="info-label">Ngày Cập Nhật:</span>
-                        <span class="info-value"> @Model.User.UpdateAt?.ToString("dd/MM/yyyy")</span>
-                    </div>
-                    <div class="col-md-6">
-                        <span class="info-label">Trạng Thái:</span>
-                        <span class="@(Model.User.Status == 1 ? "status-active" : "status-inactive")">
-                            @(Model.User.Status == 1 ? "Hoạt động" : "Dừng hoạt động")
-                        </span>
-                    </div>
                 </div>
             </div>
+
+            @* --- 2. THÔNG TIN STAFF (ROLE 4) --- *@
+            @if (Model.User.RoleId == 4 && Model.User.Staff != null)
+            {
+                <div class="detail-section section-staff">
+                    <h4><i class="fa-solid fa-id-card-clip me-2"></i>Thông Tin Nhân Viên</h4>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <span class="info-label">Mã Nhân Viên:</span>
+                            <span class="info-value fw-bold text-info"> @Model.User.Staff.EmployeeCode</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="info-label">Ngày Vào Làm:</span>
+                            <span class="info-value"> @Model.User.Staff.HireDate?.ToString("dd/MM/yyyy")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @* --- 3. THÔNG TIN TOURIST (ROLE 5) --- *@
+            @if (Model.User.RoleId == 5 && Model.User.Tourist != null)
+            {
+                <div class="detail-section section-tourist">
+                    <h4><i class="fa-solid fa-wallet me-2"></i>Thông Tin Định Danh & Ngân Hàng</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <span class="info-label">Số CCCD:</span>
+                            <span class="info-value"> @Model.User.Tourist.IdCard</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="info-label">Chủ Tài Khoản:</span>
+                            <span class="info-value"> @Model.User.Tourist.AccountHolderName</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="info-label">Ngân Hàng:</span>
+                            <span class="info-value"> @Model.User.Tourist.BankName</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span class="info-label">Số Tài Khoản:</span>
+                            <span class="info-value"> @Model.User.Tourist.BankNumber</span>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <span class="info-label d-block mb-2">Mặt trước CCCD</span>
+                            <img src="/@Model.User.Tourist.IdCardFrontImage" class="img-thumb" onerror="this.src='/images/no-image.png'" />
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <span class="info-label d-block mb-2">Mặt sau CCCD</span>
+                            <img src="/@Model.User.Tourist.IdCardBackImage" class="img-thumb" onerror="this.src='/images/no-image.png'" />
+                        </div>
+                    </div>
+                </div>
+            }
 
             @if (Model.User.RoleId == 3 && Model.TravelAgent != null)
             {
@@ -177,7 +204,7 @@
                         </div>
                         <div class="col-md-6">
                             <span class="info-label">Email Đại Lý:</span>
-                            <span class="info-value"> @Model.TravelAgent.TravelAgentGmail</span>
+                            <span class="info-value"> @Model.TravelAgent.TravelAgentEmail</span>
                         </div>
                         <div class="col-md-6">
                             <span class="info-label">Hotline:</span>
@@ -189,7 +216,7 @@
                         </div>
                         <div class="col-md-6">
                             <span class="info-label">Ngày Thành Lập:</span>
-                            <span class="info-value"> @Model.TravelAgent.EstablishmentDate?.ToString("dd/MM/yyyy")</span>
+                            <span class="info-value"> @Model.TravelAgent.EstablishMentDate?.ToString("dd/MM/yyyy")</span>
                         </div>
                         <div class="col-md-6">
                             <span class="info-label">CMND/CCCD Đại Diện:</span>

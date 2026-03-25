@@ -1,0 +1,79 @@
+﻿@page
+@model TravelSystem.Pages.Users.Profiles.UpdateTouristModel
+@{
+    ViewData["Title"] = "Xác minh tài khoản";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container mt-5">
+    <div class="card shadow p-4" style="max-width: 800px; margin: auto; border-radius: 15px;">
+        <h2 class="text-center text-primary mb-4">Xác Minh Danh Tính Tourist</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Tourist.TouristId" />
+            
+            @if (Model.Errors.ContainsKey("Images") || Model.Errors.ContainsKey("System"))
+            {
+                <div class="alert alert-danger">
+                    @Model.Errors.GetValueOrDefault("Images")
+                    @Model.Errors.GetValueOrDefault("System")
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Chủ tài khoản ngân hàng</label>
+                    <input asp-for="Tourist.AccountHolderName" class="form-control" style="text-transform: uppercase;" />
+                    @if (Model.Errors.ContainsKey("Name")) { <span class="text-danger small">@Model.Errors["Name"]</span> }
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Ngân hàng</label>
+                    <input asp-for="Tourist.BankName" class="form-control" required />
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Số tài khoản</label>
+                    <input asp-for="Tourist.BankNumber" class="form-control" />
+                    @if (Model.Errors.ContainsKey("BankNumber")) { <span class="text-danger small">@Model.Errors["BankNumber"]</span> }
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Số CCCD (9-12 số)</label>
+                    <input asp-for="Tourist.IdCard" class="form-control" />
+                    @if (Model.Errors.ContainsKey("IdCard")) { <span class="text-danger small">@Model.Errors["IdCard"]</span> }
+                </div>
+
+                <div class="col-md-6 mb-3 text-center">
+                    <label class="form-label">Mặt trước CCCD</label>
+                    <img id="p1" src="@(Model.Tourist.IdCardFrontImage ?? "/images/default-id.png")" class="img-thumbnail d-block mb-2" style="height:150px; width:100%; object-fit:cover" />
+                    <input type="file" name="FrontImageFile" class="form-control" onchange="document.getElementById('p1').src = window.URL.createObjectURL(this.files[0])" />
+                </div>
+                <div class="col-md-6 mb-3 text-center">
+                    <label class="form-label">Mặt sau CCCD</label>
+                    <img id="p2" src="@(Model.Tourist.IdCardBackImage ?? "/images/default-id.png")" class="img-thumbnail d-block mb-2" style="height:150px; width:100%; object-fit:cover" />
+                    <input type="file" name="BackImageFile" class="form-control" onchange="document.getElementById('p2').src = window.URL.createObjectURL(this.files[0])" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 py-2 mt-3 fw-bold">LƯU & XÁC THỰC NGAY</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Hiển thị Pop-up nếu TempData có dữ liệu
+        @if (TempData["SuccessPopup"] != null)
+        {
+            <text>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '@TempData["SuccessPopup"]',
+                confirmButtonText: 'Về trang chủ'
+            }).then((result) => {
+                window.location.href = '/Index';
+            });
+            </text>
+        }
+    </script>
+}

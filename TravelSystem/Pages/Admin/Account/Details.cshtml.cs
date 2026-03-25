@@ -20,24 +20,17 @@ namespace TravelSystem.Pages.Admin.Account
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             var userEmail = HttpContext.Session.GetString("UserEmail");
-            if (userEmail == null)
-            {
-                return RedirectToPage("/Auths/Login");
-            }
+            if (userEmail == null) return RedirectToPage("/Auths/Login");
 
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var user = await _context.Users
                 .Include(u => u.Role)
+                .Include(u => u.Staff)   
+                .Include(u => u.Tourist)   
                 .FirstOrDefaultAsync(m => m.UserId == id);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (user == null) return NotFound();
 
             User = user;
 

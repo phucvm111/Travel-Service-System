@@ -49,10 +49,10 @@ namespace TravelSystem.Pages.Agents.AgentProfiles
 
             TravelAgentName = Agent.TravelAgentName;
             TravelAgentAddress = Agent.TravelAgentAddress;
-            TravelAgentGmail = Agent.TravelAgentGmail;
+            TravelAgentGmail = Agent.TravelAgentEmail;
             HotLine = Agent.HotLine;
             TaxCode = Agent.TaxCode;
-            EstablishmentDateRaw = Agent.EstablishmentDate?.ToString("yyyy-MM-dd");
+            EstablishmentDateRaw = Agent.EstablishMentDate?.ToString("yyyy-MM-dd");
             ExistingBusinessLicense = Agent.BusinessLicense;
             RepresentativeIdcard = Agent.RepresentativeIdcard;
             DateOfIssueRaw = Agent.DateOfIssue?.ToString("yyyy-MM-dd");
@@ -91,13 +91,13 @@ namespace TravelSystem.Pages.Agents.AgentProfiles
 
             Agent.TravelAgentName = TravelAgentName?.Trim();
             Agent.TravelAgentAddress = TravelAgentAddress?.Trim();
-            Agent.TravelAgentGmail = TravelAgentGmail?.Trim();
+            Agent.TravelAgentEmail = TravelAgentGmail?.Trim();
             Agent.HotLine = HotLine?.Trim();
             Agent.TaxCode = TaxCode?.Trim();
             Agent.RepresentativeIdcard = RepresentativeIdcard?.Trim();
 
             if (DateOnly.TryParse(EstablishmentDateRaw, out var estDate))
-                Agent.EstablishmentDate = estDate;
+                Agent.EstablishMentDate = estDate;
             if (DateOnly.TryParse(DateOfIssueRaw, out var issueDate))
                 Agent.DateOfIssue = issueDate;
 

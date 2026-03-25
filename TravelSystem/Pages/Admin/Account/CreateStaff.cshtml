@@ -1,0 +1,207 @@
+﻿@page
+@model TravelSystem.Pages.Admin.Account.CreateStaffModel
+@{
+    ViewData["Title"] = "Thêm Mới Nhân Viên";
+}
+
+<style>
+    /* Chặn con mắt mặc định của trình duyệt Edge/Chrome */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear,
+    input[type="password"]::-webkit-credentials-auto-fill-button {
+        display: none !important;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+
+    .section-title {
+        border-left: 4px solid #0d6efd;
+        padding-left: 10px;
+        margin-bottom: 20px;
+        color: #0d6efd;
+        font-weight: bold;
+    }
+
+    .btn-submit {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+    }
+
+        .btn-submit:hover {
+            background-color: #218838;
+            color: white;
+        }
+
+    .input-group-text {
+        cursor: pointer;
+        background-color: #f8f9fa;
+    }
+</style>
+
+<div class="container-fluid px-4 py-4">
+    <h1 class="mt-4">Quản Lý Nhân Viên</h1>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-user-plus me-1"></i> Thêm Nhân Viên Mới
+        </div>
+        <div class="card-body">
+            <form method="post">
+                @if (Model.Errors.ContainsKey("System"))
+                {
+                    <div class="alert alert-danger">@Model.Errors["System"]</div>
+                }
+
+                <div class="row">
+                    <div class="col-md-7 border-end">
+                        <h5 class="section-title">Thông Tin Cá Nhân</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Họ <span class="text-danger">*</span></label>
+                                <input type="text" name="LastName" value="@Model.LastName" class="form-control @(Model.Errors.ContainsKey("LastName") ? "is-invalid" : "")" />
+                                @if (Model.Errors.ContainsKey("LastName"))
+                                {
+                                    <div class="error-message">@Model.Errors["LastName"]</div>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Tên <span class="text-danger">*</span></label>
+                                <input type="text" name="FirstName" value="@Model.FirstName" class="form-control @(Model.Errors.ContainsKey("FirstName") ? "is-invalid" : "")" />
+                                @if (Model.Errors.ContainsKey("FirstName"))
+                                {
+                                    <div class="error-message">@Model.Errors["FirstName"]</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Mật Khẩu <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" id="password" name="Password" value="@Model.Password"
+                                           class="form-control @(Model.Errors.ContainsKey("Password") ? "is-invalid" : "")" />
+                                    <span class="input-group-text" onclick="togglePassword('password')">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </div>
+                                @if (Model.Errors.ContainsKey("Password"))
+                                {
+                                    <div class="error-message">@Model.Errors["Password"]</div>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Nhập Lại Mật Khẩu <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" id="repassword" name="RePassword" value="@Model.RePassword"
+                                           class="form-control @(Model.Errors.ContainsKey("RePassword") ? "is-invalid" : "")" />
+                                    <span class="input-group-text" onclick="togglePassword('repassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </span>
+                                </div>
+                                @if (Model.Errors.ContainsKey("RePassword"))
+                                {
+                                    <div class="error-message">@Model.Errors["RePassword"]</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Gmail <span class="text-danger">*</span></label>
+                                <input type="email" name="Gmail" value="@Model.Gmail" class="form-control @(Model.Errors.ContainsKey("Gmail") ? "is-invalid" : "")" />
+                                @if (Model.Errors.ContainsKey("Gmail"))
+                                {
+                                    <div class="error-message">@Model.Errors["Gmail"]</div>
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Số Điện Thoại <span class="text-danger">*</span></label>
+                                <input type="text" name="Phone" value="@Model.Phone" class="form-control @(Model.Errors.ContainsKey("Phone") ? "is-invalid" : "")" />
+                                @if (Model.Errors.ContainsKey("Phone"))
+                                {
+                                    <div class="error-message">@Model.Errors["Phone"]</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày Sinh</label>
+                                <input type="date" name="Dob" value="@Model.Dob?.ToString("yyyy-MM-dd")" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Giới Tính</label>
+                                <select name="Gender" class="form-select">
+                                    <option value="Nam" selected="@(Model.Gender == "Nam")">Nam</option>
+                                    <option value="Nữ" selected="@(Model.Gender == "Nữ")">Nữ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Địa Chỉ</label>
+                            <textarea name="Address" class="form-control" rows="2">@Model.Address</textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 ps-md-4">
+                        <h5 class="section-title">Hồ Sơ Công Việc</h5>
+                        <div class="mb-4">
+                            <label class="form-label">Mã Số Nhân Viên <span class="text-danger">*</span></label>
+                            <input type="number" name="EmployeeCode" value="@Model.EmployeeCode" class="form-control @(Model.Errors.ContainsKey("EmployeeCode") ? "is-invalid" : "")" />
+                            @if (Model.Errors.ContainsKey("EmployeeCode"))
+                            {
+                                <div class="error-message">@Model.Errors["EmployeeCode"]</div>
+                            }
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Ngày Vào Làm <span class="text-danger">*</span></label>
+                            <input type="date" name="HireDate" value="@Model.HireDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                        </div>
+
+                        <div>
+                            <strong>Ghi chú hệ thống:</strong><br>
+                            <small class="text-muted">Nhân viên mới sẽ được cấp quyền truy cập vào hệ thống.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end mt-4 pt-3 border-top">
+                    <a asp-page="/Admin/Account/Index" class="btn btn-secondary me-2">Quay Lại</a>
+                    <button type="submit" class="btn btn-submit">Xác Nhận Thêm Nhân Viên</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function togglePassword(fieldId) {
+            const input = document.getElementById(fieldId);
+            const icon = input.parentElement.querySelector("i");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+    </script>
+}

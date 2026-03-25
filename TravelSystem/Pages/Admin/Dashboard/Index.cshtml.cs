@@ -41,7 +41,7 @@ namespace TravelSystem.Pages.Admin.Dashboard
 
             TotalTours = await _context.Tours.CountAsync();
 
-            TotalRevenue = await _context.BookDetails
+            TotalRevenue = await _context.Bookings
                 .Where(b => b.Status == CompletedBookingStatus)
                 .SumAsync(b => (double?)b.TotalPrice) ?? 0;
 
