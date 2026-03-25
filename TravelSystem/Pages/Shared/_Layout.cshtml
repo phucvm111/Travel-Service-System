@@ -15,9 +15,9 @@
     @inject IHttpContextAccessor HttpContextAccessor
 
     @{
-    var userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserID");
-    var user = HttpContextAccessor.HttpContext.Session.GetString("UserEmail");
-    var roleId = HttpContextAccessor.HttpContext.Session.GetInt32("RoleId");
+        var userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserID");
+        var user = HttpContextAccessor.HttpContext.Session.GetString("UserEmail");
+        var roleId = HttpContextAccessor.HttpContext.Session.GetInt32("RoleId");
     }
 
     <!-- NAVBAR -->
@@ -37,68 +37,76 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                    <!-- RIGHT MENU -->
-                    <ul class="navbar-nav ms-auto">
+                <!-- RIGHT MENU -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Index">Trang chủ</a>
+                    </li>
+
+                    @if (roleId == 2)
+                    {
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Index">Trang chủ</a>
+                            <a class="nav-link" asp-page="/Agents/AgentRegisters/AgentRegister">
+                                Trở thành đối tác
+                            </a>
+                        </li>
+                    }
+                    @if (roleId == 1)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Admin/Dashboard/Index">
+                                Bảng điều khiển
+                            </a>
+                        </li>
+                    }
+
+                    @if (roleId == 3)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Agents/Dashboard/Index">
+                                Bảng điều khiển
+                            </a>
+                        </li>
+                    }
+                    @if (roleId == 4)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Staff/Dashboard/Index">
+                                Bảng điều khiển
+                            </a>
+                        </li>
+                    }
+                    @if (string.IsNullOrEmpty(user))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Users/Registers/Register">
+                                Đăng ký
+                            </a>
                         </li>
 
-                        @if (roleId == 2)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Agents/AgentRegisters/AgentRegister">
-                                    Trở thành đối tác
-                                </a>
-                            </li>
-                        }
-                        @if (roleId == 1)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Admin/Dashboard/Index">
-                                    Bảng điều khiển
-                                </a>
-                            </li>
-                        }
+                        <li class="nav-item">
+                            <a class="btn btn-primary px-3 ms-2" asp-page="/Auths/Login">
+                                Đăng nhập
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item dropdown">
 
-                        @if (roleId == 3)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Agents/Dashboard/Index">
-                                    Bảng điều khiển
-                                </a>
-                            </li>
-                        }
-                        @if (string.IsNullOrEmpty(user))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Users/Registers/Register">
-                                    Đăng ký
-                                </a>
-                            </li>
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                <i class="fa fa-user text-primary"></i>
+                            </a>
 
-                            <li class="nav-item">
-                                <a class="btn btn-primary px-3 ms-2" asp-page="/Auths/Login">
-                                    Đăng nhập
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item dropdown">
+                            <ul class="dropdown-menu dropdown-menu-end">
 
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                    <i class="fa fa-user text-primary"></i>
-                                </a>
-
-                                <ul class="dropdown-menu dropdown-menu-end">
-
-                                    <li>
-                                        <a class="dropdown-item"
-                                           asp-page="/Users/Profiles/Details"
-                                           asp-route-id="@userId">
-                                            Xem tài khoản
-                                        </a>
-                                    </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-page="/Users/Profiles/Details"
+                                       asp-route-id="@userId">
+                                        Xem tài khoản
+                                    </a>
+                                </li>
 
                                 <li>
                                     <a class="dropdown-item"
@@ -116,92 +124,96 @@
                                     </a>
                                 </li>
 
-                                    <li>
-                                        <a class="dropdown-item text-danger" asp-page="/Auths/Logout">
-                                            Đăng xuất
-                                        </a>
-                                    </li>
+                                <li>
+                                    <a class="dropdown-item text-danger" asp-page="/Auths/Logout">
+                                        Đăng xuất
+                                    </a>
+                                </li>
 
-                                </ul>
+                            </ul>
 
-                            </li>
-                        }
+                        </li>
+                    }
 
-                    </ul>
+                </ul>
 
-                </div>
+            </div>
 
             </div>
         </nav>
     </header>
     <div class="main-layout">
 
-    @{
-        var path = Context.Request.Path.ToString().ToLower();
-    }
+        @{
+            var path = Context.Request.Path.ToString().ToLower();
+        }
 
-    @if (roleId == 3 && path.StartsWith("/agents"))
-    {
-        <partial name="SideNavAgent" />
-    }
+        @if (roleId == 3 && path.StartsWith("/agents"))
+        {
+            <partial name="SideNavAgent" />
+        }
 
-    @if (roleId == 1 && path.StartsWith("/admin"))
-    {
-        <partial name="SideNavAdmin" />
-    }
+        @if (roleId == 1 && path.StartsWith("/admin"))
+        {
+            <partial name="SideNavAdmin" />
+        }
+        @if (roleId == 4 && path.StartsWith("/staff"))
+        {
+            <partial name="SideNavStaff" />
+        }
 
-    <main class="content">
-        @RenderBody()
-    </main>
+        <main class="content">
+            @RenderBody()
+        </main>
 
     </div>
 
 
     <footer class="bg-dark text-light">
-    <div class="container py-5">
+        <div class="container py-5">
 
-        <div class="row text-center justify-content-center">
+            <div class="row text-center justify-content-center">
 
-            <div class="col-md-3 mb-4">
-                <h5>Hỗ trợ</h5>
-                <ul class="list-unstyled">
-                    <li>Chúng tôi</li>
-                    <li>Liên hệ</li>
-                    <li>FAQ</li>
-                    <li>Điều khoản</li>
-                </ul>
+                <div class="col-md-3 mb-4">
+                    <h5>Hỗ trợ</h5>
+                    <ul class="list-unstyled">
+                        <li>Chúng tôi</li>
+                        <li>Liên hệ</li>
+                        <li>FAQ</li>
+                        <li>Điều khoản</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h5>Hợp tác</h5>
+                    <ul class="list-unstyled">
+                        <li>Đăng ký công ty</li>
+                        <li>Hướng dẫn hệ thống</li>
+                        <li>Chính sách hợp tác</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h5>Liên hệ</h5>
+                    <p>Thạch Thất, Hà Nội</p>
+                </div>
+
+                <div class="col-md-3 mb-4">
+                    <h5>Follow</h5>
+                    <i class="fab fa-facebook fs-4 me-2"></i>
+                    <i class="fab fa-youtube fs-4"></i>
+                </div>
+
             </div>
 
-            <div class="col-md-3 mb-4">
-                <h5>Hợp tác</h5>
-                <ul class="list-unstyled">
-                    <li>Đăng ký công ty</li>
-                    <li>Hướng dẫn hệ thống</li>
-                    <li>Chính sách hợp tác</li>
-                </ul>
-            </div>
+            <hr class="border-secondary">
 
-            <div class="col-md-3 mb-4">
-                <h5>Liên hệ</h5>
-                <p>Thạch Thất, Hà Nội</p>
-            </div>
-
-            <div class="col-md-3 mb-4">
-                <h5>Follow</h5>
-                <i class="fab fa-facebook fs-4 me-2"></i>
-                <i class="fab fa-youtube fs-4"></i>
+            <div class="text-center">
+                © 2026 GoViet. All Rights Reserved.
             </div>
 
         </div>
-
-        <hr class="border-secondary">
-
-        <div class="text-center">
-            © 2026 GoViet. All Rights Reserved.
-        </div>
-
-    </div>
-</footer>
+    </footer>
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
