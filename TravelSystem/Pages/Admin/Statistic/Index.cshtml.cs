@@ -7,11 +7,11 @@ namespace TravelSystem.Pages.Admin.Statistic
 {
     public class IndexModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private const int CompletedStatus = 3;
         private const int PageSize = 10;
 
-        public IndexModel(Prn222PrjContext context)
+        public IndexModel(FinalPrnContext context)
         {
             _context = context;
         }

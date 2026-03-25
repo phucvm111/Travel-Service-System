@@ -7,10 +7,10 @@ namespace TravelSystem.Pages.Admin.Dashboard
 {
     public class IndexModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private const int CompletedBookingStatus = 3;
 
-        public IndexModel(Prn222PrjContext context)
+        public IndexModel(FinalPrnContext context)
         {
             _context = context;
         }

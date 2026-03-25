@@ -10,11 +10,11 @@ namespace TravelSystem.Pages.Agents.AgentRegisters
 {
     public class AgentRegisterModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IHubContext<HubServer> _hub;
         private readonly IWebHostEnvironment _env;
 
-        public AgentRegisterModel(Prn222PrjContext context, IHubContext<HubServer> hub, IWebHostEnvironment env)
+        public AgentRegisterModel(FinalPrnContext context, IHubContext<HubServer> hub, IWebHostEnvironment env)
         {
             _context = context;
             _hub = hub;

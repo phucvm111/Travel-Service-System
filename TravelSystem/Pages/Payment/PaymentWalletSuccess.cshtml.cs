@@ -6,9 +6,9 @@ namespace TravelSystem.Pages.Payment
 {
     public class PaymentWalletSuccessModel : PageModel
     {
-        private readonly Prn222PrjContext _con;
+        private readonly FinalPrnContext _con;
 
-        public PaymentWalletSuccessModel(Prn222PrjContext con)
+        public PaymentWalletSuccessModel(FinalPrnContext con)
         {
             _con = con;
         }

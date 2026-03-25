@@ -7,10 +7,10 @@ namespace TravelSystem.Pages.Users.Wallets
 {
     public class WithdrawOtpModel : PageModel
     {
-        private readonly Prn222PrjContext _con;
+        private readonly FinalPrnContext _con;
         private readonly IEmailService _emailService; // Inject service của bạn
 
-        public WithdrawOtpModel(Prn222PrjContext con, IEmailService emailService)
+        public WithdrawOtpModel(FinalPrnContext con, IEmailService emailService)
         {
             _con = con;
             _emailService = emailService;

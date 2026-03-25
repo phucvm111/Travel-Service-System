@@ -7,9 +7,9 @@ namespace TravelSystem.Pages.Agents.Tours
 {
     public class DetailsModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public DetailsModel(Prn222PrjContext context)
+        public DetailsModel(FinalPrnContext context)
         {
             _context = context;
         }

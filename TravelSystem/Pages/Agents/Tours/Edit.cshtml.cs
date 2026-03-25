@@ -9,11 +9,11 @@ namespace TravelSystem.Pages.Agents.Tours
 {
     public class EditModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IWebHostEnvironment _env;
         private readonly IHubContext<HubServer> _hub;
 
-        public EditModel(Prn222PrjContext context, IWebHostEnvironment env, IHubContext<HubServer> hub)
+        public EditModel(FinalPrnContext context, IWebHostEnvironment env, IHubContext<HubServer> hub)
         {
             _context = context;
             _env = env;

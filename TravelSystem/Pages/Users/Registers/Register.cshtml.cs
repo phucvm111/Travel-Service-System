@@ -9,9 +9,9 @@ namespace TravelSystem.Pages.Users.Registers
     public class RegisterModel : PageModel
     {
         private readonly IEmailService _emailService;
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public RegisterModel(IEmailService emailService, Prn222PrjContext context)
+        public RegisterModel(IEmailService emailService, FinalPrnContext context)
         {
             _emailService = emailService;
             _context = context;

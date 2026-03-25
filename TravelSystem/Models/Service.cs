@@ -7,20 +7,33 @@ public partial class Service
 {
     public int ServiceId { get; set; }
 
+    public int? AgentId { get; set; }
+
+    public int? ServiceType { get; set; }
+
     public string? ServiceName { get; set; }
 
-    public string? ServiceType { get; set; }
+    public string? Address { get; set; }
 
-    public int? TravelAgentId { get; set; }
+    public string? PhoneNumber { get; set; }
 
-    public virtual ICollection<Accommodation> Accommodations { get; set; } = new List<Accommodation>();
+    public string? Description { get; set; }
 
-    public virtual ICollection<Entertainment> Entertainments { get; set; } = new List<Entertainment>();
+    public string? Image { get; set; }
 
-    public virtual ICollection<Restaurant> Restaurants { get; set; } = new List<Restaurant>();
+    public int? Status { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public virtual Accommodation? Accommodation { get; set; }
+
+    public virtual TravelAgent? Agent { get; set; }
+
+    public virtual Entertainment? Entertainment { get; set; }
+
+    public virtual Restaurant? Restaurant { get; set; }
 
     public virtual ICollection<TourServiceDetail> TourServiceDetails { get; set; } = new List<TourServiceDetail>();
-
-    public virtual TravelAgent? TravelAgent { get; set; }
-    //public int? UserID { get; internal set; }
 }

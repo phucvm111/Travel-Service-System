@@ -7,9 +7,9 @@ namespace TravelSystem.Pages.Agents.Room
 {
     public class CreateModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public CreateModel(Prn222PrjContext context)
+        public CreateModel(FinalPrnContext context)
         {
             _context = context;
         }

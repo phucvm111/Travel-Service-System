@@ -7,7 +7,7 @@ public partial class Vat
 {
     public int VatId { get; set; }
 
-    public double VatRate { get; set; }
+    public double? VatRate { get; set; }
 
     public string? Description { get; set; }
 
@@ -20,4 +20,8 @@ public partial class Vat
     public DateTime? CreateDate { get; set; }
 
     public DateTime? UpdateDate { get; set; }
+
+    public int? UserId { get; set; }
+
+    public virtual User? User { get; set; }
 }

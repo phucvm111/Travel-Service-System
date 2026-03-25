@@ -9,9 +9,9 @@ namespace TravelSystem.Pages.Users.Wallets
 {
     public class WalletAmountModel : PageModel
     {
-        private readonly Prn222PrjContext _con;
+        private readonly FinalPrnContext _con;
 
-        public WalletAmountModel(Prn222PrjContext con)
+        public WalletAmountModel(FinalPrnContext con)
         {
             _con = con;
         }

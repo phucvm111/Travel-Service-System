@@ -7,9 +7,9 @@ namespace TravelSystem.Pages.Users.Tours
 {
     public class SearchModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public SearchModel(Prn222PrjContext context)
+        public SearchModel(FinalPrnContext context)
         {
             _context = context;
         }

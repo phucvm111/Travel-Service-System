@@ -11,7 +11,7 @@ namespace TravelSystem
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<Prn222PrjContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
+            builder.Services.AddDbContext<FinalPrnContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
             builder.Services.AddSignalR();
             // Add services to the container.
             builder.Services.AddRazorPages();

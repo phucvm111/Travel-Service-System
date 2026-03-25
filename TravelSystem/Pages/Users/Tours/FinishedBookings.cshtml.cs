@@ -7,10 +7,10 @@ namespace TravelSystem.Pages.Users.BookTours
 {
     public class FinishedBookingsModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IWebHostEnvironment _environment;
 
-        public FinishedBookingsModel(Prn222PrjContext context, IWebHostEnvironment environment)
+        public FinishedBookingsModel(FinalPrnContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _environment = environment;

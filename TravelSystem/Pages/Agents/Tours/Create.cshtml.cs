@@ -10,11 +10,11 @@ namespace TravelSystem.Pages.Agents.Tours
 {
     public class CreateModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IWebHostEnvironment _env;
         private readonly IHubContext<HubServer> _hub;
 
-        public CreateModel(Prn222PrjContext context, IWebHostEnvironment env, IHubContext<HubServer> hub)
+        public CreateModel(FinalPrnContext context, IWebHostEnvironment env, IHubContext<HubServer> hub)
         {
             _context = context;
             _env = env;

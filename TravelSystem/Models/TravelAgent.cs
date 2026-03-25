@@ -7,13 +7,13 @@ public partial class TravelAgent
 {
     public int TravelAgentId { get; set; }
 
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     public string? TravelAgentName { get; set; }
 
     public string? TravelAgentAddress { get; set; }
 
-    public string? TravelAgentGmail { get; set; }
+    public string? TravelAgentEmail { get; set; }
 
     public string? HotLine { get; set; }
 
@@ -21,7 +21,7 @@ public partial class TravelAgent
 
     public string? BusinessLicense { get; set; }
 
-    public DateOnly? EstablishmentDate { get; set; }
+    public DateOnly? EstablishMentDate { get; set; }
 
     public string? FrontIdcard { get; set; }
 
@@ -35,5 +35,5 @@ public partial class TravelAgent
 
     public virtual ICollection<Tour> Tours { get; set; } = new List<Tour>();
 
-    public virtual User? User { get; set; }
+    public virtual User User { get; set; } = null!;
 }

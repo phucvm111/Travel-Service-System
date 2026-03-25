@@ -7,17 +7,17 @@ public partial class RequestCancel
 {
     public int RequestCancelId { get; set; }
 
-    public int BookId { get; set; }
+    public int? BookId { get; set; }
 
-    public int UserId { get; set; }
+    public int? StaffId { get; set; }
 
     public DateOnly? RequestDate { get; set; }
 
     public string? Reason { get; set; }
 
-    public string Status { get; set; } = null!;
+    public string? Status { get; set; }
 
-    public virtual BookDetail Book { get; set; } = null!;
+    public virtual Booking? Book { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public virtual Staff? Staff { get; set; }
 }

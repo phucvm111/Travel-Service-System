@@ -15,13 +15,7 @@ public partial class Feedback
 
     public DateTime? CreateDate { get; set; }
 
-    public int? Status { get; set; }
+    public int BookId { get; set; }
 
-    public int? BookId { get; set; }
-
-    public int? UserId { get; set; }
-
-    public virtual BookDetail? Book { get; set; }
-
-    public virtual User? User { get; set; }
+    public virtual Booking Book { get; set; } = null!;
 }

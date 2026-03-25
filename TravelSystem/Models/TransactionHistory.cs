@@ -7,9 +7,9 @@ public partial class TransactionHistory
 {
     public int TransactionId { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
-    public decimal Amount { get; set; }
+    public decimal? Amount { get; set; }
 
     public string? TransactionType { get; set; }
 
@@ -17,7 +17,5 @@ public partial class TransactionHistory
 
     public DateTime? TransactionDate { get; set; }
 
-    public decimal? AmountAfterTransaction { get; set; }
-
-    public virtual Wallet User { get; set; } = null!;
+    public virtual User? User { get; set; }
 }
