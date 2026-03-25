@@ -33,7 +33,11 @@ namespace TravelSystem.Pages.Users.Profiles
                 return RedirectToPage("/Auths/Login");
             }
 
-            User = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+            // Lấy thông tin User kèm theo danh sách Tourists liên quan
+            User = await _context.Users
+                .Include(u => u.Tourist)
+                .Include(u => u.Staff)
+                .FirstOrDefaultAsync(u => u.UserId == id);
 
             if (User == null)
             {

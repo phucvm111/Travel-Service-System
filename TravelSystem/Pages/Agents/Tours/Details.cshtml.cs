@@ -8,57 +8,49 @@ namespace TravelSystem.Pages.Agents.Tours
     public class DetailsModel : PageModel
     {
         private readonly FinalPrnContext _context;
-
-        public DetailsModel(FinalPrnContext context)
-        {
-            _context = context;
-        }
+        public DetailsModel(FinalPrnContext context) => _context = context;
 
         public Tour Tour { get; set; }
-        public List<Restaurant> RestaurantList { get; set; } = new();
-        public List<Entertainment> EntertainmentList { get; set; } = new();
-        public List<Accommodation> AccommodationList { get; set; } = new();
+        public List<TourDeparture> Departures { get; set; } = new();
+        public List<Service> RestaurantList { get; set; } = new();
+        public List<Service> EntertainmentList { get; set; } = new();
+        public List<Service> AccommodationList { get; set; } = new();
         public List<Feedback> Feedbacks { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            // Chỉ Agent đã đăng nhập mới vào được
             var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null) return RedirectToPage("/Auths/Login");
 
             var agent = await _context.TravelAgents
                 .FirstOrDefaultAsync(a => a.UserId == userId.Value);
-
             if (agent == null) return RedirectToPage("/Auths/Login");
 
-            // Chỉ cho xem tour của chính agent đó
             Tour = await _context.Tours
                 .FirstOrDefaultAsync(t => t.TourId == id && t.TravelAgentId == agent.TravelAgentId);
-
             if (Tour == null) return NotFound();
 
-            // Nhà hàng
-            RestaurantList = await _context.Restaurants
-                .Where(r => _context.TourServiceDetails
-                    .Any(t => t.ServiceId == r.ServiceId && t.TourId == id))
+            Departures = await _context.TourDepartures
+                .Where(d => d.TourId == id)
+                .OrderBy(d => d.StartDate)
                 .ToListAsync();
 
-            // Giải trí
-            EntertainmentList = await _context.Entertainments
-                .Where(e => _context.TourServiceDetails
-                    .Any(t => t.ServiceId == e.ServiceId && t.TourId == id))
+            var serviceIds = await _context.TourServiceDetails
+                .Where(td => td.TourId == id)
+                .Select(td => td.ServiceId)
                 .ToListAsync();
 
-            // Khách sạn
-            AccommodationList = await _context.Accommodations
-                .Where(a => _context.TourServiceDetails
-                    .Any(t => t.ServiceId == a.ServiceId && t.TourId == id))
+            var allServices = await _context.Services
+                .Where(s => serviceIds.Contains(s.ServiceId))
                 .ToListAsync();
 
-            // Feedback
+            RestaurantList = allServices.Where(s => s.ServiceType == 2).ToList();
+            EntertainmentList = allServices.Where(s => s.ServiceType == 3).ToList();
+            AccommodationList = allServices.Where(s => s.ServiceType == 1).ToList();
+
             Feedbacks = await _context.Feedbacks
-                .Include(f => f.User)
-                .Where(f => f.Book.TourId == id)
+                .Include(f => f.Book).ThenInclude(b => b.User)
+                .Where(f => f.Book.TourDeparture.TourId == id)
                 .OrderByDescending(f => f.CreateDate)
                 .ToListAsync();
 

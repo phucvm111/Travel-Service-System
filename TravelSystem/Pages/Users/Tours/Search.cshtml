@@ -1,192 +1,473 @@
 ﻿@page
-@using TravelSystem.Pages.Users.Tours
 @model TravelSystem.Pages.Users.Tours.SearchModel
 @{
-    // Tạo returnUrl chứa toàn bộ trạng thái filter hiện tại
-    // Khi user quay lại từ Details, Search sẽ restore đúng filter
-    var queryParams = new List<string>();
-    if (!string.IsNullOrEmpty(Model.Budget)) queryParams.Add($"Budget={Uri.EscapeDataString(Model.Budget)}");
-    if (!string.IsNullOrEmpty(Model.Departure)) queryParams.Add($"Departure={Uri.EscapeDataString(Model.Departure)}");
-    if (!string.IsNullOrEmpty(Model.Destination)) queryParams.Add($"Destination={Uri.EscapeDataString(Model.Destination)}");
-    if (Model.DepartureDate.HasValue) queryParams.Add($"DepartureDate={Model.DepartureDate.Value:yyyy-MM-dd}");
-    if (Model.PageNumber > 1) queryParams.Add($"PageNumber={Model.PageNumber}");
-
-    var returnUrl = "/Users/Tours/Search" + (queryParams.Any() ? "?" + string.Join("&", queryParams) : "");
+    ViewData["Title"] = "Tìm kiếm Tour";
 }
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+<style>
+    /* ===== BỘ LỌC ===== */
+    .filter-card {
+        border-radius: 12px;
+        border: 1px solid #eee;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        padding: 20px;
+        background: #fff;
+        position: sticky;
+        top: 20px;
+    }
+
+    .filter-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    .filter-section {
+        margin-bottom: 18px;
+    }
+
+        .filter-section label.section-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #444;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+    .filter-radio-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .filter-radio {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        border: 1px solid #eee;
+        background: #fafafa;
+        transition: 0.2s;
+        margin-bottom: 0;
+    }
+
+        .filter-radio:hover {
+            border-color: #198754;
+            background: #f0f9f4;
+        }
+
+        .filter-radio input[type="radio"] {
+            accent-color: #198754;
+            margin: 0;
+        }
+
+    .btn-clear-filter {
+        font-size: 0.75rem;
+        color: #dc3545;
+        text-decoration: none;
+        border: 1px solid #dc3545;
+        border-radius: 20px;
+        padding: 2px 12px;
+        transition: 0.2s;
+    }
+
+        .btn-clear-filter:hover {
+            background: #dc3545;
+            color: #fff;
+        }
+
+    .btn-apply {
+        background: #198754;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        width: 100%;
+        font-weight: 600;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+        .btn-apply:hover {
+            background: #146c43;
+        }
+
+    /* ===== TOUR CARD ===== */
+    .tour-card {
+        border-radius: 12px;
+        border: 1px solid #eee;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        margin-bottom: 24px;
+        overflow: hidden;
+        transition: 0.3s;
+        background: #fff;
+    }
+
+        .tour-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+    .tour-card-img {
+        width: 100%;
+        height: 100%;
+        min-height: 240px;
+        object-fit: cover;
+    }
+
+    .tour-day-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(25, 135, 84, 0.9);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        backdrop-filter: blur(4px);
+    }
+
+    .tour-card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .tour-card-title {
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: #2c3e50;
+        margin-bottom: 12px;
+        line-height: 1.4;
+    }
+
+    .tour-meta {
+        font-size: 0.85rem;
+        color: #555;
+        margin-bottom: 6px;
+    }
+
+        .tour-meta i {
+            width: 20px;
+            color: #198754;
+        }
+
+    /* ===== DEPARTURE SLIDER ===== */
+    .dep-slider-wrap {
+        margin: 15px 0;
+        padding: 0 30px;
+        position: relative;
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .dep-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 8px 4px;
+        margin: 0 5px;
+        text-align: center;
+        cursor: pointer;
+        background: #fff;
+        transition: 0.2s;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .dep-item.active {
+            border: 2px solid #198754;
+            background: #eefaf3;
+        }
+
+        .dep-item .dep-date {
+            color: #333;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .dep-item .dep-end {
+            color: #777;
+            font-size: 0.7rem;
+        }
+
+    .dep-slider .slick-prev, .dep-slider .slick-next {
+        width: 24px;
+        height: 24px;
+        background: #198754 !important;
+        border-radius: 50%;
+        z-index: 2;
+    }
+
+        .dep-slider .slick-prev:before, .dep-slider .slick-next:before {
+            font-size: 10px;
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+        }
+
+    /* ===== PRICE / FOOTER ===== */
+    .tour-card-footer {
+        margin-top: auto;
+        border-top: 1px solid #f0f0f0;
+        padding-top: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .price-value {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #d9534f;
+    }
+
+    .btn-detail {
+        background: #1a73e8;
+        color: white;
+        border-radius: 8px;
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        .btn-detail:hover {
+            background: #1558b0;
+            color: white;
+        }
+
+    .pagination .page-item.active .page-link {
+        background-color: #198754;
+        border-color: #198754;
+    }
+</style>
+
 <div class="container mt-4 mb-5">
+    <div class="row g-4">
 
-    <div class="row">
-
-        <!-- FILTER -->
         <div class="col-md-3">
-
-            <form method="get">
-
-                <div class="d-flex justify-content-between mb-3">
-                    <h4>Bộ lọc tìm kiếm</h4>
-                    <button type="button"
-                            class="btn btn-danger btn-sm"
-                            onclick="window.location.href='/Users/Tours/Search'">
-                        Xóa bộ lọc
-                    </button>
+            <form method="get" class="filter-card">
+                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                    <span class="filter-title"><i class="fa-solid fa-sliders me-2 text-success"></i>Bộ lọc</span>
+                    <a href="/Users/Tours/Search" class="btn-clear-filter">Xóa lọc</a>
                 </div>
 
-                <!-- Budget -->
-                <div class="mb-3">
-                    <label class="fw-bold">Ngân sách</label>
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <label class="border rounded p-2 w-100 d-flex align-items-center gap-2">
-                                <input type="radio" name="Budget" value="under5"
-                                       @(Model.Budget == "under5" ? "checked" : "") />
-                                <span>Dưới 5 triệu</span>
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label class="border rounded p-2 w-100 d-flex align-items-center gap-2">
-                                <input type="radio" name="Budget" value="5-10"
-                                       @(Model.Budget == "5-10" ? "checked" : "") />
-                                <span>5 - 10 triệu</span>
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label class="border rounded p-2 w-100 d-flex align-items-center gap-2">
-                                <input type="radio" name="Budget" value="10-20"
-                                       @(Model.Budget == "10-20" ? "checked" : "") />
-                                <span>10 - 20 triệu</span>
-                            </label>
-                        </div>
-                        <div class="col-6">
-                            <label class="border rounded p-2 w-100 d-flex align-items-center gap-2">
-                                <input type="radio" name="Budget" value="over20"
-                                       @(Model.Budget == "over20" ? "checked" : "") />
-                                <span>Trên 20 triệu</span>
-                            </label>
-                        </div>
+                <div class="filter-section">
+                    <label class="section-label"><i class="fa-solid fa-magnifying-glass me-1"></i>Từ khóa</label>
+                    <input type="text" name="Keyword" class="form-control form-control-sm"
+                           placeholder="Tên tour, địa danh..." value="@Model.Keyword" />
+                </div>
+
+                <div class="filter-section">
+                    <label class="section-label"><i class="fa-solid fa-wallet me-1"></i>Mức giá</label>
+                    <div class="filter-radio-grid">
+                        <label class="filter-radio">
+                            <input type="radio" name="Budget" value="under5" @(Model.Budget == "under5" ? "checked" : "") /> Dưới 5tr
+                        </label>
+                        <label class="filter-radio">
+                            <input type="radio" name="Budget" value="5-10" @(Model.Budget == "5-10" ? "checked" : "") /> 5 - 10tr
+                        </label>
+                        <label class="filter-radio">
+                            <input type="radio" name="Budget" value="10-20" @(Model.Budget == "10-20" ? "checked" : "") /> 10 - 20tr
+                        </label>
+                        <label class="filter-radio">
+                            <input type="radio" name="Budget" value="over20" @(Model.Budget == "over20" ? "checked" : "") /> Trên 20tr
+                        </label>
                     </div>
                 </div>
 
-                <!-- Start place -->
-                <div class="mb-3">
-                    <label>Điểm khởi hành</label>
-                    <select name="Departure" class="form-control">
+                <div class="filter-section">
+                    <label class="section-label"><i class="fa-solid fa-plane-departure me-1"></i>Khởi hành</label>
+                    <select name="Departure" class="form-select form-select-sm">
                         <option value="">Tất cả</option>
-                        @foreach (var place in Model.StartPlaces)
+                        @foreach (var p in Model.StartPlaces)
                         {
-                            if (Model.Departure == place)
-                            {
-                                <option value="@place" selected>@place</option>
-                            }
-                            else
-                            {
-                                <option value="@place">@place</option>
-                            }
+                            <option value="@p" selected="@(Model.Departure == p ? "selected" : null)">@p</option>
                         }
                     </select>
                 </div>
 
-                <!-- Destination -->
-                <div class="mb-3">
-                    <label>Điểm đến</label>
-                    <select name="Destination" class="form-control">
+                <div class="filter-section">
+                    <label class="section-label"><i class="fa-solid fa-location-dot me-1"></i>Điểm đến</label>
+                    <select name="Destination" class="form-select form-select-sm">
                         <option value="">Tất cả</option>
-                        @foreach (var place in Model.EndPlaces)
+                        @foreach (var p in Model.EndPlaces)
                         {
-                            if (!string.IsNullOrEmpty(Model.Destination) && place.Contains(Model.Destination))
-                            {
-                                <option value="@place" selected>@place</option>
-                            }
-                            else
-                            {
-                                <option value="@place">@place</option>
-                            }
+                            <option value="@p" selected="@(p.Contains(Model.Destination) ? "selected" : null)">@p</option>
                         }
                     </select>
                 </div>
 
-                <!-- Date -->
-                <div class="mb-3">
-                    <label>Ngày đi</label>
-                    <input type="date"
-                           class="form-control"
-                           name="DepartureDate"
+                <div class="filter-section">
+                    <label class="section-label"><i class="fa-regular fa-calendar me-1"></i>Ngày đi từ</label>
+                    <input type="date" name="DepartureDate" class="form-control form-control-sm"
                            value="@Model.DepartureDate?.ToString("yyyy-MM-dd")" />
                 </div>
 
-                <button class="btn btn-primary w-100">Áp dụng</button>
-
+                <button type="submit" class="btn-apply shadow-sm">
+                    <i class="fa-solid fa-magnifying-glass me-1"></i> Tìm kiếm ngay
+                </button>
             </form>
-
         </div>
 
-        <!-- TOUR LIST -->
         <div class="col-md-9">
-
-            <h3>Có @Model.TotalTours tour</h3>
+            <h5 class="mb-4">
+                <i class="fa-solid fa-route text-success me-2"></i>
+                Tìm thấy <span class="text-success fw-bold">@Model.TotalTours</span> tour phù hợp
+            </h5>
 
             @foreach (var tour in Model.Tours)
             {
-                <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="~/@tour.Image" class="img-fluid rounded-start" />
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5>@tour.TourName</h5>
-                                <p>
-                                    Khởi hành: @tour.StartDay <br />
-                                    Thời gian: @tour.NumberOfDay ngày <br />
-                                    Khởi hành từ: @tour.StartPlace <br />
-                                    Điểm đến: @tour.EndPlace <br />
-                                    Còn: @tour.Quantity chỗ
-                                </p>
-                                <h4 class="text-danger">@String.Format("{0:N0} đ", tour.AdultPrice)</h4>
+                var today = DateOnly.FromDateTime(DateTime.Today);
+                var departures = tour.TourDepartures
+                .Where(d => d.StartDate >= today)
+                .OrderBy(d => d.StartDate)
+                .ToList();
+                var earliest = departures.FirstOrDefault();
+                var tourIdx = tour.TourId;
 
-                                <a asp-page="/Users/Tours/Details"
-                                   asp-route-id="@tour.TourId"
-                                   class="btn btn-success">
-                                    Xem chi tiết
-                                </a>
+                <div class="tour-card">
+                    <div class="row g-0">
+                        <div class="col-md-4 position-relative">
+                            <img src="~/@tour.Image" class="tour-card-img" alt="@tour.TourName" />
+                            <span class="tour-day-badge">
+                                <i class="fa-regular fa-clock me-1"></i>@tour.NumberOfDay ngày
+                            </span>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="tour-card-body">
+                                <div class="tour-card-title">@tour.TourName</div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p class="tour-meta"><i class="fa-solid fa-circle-dot" style="font-size: 10px;"></i> <b>Khởi hành:</b> @tour.StartPlace</p>
+                                        <p class="tour-meta"><i class="fa-solid fa-location-dot"></i> <b>Điểm đến:</b> @tour.EndPlace</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="tour-meta">
+                                            <i class="fa-solid fa-user-check"></i>
+                                            <b>Trống:</b> <span id="seat-@tourIdx" class="text-success fw-bold">@(earliest != null ? earliest.AvailableSeat.ToString() + " chỗ" : "--")</span>
+                                        </p>
+                                        <p class="tour-meta">
+                                            <i class="fa-solid fa-baby"></i>
+                                            <b>Trẻ em:</b> <span id="child-@tourIdx" class="text-danger fw-bold">@(earliest != null ? String.Format("{0:N0} đ", earliest.ChildPrice) : "--")</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                @if (departures.Count > 0)
+                                {
+                                    <div class="dep-slider-wrap">
+                                        <div class="dep-slider" id="slider-@tourIdx">
+                                            @foreach (var dep in departures)
+                                            {
+                                                <div>
+                                                    <div class="dep-item @(dep == earliest ? "active" : "")"
+                                                         onclick="selectDep(this, '@tourIdx', '@dep.AvailableSeat', '@dep.AdultPrice', '@dep.ChildPrice', '@dep.DepartureId')">
+                                                        <span class="dep-date">@dep.StartDate</span>
+                                                        <span class="dep-end">đến @dep.EndDate</span>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning py-2 px-3 my-2" style="font-size: 0.8rem;">
+                                        <i class="fa-solid fa-calendar-xmark me-2"></i>Hiện chưa có lịch khởi hành mới.
+                                    </div>
+                                }
+
+                                <div class="tour-card-footer">
+                                    <div>
+                                        <div class="small text-muted">Giá từ (Người lớn):</div>
+                                        <div class="price-value" id="price-@tourIdx">
+                                            @(earliest != null ? String.Format("{0:N0} đ", earliest.AdultPrice) : "--")
+                                        </div>
+                                    </div>
+                                    <a asp-page="/Users/Tours/Details" asp-route-id="@tour.TourId" class="btn-detail">
+                                        Chi tiết <i class="fa-solid fa-chevron-right ms-1" style="font-size: 0.7rem;"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             }
 
-            <!-- PAGINATION -->
-            <div class="mt-3">
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
-                    if (i == Model.CurrentPage)
-                    {
-                        <span class="btn btn-primary">@i</span>
-                    }
-                    else
-                    {
-                        <a class="btn btn-outline-primary"
-                           asp-page="./Search"
-                           asp-route-PageNumber="@i"
-                           asp-route-budget="@Model.Budget"
-                           asp-route-departure="@Model.Departure"
-                           asp-route-destination="@Model.Destination"
-                           asp-route-departureDate="@Model.DepartureDate">
-                            @i
-                        </a>
-                    }
-                }
-            </div>
-
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-page="./Search"
+                                   asp-route-PageNumber="@i"
+                                   asp-route-Budget="@Model.Budget"
+                                   asp-route-Departure="@Model.Departure"
+                                   asp-route-Destination="@Model.Destination"
+                                   asp-route-Keyword="@Model.Keyword"
+                                   asp-route-DepartureDate="@Model.DepartureDate">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
         </div>
-
     </div>
-
 </div>
 
-<style>
-    label:has(input[type="radio"]:checked) {
-        border: 2px solid #0d6efd;
-        background: #f0f7ff;
-    }
-</style>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            @foreach (var tour in Model.Tours)
+            {
+                    var today2 = DateOnly.FromDateTime(DateTime.Today);
+                    var deps = tour.TourDepartures.Where(d => d.StartDate >= today2).ToList();
+                    if (deps.Count > 0)
+                    {
+                            @:$('#slider-@tour.TourId').slick({
+                            @:    infinite: false,
+                            @:    slidesToShow: 3,
+                            @:    slidesToScroll: 1,
+                            @:    arrows: true,
+                            @:    dots: false,
+                            @:    responsive: [
+                            @:        { breakpoint: 1200, settings: { slidesToShow: 3 } },
+                            @:        { breakpoint: 992, settings: { slidesToShow: 2 } },
+                            @:        { breakpoint: 576, settings: { slidesToShow: 1 } }
+                            @:    ]
+                            @:});
+                    }
+            }
+        });
+
+        function selectDep(el, tourId, seat, adult, child, depId) {
+            // Cập nhật class active
+            $(el).closest('.dep-slider').find('.dep-item').removeClass('active');
+            $(el).addClass('active');
+
+            // Cập nhật text hiển thị
+            document.getElementById('seat-' + tourId).innerText = seat + ' chỗ';
+            document.getElementById('price-' + tourId).innerText = Number(adult).toLocaleString('vi-VN') + ' đ';
+            document.getElementById('child-' + tourId).innerText = Number(child).toLocaleString('vi-VN') + ' đ';
+        }
+    </script>
+}

@@ -1,44 +1,40 @@
 ﻿@page
 @model TravelSystem.Pages.Users.Profiles.EditModel
-
 @{
-    ViewData["Title"] = "Edit Profile";
+    ViewData["Title"] = "Chỉnh sửa hồ sơ";
 }
 
 <style>
     body {
         background-image: url('/images/img_10.jpg');
         background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        background-attachment: fixed;
         min-height: 100vh;
     }
 
     .profile-container {
         max-width: 860px;
-        margin: 80px auto;
+        margin: 50px auto;
         background: rgba(255,255,255,0.95);
-        padding: 36px 40px;
+        padding: 40px;
         border-radius: 12px;
         box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
     .profile-title {
         font-size: 24px;
-        font-weight: 600;
+        font-weight: 700;
         color: #0d6efd;
         text-align: center;
-        margin-bottom: 28px;
+        margin-bottom: 30px;
     }
 
-    /* ── 2 cột ── */
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0 24px;
     }
 
-    /* Field chiếm cả 2 cột (gmail, password) */
     .col-full {
         grid-column: 1 / -1;
     }
@@ -46,7 +42,7 @@
     .field-group {
         display: flex;
         flex-direction: column;
-        margin-bottom: 18px;
+        margin-bottom: 15px;
     }
 
         .field-group label {
@@ -56,18 +52,13 @@
             color: #333;
         }
 
-        .field-group .form-control {
-            width: 100%;
-        }
-
-    /* Lỗi hiện ngay dưới input */
     .field-error {
         color: #dc3545;
-        font-size: 12.5px;
+        font-size: 12px;
         margin-top: 4px;
+        font-weight: 500;
     }
 
-    /* Password eye */
     .password-wrap {
         position: relative;
     }
@@ -83,28 +74,40 @@
         transform: translateY(-50%);
         cursor: pointer;
         color: #666;
-        font-size: 15px;
     }
 
-        .toggle-password:hover {
-            color: #28a745;
+    .img-card {
+        background: #f8f9fa;
+        border: 1px dashed #ccc;
+        padding: 15px;
+        text-align: center;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+        .img-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            background: #eee;
         }
 
-    /* Buttons */
     .btn-group-center {
         display: flex;
         justify-content: center;
         gap: 20px;
-        margin-top: 10px;
+        margin-top: 30px;
     }
 
     .btn-save {
         background: #28a745;
         color: white;
-        padding: 10px 28px;
+        padding: 10px 40px;
         border-radius: 6px;
         border: none;
-        font-size: 15px;
+        font-weight: 600;
         cursor: pointer;
     }
 
@@ -115,122 +118,152 @@
     .btn-back {
         background: #dc3545;
         color: white;
-        padding: 10px 28px;
+        padding: 10px 40px;
         border-radius: 6px;
         text-decoration: none;
-        font-size: 15px;
+        font-weight: 600;
     }
-
-        .btn-back:hover {
-            background: #c82333;
-            color: white;
-        }
 </style>
 
 <div class="profile-container">
+    <h2 class="profile-title">Cập nhật hồ sơ</h2>
 
-    <h2 class="profile-title">Chỉnh sửa thông tin cá nhân</h2>
-
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="User.UserId" />
+        <input type="hidden" asp-for="User.RoleId" />
+        <input type="hidden" asp-for="ExistingFrontIdcard" />
+        <input type="hidden" asp-for="ExistingBackIdcard" />
 
         <div class="form-grid">
-
-            @* ── Họ ── *@
+            @* --- Thông tin cơ bản (Dùng chung cho tất cả Role) --- *@
             <div class="field-group">
-                <label>Họ <span style="color:red">*</span></label>
-                <input asp-for="User.LastName" class="form-control" placeholder="Nhập họ" />
+                <label>Họ <span class="text-danger">*</span></label>
+                <input asp-for="User.LastName" class="form-control" />
                 <span asp-validation-for="User.LastName" class="field-error"></span>
             </div>
-
-            @* ── Tên ── *@
             <div class="field-group">
-                <label>Tên <span style="color:red">*</span></label>
-                <input asp-for="User.FirstName" class="form-control" placeholder="Nhập tên" />
+                <label>Tên <span class="text-danger">*</span></label>
+                <input asp-for="User.FirstName" class="form-control" />
                 <span asp-validation-for="User.FirstName" class="field-error"></span>
             </div>
-
-            @* ── Gmail — full width ── *@
             <div class="field-group col-full">
                 <label>Gmail</label>
                 <input asp-for="User.Gmail" class="form-control" readonly />
             </div>
-
-            @* ── Mật khẩu — full width ── *@
             <div class="field-group col-full">
-                <label>Mật khẩu <span style="color:red">*</span></label>
+                <label>Mật khẩu <span class="text-danger">*</span></label>
                 <div class="password-wrap">
-                    <input asp-for="User.Password"
-                           id="password"
-                           type="password"
-                           class="form-control"
-                           value="@Model.User.Password" />
-                    <span class="toggle-password" onclick="togglePassword()">
-                        <i id="eyeIcon" class="fa-solid fa-eye"></i>
-                    </span>
+                    <input asp-for="User.Password" id="password" type="password" class="form-control" value="@Model.User.Password" />
+                    <span class="toggle-password" onclick="togglePassword()"><i id="eyeIcon" class="fa-solid fa-eye"></i></span>
                 </div>
                 <span asp-validation-for="User.Password" class="field-error"></span>
             </div>
-
-            @* ── Giới tính ── *@
             <div class="field-group">
-                <label>Giới tính <span style="color:red">*</span></label>
+                <label>Giới tính <span class="text-danger">*</span></label>
                 <select asp-for="User.Gender" class="form-control">
-                    <option value="">-- Chọn giới tính --</option>
                     <option value="Nam">Nam</option>
                     <option value="Nữ">Nữ</option>
                 </select>
                 <span asp-validation-for="User.Gender" class="field-error"></span>
             </div>
-
-            @* ── Số điện thoại ── *@
             <div class="field-group">
-                <label>Số điện thoại <span style="color:red">*</span></label>
-                <input asp-for="User.Phone" class="form-control" placeholder="0xxxxxxxxx" />
+                <label>Số điện thoại <span class="text-danger">*</span></label>
+                <input asp-for="User.Phone" class="form-control" />
                 <span asp-validation-for="User.Phone" class="field-error"></span>
             </div>
-
-            @* ── Ngày sinh ── *@
             <div class="field-group">
-                <label>Ngày sinh <span style="color:red">*</span></label>
+                <label>Ngày sinh <span class="text-danger">*</span></label>
                 <input asp-for="User.Dob" type="date" class="form-control" />
                 <span asp-validation-for="User.Dob" class="field-error"></span>
             </div>
-
-            @* ── Địa chỉ ── *@
             <div class="field-group">
-                <label>Địa chỉ <span style="color:red">*</span></label>
-                <input asp-for="User.Address" class="form-control" placeholder="Nhập địa chỉ" />
+                <label>Địa chỉ <span class="text-danger">*</span></label>
+                <input asp-for="User.Address" class="form-control" />
                 <span asp-validation-for="User.Address" class="field-error"></span>
             </div>
 
+            @* --- Role 5: Tourist --- *@
+            @if (Model.User.RoleId == 5)
+            {
+                <div class="col-full mt-4"><h5 class="text-primary border-bottom pb-2">Thông tin Du khách & Ngân hàng</h5></div>
+                <div class="field-group">
+                    <label>Số CCCD <span class="text-danger">*</span></label>
+                    <input asp-for="IdCard" class="form-control" />
+                    <span asp-validation-for="IdCard" class="field-error"></span>
+                </div>
+                <div class="field-group">
+                    <label>Chủ tài khoản</label>
+                    <input asp-for="AccountHolderName" class="form-control" />
+                </div>
+                <div class="field-group">
+                    <label>Ngân hàng</label>
+                    <input asp-for="BankName" class="form-control" />
+                </div>
+                <div class="field-group">
+                    <label>Số tài khoản</label>
+                    <input asp-for="BankNumber" class="form-control" />
+                </div>
+                <div class="field-group">
+                    <div class="img-card">
+                        <label>Mặt trước CCCD</label>
+                        <img id="prevFront" src="~/@(string.IsNullOrEmpty(Model.ExistingFrontIdcard) ? "images/no-image.png" : Model.ExistingFrontIdcard)" />
+                        <input type="file" asp-for="FrontIdcardFile" class="form-control mt-2" accept="image/*" onchange="previewImg(this, 'prevFront')" />
+                        <span asp-validation-for="FrontIdcardFile" class="field-error"></span>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <div class="img-card">
+                        <label>Mặt sau CCCD</label>
+                        <img id="prevBack" src="~/@(string.IsNullOrEmpty(Model.ExistingBackIdcard) ? "images/no-image.png" : Model.ExistingBackIdcard)" />
+                        <input type="file" asp-for="BackIdcardFile" class="form-control mt-2" accept="image/*" onchange="previewImg(this, 'prevBack')" />
+                        <span asp-validation-for="BackIdcardFile" class="field-error"></span>
+                    </div>
+                </div>
+            }
+
+            @* --- Role 4: Employee --- *@
+            @if (Model.User.RoleId == 4)
+            {
+                <div class="col-full mt-4"><h5 class="text-primary border-bottom pb-2">Thông tin Nhân sự</h5></div>
+                <div class="field-group">
+                    <label>Mã nhân viên <span class="text-danger">*</span></label>
+                    <input readonly asp-for="EmployeeCode" class="form-control" />
+                    <span asp-validation-for="EmployeeCode" class="field-error"></span>
+                </div>
+                <div class="field-group">
+                    <label>Ngày vào làm <span class="text-danger">*</span></label>
+                    <input readonly asp-for="HireDateRaw" type="date" class="form-control" />
+                    <span asp-validation-for="HireDateRaw" class="field-error"></span>
+                </div>
+            }
         </div>
 
         <div class="btn-group-center">
-            <input type="submit" value="Lưu" class="btn-save" />
-            <a asp-page="./Details" asp-route-id="@Model.User.UserId" class="btn-back">
-                Quay lại
-            </a>
+            <button type="submit" class="btn-save">Lưu hồ sơ</button>
+            <a asp-page="./Details" asp-route-id="@Model.User.UserId" class="btn-back">Hủy bỏ</a>
         </div>
-
     </form>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
+    <partial name="_ValidationScriptsPartial" />
     <script>
         function togglePassword() {
             const input = document.getElementById("password");
-            const icon  = document.getElementById("eyeIcon");
+            const icon = document.getElementById("eyeIcon");
             if (input.type === "password") {
                 input.type = "text";
                 icon.classList.replace("fa-eye", "fa-eye-slash");
             } else {
                 input.type = "password";
                 icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+        function previewImg(input, imgId) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) { document.getElementById(imgId).src = e.target.result; };
+                reader.readAsDataURL(input.files[0]);
             }
         }
     </script>

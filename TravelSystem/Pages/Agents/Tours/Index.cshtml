@@ -6,7 +6,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Quản lý Tour</h2>
-            <a asp-page="./Create" class="btn btn-success">Tạo Tour</a>
+            <a asp-page="./Create" class="btn btn-success">+ Tạo Tour</a>
         </div>
 
         @if (TempData["ErrorMessage"] != null)
@@ -16,26 +16,50 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
 
-        <!-- FILTER -->
-        <div style="margin-bottom:20px">
-            <a asp-page="./Index" class="btn btn-secondary @(Model.Status == null ? "active" : "")">Tất cả</a>
-            <a asp-page="./Index" asp-route-status="1" class="btn btn-warning @(Model.Status == 1 ? "active" : "")">Sắp diễn ra</a>
-            <a asp-page="./Index" asp-route-status="2" class="btn btn-success @(Model.Status == 2 ? "active" : "")">Đang diễn ra</a>
-            <a asp-page="./Index" asp-route-status="3" class="btn btn-primary @(Model.Status == 3 ? "active" : "")">Hoàn thành</a>
+
+        <!-- FILTER: Trạng thái chuyến đi -->
+        <div class="mb-3">
+            <span class="fw-semibold me-2">Trạng thái chuyến đi:</span>
+            <a asp-page="./Index"
+               asp-route-tourStatus="@Model.TourStatus"
+               asp-route-departureStatus=""
+               asp-route-pageNumber="1"
+               class="btn btn-sm btn-secondary @(string.IsNullOrEmpty(Model.DepartureStatus) ? "active" : "")">Tất cả</a>
+            <a asp-page="./Index"
+               asp-route-tourStatus="@Model.TourStatus"
+               asp-route-departureStatus="active"
+               asp-route-pageNumber="1"
+               class="btn btn-sm btn-warning @(Model.DepartureStatus == "active" ? "active" : "")">Sắp diễn ra</a>
+            <a asp-page="./Index"
+               asp-route-tourStatus="@Model.TourStatus"
+               asp-route-departureStatus="ongoing"
+               asp-route-pageNumber="1"
+               class="btn btn-sm btn-success @(Model.DepartureStatus == "ongoing" ? "active" : "")">Đang diễn ra</a>
+            <a asp-page="./Index"
+               asp-route-tourStatus="@Model.TourStatus"
+               asp-route-departureStatus="completed"
+               asp-route-pageNumber="1"
+               class="btn btn-sm btn-primary @(Model.DepartureStatus == "completed" ? "active" : "")">Đã hoàn thành</a>
         </div>
 
         <!-- TABLE -->
-        <table class="table table-bordered table-striped">
-            <thead>
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
                 <tr>
                     <th>STT</th>
                     <th>Tên Tour</th>
                     <th>Điểm bắt đầu</th>
                     <th>Điểm đến</th>
-                    <th>Ngày bắt đầu</th>
-                    <th>Ngày kết thúc</th>
-                    <th>Trạng thái</th>
+                    <th>Trạng thái Tour</th>
+                    <th>Chuyến đi</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -43,50 +67,110 @@
                 @{
                     int stt = (Model.PageNumber - 1) * 5;
                 }
-                @foreach (var item in Model.Tour)
+                @foreach (var item in Model.TourList)
                 {
                     stt++;
-                    bool isBooked = Model.BookedTourIds.Contains(item.TourId);
-                    bool canEditDelete = item.Status == 1 && !isBooked;
+                    bool isBooked = Model.BookedTourIds.Contains(item.Tour.TourId);
 
                     <tr>
                         <td>@stt</td>
-                        <td style="max-width:250px">@item.TourName</td>
-                        <td>@item.StartPlace</td>
-                        <td>@item.EndPlace</td>
-                        <td>@item.StartDay?.ToString("dd/MM/yyyy")</td>
-                        <td>@item.EndDay?.ToString("dd/MM/yyyy")</td>
-                        <td>
-                            @if (item.Status == 1)
+                        <td style="max-width:220px">@item.Tour.TourName</td>
+                        <td>@item.Tour.StartPlace</td>
+                        <td>@item.Tour.EndPlace</td>
+
+                        <!-- Danh sách TourDeparture -->
+                        <td style="min-width:460px">
+                            @if (!item.Departures.Any())
                             {
-                                <span class="badge bg-warning text-dark">Sắp diễn ra</span>
-                            }
-                            else if (item.Status == 2)
-                            {
-                                <span class="badge bg-success">Đang diễn ra</span>
+                                <span class="text-muted fst-italic">Chưa có chuyến đi</span>
                             }
                             else
                             {
-                                <span class="badge bg-primary">Hoàn thành</span>
+                                <table class="table table-sm table-bordered mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Ngày đi</th>
+                                            <th>Ngày về</th>
+                                            <th>Còn chỗ</th>
+                                            <th>Giá người lớn</th>
+                                            <th>Trạng thái</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var dep in item.Departures)
+                                        {
+                                            <tr>
+                                                <td>@dep.StartDate?.ToString("dd/MM/yyyy")</td>
+                                                <td>@dep.EndDate?.ToString("dd/MM/yyyy")</td>
+                                                <td>@dep.AvailableSeat / @dep.Capacity</td>
+                                                <td>@dep.AdultPrice?.ToString("N0") đ</td>
+                                                <td>
+                                                    @switch (dep.Status?.Trim())
+                                                    {
+                                                        case "active":
+                                                            <span class="badge bg-warning text-dark">Sắp diễn ra</span>
+                                                            break;
+                                                        case "ongoing":
+                                                            <span class="badge bg-success">Đang diễn ra</span>
+                                                            break;
+                                                        case "completed":
+                                                            <span class="badge bg-primary">Đã hoàn thành</span>
+                                                            break;
+                                                        default:
+                                                            <span class="badge bg-secondary">@dep.Status</span>
+                                                            break;
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (dep.Status?.Trim() == "active")
+                                                    {
+                                                        <button type="button"
+                                                                class="btn btn-danger btn-sm"
+                                                                onclick="confirmDeleteDeparture(@dep.DepartureId, '@dep.StartDate?.ToString("dd/MM/yyyy")')">
+                                                            Xóa
+                                                        </button>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+
+                            @if (item.Tour.Status == 1)
+                            {
+                                <a asp-page="./CreateDeparture"
+                                   asp-route-tourId="@item.Tour.TourId"
+                                   class="btn btn-outline-success btn-sm mt-1">
+                                    + Thêm chuyến đi
+                                </a>
                             }
                         </td>
+
+                        <!-- Hành động Tour -->
                         <td>
-                            <a asp-page="./Details" asp-route-id="@item.TourId"
-                               class="btn btn-info btn-sm">Chi tiết</a>
-
-                            @if (canEditDelete)
+                            <a asp-page="./Details"
+                               asp-route-id="@item.Tour.TourId"
+                               class="btn btn-info btn-sm mb-1">Chi tiết</a>
+                            <a asp-page="/Agents/TourDepartures/Index" asp-route-tourId="@item.Tour.TourId" class="btn btn-sm btn-outline-info">
+                            <i class="fas fa-calendar-alt"></i> Lịch khởi hành</a>
+                            @if (!isBooked)
                             {
-                                <a asp-page="./Edit" asp-route-id="@item.TourId"
-                                   class="btn btn-success btn-sm">Sửa</a>
+                                <a asp-page="./Edit"
+                                   asp-route-id="@item.Tour.TourId"
+                                   class="btn btn-warning btn-sm mb-1">Sửa</a>
 
-                                <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="confirmDelete(@item.TourId, '@item.TourName.Replace("'", "\'")')">
+                                <button type="button"
+                                        class="btn btn-danger btn-sm mb-1"
+                                        onclick="confirmDeleteTour(@item.Tour.TourId, '@item.Tour.TourName.Replace("'", "\'")')">
                                     Xóa
                                 </button>
                             }
-                            else if (item.Status == 1 && isBooked)
+                            else
                             {
-                                <span class="badge bg-secondary" title="Tour đã có khách đặt">Đã có booking</span>
+                                <span class="badge bg-secondary d-block mt-1"
+                                      title="Tour đã có khách đặt">Đã được đặt</span>
                             }
                         </td>
                     </tr>
@@ -95,36 +179,56 @@
         </table>
 
         <!-- PAGINATION -->
-        <nav>
-            <ul class="pagination">
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
-                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+        @if (Model.TotalPages > 1)
+        {
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
                         <a class="page-link"
                            asp-page="./Index"
-                           asp-route-pageNumber="@i"
-                           asp-route-status="@Model.Status">@i</a>
+                           asp-route-pageNumber="@(Model.PageNumber - 1)"
+                           asp-route-departureStatus="@Model.DepartureStatus"
+                           asp-route-tourStatus="@Model.TourStatus">«</a>
                     </li>
-                }
-            </ul>
-        </nav>
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link"
+                               asp-page="./Index"
+                               asp-route-pageNumber="@i"
+                               asp-route-departureStatus="@Model.DepartureStatus"
+                               asp-route-tourStatus="@Model.TourStatus">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-page="./Index"
+                           asp-route-pageNumber="@(Model.PageNumber + 1)"
+                           asp-route-departureStatus="@Model.DepartureStatus"
+                           asp-route-tourStatus="@Model.TourStatus">»</a>
+                    </li>
+                </ul>
+            </nav>
+        }
     </div>
 </div>
 
-@* Form xóa ẩn — submit bằng SweetAlert2 *@
-<form id="deleteForm" method="post" style="display:none">
+@* Forms xóa ẩn *@
+<form id="deleteTourForm" method="post" style="display:none">
     <input type="hidden" name="id" id="deleteTourId" />
+</form>
+<form id="deleteDepartureForm" method="post" style="display:none">
+    <input type="hidden" name="id" id="deleteDepartureId" />
 </form>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
     <script>
 
-        // ── Popup xóa tour ──
-        function confirmDelete(id, name) {
+        function confirmDeleteTour(id, name) {
             Swal.fire({
-                title: `Bạn có chắc chắn muốn xóa tour "${name}"?`,
-                text: 'Tour sẽ bị xóa vĩnh viễn và không thể khôi phục!',
+                title: `Xóa tour "${name}"?`,
+                text: 'Tour và tất cả chuyến đi sẽ bị xóa vĩnh viễn!',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -134,8 +238,27 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('deleteTourId').value = id;
-                    document.getElementById('deleteForm').action = '?handler=Delete&id=' + id;
-                    document.getElementById('deleteForm').submit();
+                    document.getElementById('deleteTourForm').action = '?handler=DeleteTour&id=' + id;
+                    document.getElementById('deleteTourForm').submit();
+                }
+            });
+        }
+
+        function confirmDeleteDeparture(id, date) {
+            Swal.fire({
+                title: `Xóa chuyến đi ngày ${date}?`,
+                text: 'Chuyến đi này sẽ bị xóa vĩnh viễn!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteDepartureId').value = id;
+                    document.getElementById('deleteDepartureForm').action = '?handler=DeleteDeparture&id=' + id;
+                    document.getElementById('deleteDepartureForm').submit();
                 }
             });
         }
@@ -154,7 +277,6 @@
             </text>
         }
 
-        // ── Popup cập nhật tour thành công ──
         @if (TempData["EditSuccess"] != null)
         {
             <text>

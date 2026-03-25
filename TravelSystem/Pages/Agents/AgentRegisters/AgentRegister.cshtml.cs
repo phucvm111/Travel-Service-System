@@ -262,10 +262,10 @@ namespace TravelSystem.Pages.Agents.AgentRegisters
                     UserId = finalUserId,
                     TravelAgentName = TravelAgentName,
                     TravelAgentAddress = TravelAgentAddress,
-                    TravelAgentGmail = TravelAgentGmail,
+                    TravelAgentEmail = TravelAgentGmail,
                     HotLine = HotLine,
                     TaxCode = TaxCode,
-                    EstablishmentDate = DateOnly.TryParse(EstablishmentDate, out var ed) ? ed : (DateOnly?)null,
+                    EstablishMentDate = DateOnly.TryParse(EstablishmentDate, out var ed) ? ed : (DateOnly?)null,
                     RepresentativeIdcard = RepresentativeIdcard,
                     DateOfIssue = DateOnly.TryParse(DateOfIssue, out var doi) ? doi : (DateOnly?)null,
                     FrontIdcard = frontPath,
@@ -322,7 +322,7 @@ namespace TravelSystem.Pages.Agents.AgentRegisters
             else if (!Regex.IsMatch(TravelAgentGmail,
                 @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
                 e["AgentGmail"] = "Email công ty không hợp lệ!";
-            else if (_context.TravelAgents.Any(a => a.TravelAgentGmail == TravelAgentGmail))
+            else if (_context.TravelAgents.Any(a => a.TravelAgentEmail == TravelAgentGmail))
                 e["AgentGmail"] = "Email công ty đã được sử dụng!";
 
             if (string.IsNullOrWhiteSpace(HotLine))

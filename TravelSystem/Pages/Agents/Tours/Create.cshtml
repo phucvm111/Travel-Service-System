@@ -2,9 +2,7 @@
 @model TravelSystem.Pages.Agents.Tours.CreateModel
 
 <style>
-    body {
-        background: #f4f6f9;
-    }
+    body { background: #f4f6f9; }
 
     .create-box {
         max-width: 1200px;
@@ -15,152 +13,116 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
-    h2 {
-        color: #28A745;
-        text-align: center;
-        margin-bottom: 30px;
-    }
+    h2 { color: #28A745; text-align: center; margin-bottom: 10px; }
 
-    /* ── Layout hình ảnh + form cơ bản ── */
-    .flex-top {
+    /* ── Stepper ── */
+    .stepper {
         display: flex;
-        gap: 30px;
-        margin-bottom: 24px;
-        flex-wrap: wrap;
-    }
-
-    .image-column {
-        flex: 0 0 420px;
-        display: flex;
-        flex-direction: column;
         align-items: center;
+        justify-content: center;
+        margin-bottom: 32px;
     }
+    .step-item { display: flex; flex-direction: column; align-items: center; }
+    .step-circle {
+        width: 40px; height: 40px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: bold; font-size: 16px;
+        background: #dee2e6; color: #6c757d; z-index: 1;
+    }
+    .step-circle.active { background: #28a745; color: white; }
+    .step-circle.done   { background: #28a745; color: white; }
+    .step-label { font-size: 13px; margin-top: 6px; color: #6c757d; white-space: nowrap; }
+    .step-label.active  { color: #28a745; font-weight: 600; }
+    .step-line { width: 120px; height: 3px; background: #dee2e6; margin-bottom: 20px; }
+    .step-line.done { background: #28a745; }
 
+    /* ── Layout ── */
+    .flex-top { display: flex; gap: 30px; margin-bottom: 24px; flex-wrap: wrap; }
+    .image-column { flex: 0 0 420px; display: flex; flex-direction: column; align-items: center; }
     .image-preview {
-        width: 400px;
-        height: 260px;
-        object-fit: cover;
-        border-radius: 8px;
-        border: 1px dashed #ccc;
-        background: #fafafa;
+        width: 400px; height: 260px; object-fit: cover;
+        border-radius: 8px; border: 1px dashed #ccc; background: #fafafa;
     }
-
-    .form-column {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    /* ── 2 / 3 cột trong hàng ── */
-    .row-2col {
-        display: flex;
-        gap: 16px;
-    }
-
-        .row-2col > .col,
-        .row-3col > .col {
-            flex: 1;
-        }
-
-    .row-3col {
-        display: flex;
-        gap: 16px;
-    }
+    .form-column { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+    .row-2col { display: flex; gap: 16px; }
+    .row-2col > .col { flex: 1; }
+    .row-3col { display: flex; gap: 16px; }
+    .row-3col > .col { flex: 1; }
 
     /* ── Dịch vụ ── */
-    .service-row {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 8px;
-    }
-
-    .service-col {
-        flex: 1;
-    }
-
-    .service-select {
-        height: 110px;
-    }
-
-    /* ── Nút xóa chọn ── */
+    .service-row { display: flex; gap: 16px; margin-bottom: 8px; }
+    .service-col { flex: 1; }
+    .service-select { height: 110px; }
     .btn-clear {
-        margin-top: 6px;
-        font-size: 13px;
-        padding: 5px 14px;
-        background: #FFC107;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        color: #000;
-        font-weight: 500;
+        margin-top: 6px; font-size: 13px; padding: 5px 14px;
+        background: #FFC107; border: none; border-radius: 6px;
+        cursor: pointer; color: #000; font-weight: 500;
     }
+    .btn-clear:hover { background: #e0a800; }
 
-        .btn-clear:hover {
-            background: #e0a800;
-        }
+    .field-error { color: #dc3545; font-size: 13px; margin-top: 4px; display: block; }
+    .required { color: red; font-weight: bold; }
 
-    /* ── Lỗi ── */
-    .field-error {
-        color: #dc3545;
-        font-size: 13px;
-        margin-top: 4px;
-        display: block;
+    /* ── Summary bước 2 ── */
+    .summary-box {
+        background: #f8f9fa; border: 1px solid #dee2e6;
+        border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; font-size: 14px;
     }
-
-    .required {
-        color: red;
-        font-weight: bold;
-    }
+    .summary-box h6 { color: #28a745; font-weight: 700; margin-bottom: 10px; }
+    .summary-grid { display: flex; gap: 32px; flex-wrap: wrap; }
+    .summary-item { flex: 1; min-width: 160px; }
+    .summary-label { color: #6c757d; font-size: 12px; }
+    .summary-value { font-weight: 600; color: #212529; }
 </style>
 
 <div class="create-box">
-    <h2>Tạo Tour</h2>
+    <h2>Tạo Tour Mới</h2>
 
-    <div class="d-flex align-items-center mb-4 gap-3">
-        <a asp-page="./Index" class="btn btn-outline-secondary">← Quay lại</a>
+    @* Stepper *@
+    <div class="stepper">
+        <div class="step-item">
+            <div class="step-circle @(Model.Step > 1 ? "done" : "active")">
+                @if (Model.Step > 1) { <text>✓</text> } else { <text>1</text> }
+            </div>
+            <div class="step-label @(Model.Step == 1 ? "active" : "")">Thông tin tour</div>
+        </div>
+        <div class="step-line @(Model.Step > 1 ? "done" : "")"></div>
+        <div class="step-item">
+            <div class="step-circle @(Model.Step == 2 ? "active" : "")">2</div>
+            <div class="step-label @(Model.Step == 2 ? "active" : "")">Chuyến đi đầu tiên</div>
+        </div>
     </div>
 
-    @* Lỗi chung (nếu có) *@
+    <div class="d-flex align-items-center mb-4">
+        <a asp-page="./Index" class="btn btn-outline-secondary">← Quay lại danh sách</a>
+    </div>
+
     @foreach (var err in ViewData.ModelState[""]?.Errors
         ?? Enumerable.Empty<Microsoft.AspNetCore.Mvc.ModelBinding.ModelError>())
     {
         <div class="alert alert-danger">@err.ErrorMessage</div>
     }
 
-    <div id="formWrapper">
-        <form method="post" enctype="multipart/form-data" id="tourForm" novalidate>
-
+    @* ══════════════════════════════════════════════════════════════════
+       BƯỚC 1: Thông tin Tour
+       ══════════════════════════════════════════════════════════════════ *@
+    @if (Model.Step == 1)
+    {
+        <form method="post" enctype="multipart/form-data" novalidate>
             @Html.AntiForgeryToken()
-
-            @* Hidden fields cho giá, số lượng (giá trị thô không format) *@
-            <input type="hidden" name="AdultPriceRaw" id="adultPriceHidden" value="@Model.AdultPriceRaw" />
-            <input type="hidden" name="ChildrenPriceRaw" id="childPriceHidden" value="@Model.ChildrenPriceRaw" />
-            <input type="hidden" name="QuantityRaw" id="quantityHidden" value="@Model.QuantityRaw" />
-
             <input type="hidden" name="ExistingImage" id="existingImageHidden"
                    value="@Model.ExistingImage" />
 
-            @* ════════════════════════════════════════════════════════════
-               PHẦN 1: Ảnh + thông tin cơ bản
-               ════════════════════════════════════════════════════════════ *@
             <div class="flex-top">
 
+                @* Ảnh *@
                 <div class="image-column">
-                    @if (!string.IsNullOrEmpty(Model.ExistingImage))
-                    {
-                        @* Có ảnh cũ → hiện luôn (giống JSP: not empty sessionScope.imagePath) *@
-                        <img id="preview" class="image-preview"
-                             src="/@Model.ExistingImage" alt="Ảnh xem trước" />
-                    }
-                    else
-                    {
-                        @* Chưa có ảnh → hiện placeholder *@
-                        <img id="preview" class="image-preview"
-                             src="~/assets/img/placeholder.jpg"
-                             onerror="this.style.visibility='hidden'"
-                             alt="Ảnh xem trước" />
-                    }
+                    <img id="preview" class="image-preview"
+                         src="@(string.IsNullOrEmpty(Model.ExistingImage)
+                                    ? "~/assets/img/placeholder.jpg"
+                                    : "/" + Model.ExistingImage)"
+                         onerror="this.style.visibility='hidden'"
+                         alt="Ảnh xem trước" />
                     <br />
                     <input type="file" name="ImageFile" id="imageFileInput"
                            class="form-control mt-2" accept="image/*"
@@ -173,15 +135,13 @@
                     }
                 </div>
 
-                @* Cột form thông tin cơ bản *@
+                @* Form cơ bản *@
                 <div class="form-column">
 
-                    @* Tên tour *@
                     <div class="form-group">
                         <label>Tên tour <span class="required">*</span></label>
                         <input type="text" name="Tour.TourName" class="form-control"
-                               value="@Model.Tour.TourName"
-                               placeholder="Nhập tên tour" />
+                               value="@Model.Tour.TourName" placeholder="Nhập tên tour" />
                         @if (ViewData.ModelState["Tour.TourName"]?.Errors.Count > 0)
                         {
                             <span class="field-error">
@@ -190,7 +150,6 @@
                         }
                     </div>
 
-                    @* Điểm đi / Điểm đến *@
                     <div class="row-2col">
                         <div class="col">
                             <label>Điểm bắt đầu <span class="required">*</span></label>
@@ -212,14 +171,8 @@
                                 <option value="">Chọn điểm đến</option>
                                 @foreach (var p in Model.EndPlaces)
                                 {
-                                    if (Model.Tour.EndPlace == p)
-                                    {
-                                        <option value="@p" selected>@p</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@p">@p</option>
-                                    }
+                                    var epSel = (Model.Tour.EndPlace == p);
+                                    <option value="@p" selected="@epSel">@p</option>
                                 }
                             </select>
                             @if (ViewData.ModelState["Tour.EndPlace"]?.Errors.Count > 0)
@@ -231,78 +184,24 @@
                         </div>
                     </div>
 
-                    @* Ngày bắt đầu / Ngày kết thúc *@
-                    <div class="row-2col">
-                        <div class="col">
-                            <label>Ngày bắt đầu <span class="required">*</span></label>
-                            <input type="date" name="Tour.StartDay" class="form-control" id="startDay"
-                                   value="@Model.Tour.StartDay?.ToString("yyyy-MM-dd")" />
-                            @if (ViewData.ModelState["Tour.StartDay"]?.Errors.Count > 0)
-                            {
-                                <span class="field-error">
-                                    @ViewData.ModelState["Tour.StartDay"].Errors[0].ErrorMessage
-                                </span>
-                            }
-                        </div>
-                        <div class="col">
-                            <label>Ngày kết thúc <span class="required">*</span></label>
-                            <input type="date" name="Tour.EndDay" class="form-control" id="endDay"
-                                   value="@Model.Tour.EndDay?.ToString("yyyy-MM-dd")" />
-                            @if (ViewData.ModelState["Tour.EndDay"]?.Errors.Count > 0)
-                            {
-                                <span class="field-error">
-                                    @ViewData.ModelState["Tour.EndDay"].Errors[0].ErrorMessage
-                                </span>
-                            }
-                        </div>
-                    </div>
-
-                    @* Giá người lớn / Giá trẻ em / Số lượng *@
-                    <div class="row-3col">
-                        <div class="col">
-                            <label>Giá người lớn <span class="required">*</span></label>
-                            <input type="text" id="adultPriceDisplay" class="form-control"
-                                   autocomplete="off" placeholder="Nhập giá"
-                                   value="@FormatPrice(Model.AdultPriceRaw)" />
-                            @if (ViewData.ModelState["AdultPriceRaw"]?.Errors.Count > 0)
-                            {
-                                <span class="field-error">
-                                    @ViewData.ModelState["AdultPriceRaw"].Errors[0].ErrorMessage
-                                </span>
-                            }
-                        </div>
-                        <div class="col">
-                            <label>Giá trẻ em <span class="required">*</span></label>
-                            <input type="text" id="childPriceDisplay" class="form-control"
-                                   autocomplete="off" placeholder="Nhập giá"
-                                   value="@FormatPrice(Model.ChildrenPriceRaw)" />
-                            @if (ViewData.ModelState["ChildrenPriceRaw"]?.Errors.Count > 0)
-                            {
-                                <span class="field-error">
-                                    @ViewData.ModelState["ChildrenPriceRaw"].Errors[0].ErrorMessage
-                                </span>
-                            }
-                        </div>
-                        <div class="col">
-                            <label>Số lượng <span class="required">*</span></label>
-                            <input type="text" id="quantityDisplay" class="form-control"
-                                   autocomplete="off" placeholder="Nhập số lượng"
-                                   value="@Model.QuantityRaw" />
-                            @if (ViewData.ModelState["QuantityRaw"]?.Errors.Count > 0)
-                            {
-                                <span class="field-error">
-                                    @ViewData.ModelState["QuantityRaw"].Errors[0].ErrorMessage
-                                </span>
-                            }
-                        </div>
+                    <div class="form-group">
+                        <label>Số ngày <span class="required">*</span></label>
+                        <input type="number" name="Tour.NumberOfDay" class="form-control"
+                               min="1" max="365" placeholder="VD: 3"
+                               value="@(Model.Tour.NumberOfDay > 0 ? Model.Tour.NumberOfDay : "")" />
+                        <small class="text-muted">Ngày khởi hành cụ thể sẽ nhập ở bước tiếp theo.</small>
+                        @if (ViewData.ModelState["Tour.NumberOfDay"]?.Errors.Count > 0)
+                        {
+                            <span class="field-error">
+                                @ViewData.ModelState["Tour.NumberOfDay"].Errors[0].ErrorMessage
+                            </span>
+                        }
                     </div>
 
                 </div>
             </div>
 
-            @* ════════════════════════════════════════════════════════════
-               PHẦN 2: Dịch vụ 
-               ════════════════════════════════════════════════════════════ *@
+            @* Dịch vụ — value = ServiceId (PK chung) *@
             <h5 class="mt-2 mb-2">Dịch vụ tour</h5>
             <div class="service-row">
 
@@ -311,53 +210,31 @@
                     <input type="hidden" name="SelectedRestaurants" value="" />
                     <select name="SelectedRestaurants" multiple
                             class="form-control service-select" id="restaurantSelect">
-                        @foreach (var r in Model.Restaurants)
+                        @foreach (var s in Model.Restaurants)
                         {
-                            if (Model.SelectedRestaurants.Contains(r.RestaurantId))
-                            {
-                                <option value="@r.RestaurantId" data-address="@r.Address" selected>
-                                    @r.Name
-                                </option>
-                            }
-                            else
-                            {
-                                <option value="@r.RestaurantId" data-address="@r.Address">
-                                    @r.Name
-                                </option>
-                            }
+                            var rSel = Model.SelectedRestaurants.Contains(s.ServiceId);
+                            <option value="@s.ServiceId" data-address="@s.Address"
+                                    selected="@rSel">@s.Name</option>
                         }
                     </select>
                     <button type="button" class="btn-clear"
-                            onclick="clearSelect('restaurantSelect')">
-                        Xóa lựa chọn
-                    </button>
+                            onclick="clearSelect('restaurantSelect')">Xóa lựa chọn</button>
                 </div>
 
                 <div class="service-col">
-                    <label>Khách sạn</label>
+                    <label>Khách sạn / Lưu trú</label>
                     <input type="hidden" name="SelectedHotels" value="" />
                     <select name="SelectedHotels" multiple
                             class="form-control service-select" id="hotelSelect">
-                        @foreach (var h in Model.Hotels)
+                        @foreach (var s in Model.Hotels)
                         {
-                            if (Model.SelectedHotels.Contains(h.AccommodationId))
-                            {
-                                <option value="@h.AccommodationId" data-address="@h.Address" selected>
-                                    @h.Name
-                                </option>
-                            }
-                            else
-                            {
-                                <option value="@h.AccommodationId" data-address="@h.Address">
-                                    @h.Name
-                                </option>
-                            }
+                            var hSel = Model.SelectedHotels.Contains(s.ServiceId);
+                            <option value="@s.ServiceId" data-address="@s.Address"
+                                    selected="@hSel">@s.Name</option>
                         }
                     </select>
                     <button type="button" class="btn-clear"
-                            onclick="clearSelect('hotelSelect')">
-                        Xóa lựa chọn
-                    </button>
+                            onclick="clearSelect('hotelSelect')">Xóa lựa chọn</button>
                 </div>
 
                 <div class="service-col">
@@ -365,33 +242,20 @@
                     <input type="hidden" name="SelectedEntertainments" value="" />
                     <select name="SelectedEntertainments" multiple
                             class="form-control service-select" id="entertainmentSelect">
-                        @foreach (var e in Model.Entertainments)
+                        @foreach (var s in Model.Entertainments)
                         {
-                            if (Model.SelectedEntertainments.Contains(e.EntertainmentId))
-                            {
-                                <option value="@e.EntertainmentId" data-address="@e.Address" selected>
-                                    @e.Name
-                                </option>
-                            }
-                            else
-                            {
-                                <option value="@e.EntertainmentId" data-address="@e.Address">
-                                    @e.Name
-                                </option>
-                            }
+                            var eSel = Model.SelectedEntertainments.Contains(s.ServiceId);
+                            <option value="@s.ServiceId" data-address="@s.Address"
+                                    selected="@eSel">@s.Name</option>
                         }
                     </select>
                     <button type="button" class="btn-clear"
-                            onclick="clearSelect('entertainmentSelect')">
-                        Xóa lựa chọn
-                    </button>
+                            onclick="clearSelect('entertainmentSelect')">Xóa lựa chọn</button>
                 </div>
 
             </div>
 
-            @* ════════════════════════════════════════════════════════════
-               PHẦN 3: Textarea chi tiết
-               ════════════════════════════════════════════════════════════ *@
+            @* Textarea chi tiết *@
             <div class="form-group mt-3">
                 <label>Giới thiệu tour <span class="required">*</span></label>
                 <textarea name="Tour.TourIntroduce" class="form-control" rows="4"
@@ -403,7 +267,6 @@
                     </span>
                 }
             </div>
-
             <div class="form-group mt-2">
                 <label>Lịch trình tour <span class="required">*</span></label>
                 <textarea name="Tour.TourSchedule" class="form-control" rows="5"
@@ -415,7 +278,6 @@
                     </span>
                 }
             </div>
-
             <div class="form-group mt-2">
                 <label>Bao gồm <span class="required">*</span></label>
                 <textarea name="Tour.TourInclude" class="form-control" rows="3"
@@ -427,7 +289,6 @@
                     </span>
                 }
             </div>
-
             <div class="form-group mt-2">
                 <label>Không bao gồm <span class="required">*</span></label>
                 <textarea name="Tour.TourNonInclude" class="form-control" rows="3"
@@ -442,24 +303,164 @@
 
             <br />
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-success"
-                        style="width:200px; padding:10px 0">
-                    Tạo Tour
+                <button type="submit" asp-page-handler="Next"
+                        class="btn btn-success" style="width:220px; padding:10px 0">
+                    Tiếp theo →
                 </button>
             </div>
-
         </form>
-    </div>
+    }
+
+    @* ══════════════════════════════════════════════════════════════════
+       BƯỚC 2: Chuyến đi đầu tiên
+       Toàn bộ dữ liệu Tour được gửi qua hidden fields
+       ══════════════════════════════════════════════════════════════════ *@
+    @if (Model.Step == 2)
+    {
+        <div class="summary-box">
+            <h6>📋 Thông tin Tour đã nhập</h6>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-label">Tên tour</div>
+                    <div class="summary-value">@Model.Tour.TourName</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Điểm bắt đầu</div>
+                    <div class="summary-value">@Model.Tour.StartPlace</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Điểm đến</div>
+                    <div class="summary-value">@Model.Tour.EndPlace</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Số ngày</div>
+                    <div class="summary-value">@Model.Tour.NumberOfDay ngày</div>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="mb-3">Thêm chuyến đi đầu tiên</h5>
+
+        <form method="post" novalidate>
+            @Html.AntiForgeryToken()
+
+            @* Hidden: dữ liệu Tour từ bước 1 *@
+            <input type="hidden" name="Tour.TourName"       value="@Model.Tour.TourName" />
+            <input type="hidden" name="Tour.StartPlace"     value="@Model.Tour.StartPlace" />
+            <input type="hidden" name="Tour.EndPlace"       value="@Model.Tour.EndPlace" />
+            <input type="hidden" name="Tour.NumberOfDay"    value="@Model.Tour.NumberOfDay" />
+            <input type="hidden" name="Tour.TourIntroduce"  value="@Model.Tour.TourIntroduce" />
+            <input type="hidden" name="Tour.TourSchedule"   value="@Model.Tour.TourSchedule" />
+            <input type="hidden" name="Tour.TourInclude"    value="@Model.Tour.TourInclude" />
+            <input type="hidden" name="Tour.TourNonInclude" value="@Model.Tour.TourNonInclude" />
+            <input type="hidden" name="ExistingImage"       value="@Model.ExistingImage" />
+
+            @* Hidden: dịch vụ đã chọn (ServiceId) *@
+            @foreach (var id in Model.SelectedHotels)
+            {
+                <input type="hidden" name="SelectedHotels" value="@id" />
+            }
+            @foreach (var id in Model.SelectedRestaurants)
+            {
+                <input type="hidden" name="SelectedRestaurants" value="@id" />
+            }
+            @foreach (var id in Model.SelectedEntertainments)
+            {
+                <input type="hidden" name="SelectedEntertainments" value="@id" />
+            }
+
+            @* Hidden: giá raw giữ lại khi lỗi *@
+            <input type="hidden" name="AdultPriceRaw" id="adultPriceHidden" value="@Model.AdultPriceRaw" />
+            <input type="hidden" name="ChildPriceRaw" id="childPriceHidden" value="@Model.ChildPriceRaw" />
+            <input type="hidden" name="CapacityRaw"   id="capacityHidden"   value="@Model.CapacityRaw" />
+
+            @* Form Departure *@
+            <div class="row-2col mb-3">
+                <div class="col">
+                    <label>Ngày khởi hành <span class="required">*</span></label>
+                    <input type="date" name="Departure.StartDate" id="depStartDate"
+                           class="form-control"
+                           value="@Model.Departure.StartDate?.ToString("yyyy-MM-dd")" />
+                    @if (ViewData.ModelState["Departure.StartDate"]?.Errors.Count > 0)
+                    {
+                        <span class="field-error">
+                            @ViewData.ModelState["Departure.StartDate"].Errors[0].ErrorMessage
+                        </span>
+                    }
+                </div>
+                <div class="col">
+                    <label>Ngày kết thúc <span class="required">*</span></label>
+                    <input type="date" name="Departure.EndDate" id="depEndDate"
+                           class="form-control"
+                           value="@Model.Departure.EndDate?.ToString("yyyy-MM-dd")" />
+                    <small id="dayCountHint" class="text-muted"></small>
+                    @if (ViewData.ModelState["Departure.EndDate"]?.Errors.Count > 0)
+                    {
+                        <span class="field-error">
+                            @ViewData.ModelState["Departure.EndDate"].Errors[0].ErrorMessage
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <div class="row-3col mb-3">
+                <div class="col">
+                    <label>Giá người lớn (đ) <span class="required">*</span></label>
+                    <input type="text" id="adultPriceDisplay" class="form-control"
+                           autocomplete="off" placeholder="Nhập giá"
+                           value="@FormatPrice(Model.AdultPriceRaw)" />
+                    @if (ViewData.ModelState["AdultPriceRaw"]?.Errors.Count > 0)
+                    {
+                        <span class="field-error">
+                            @ViewData.ModelState["AdultPriceRaw"].Errors[0].ErrorMessage
+                        </span>
+                    }
+                </div>
+                <div class="col">
+                    <label>Giá trẻ em (đ) <span class="required">*</span></label>
+                    <input type="text" id="childPriceDisplay" class="form-control"
+                           autocomplete="off" placeholder="Nhập giá"
+                           value="@FormatPrice(Model.ChildPriceRaw)" />
+                    @if (ViewData.ModelState["ChildPriceRaw"]?.Errors.Count > 0)
+                    {
+                        <span class="field-error">
+                            @ViewData.ModelState["ChildPriceRaw"].Errors[0].ErrorMessage
+                        </span>
+                    }
+                </div>
+                <div class="col">
+                    <label>Số chỗ <span class="required">*</span></label>
+                    <input type="text" id="capacityDisplay" class="form-control"
+                           autocomplete="off" placeholder="Nhập số chỗ"
+                           value="@Model.CapacityRaw" />
+                    @if (ViewData.ModelState["CapacityRaw"]?.Errors.Count > 0)
+                    {
+                        <span class="field-error">
+                            @ViewData.ModelState["CapacityRaw"].Errors[0].ErrorMessage
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <br />
+            <div class="d-flex justify-content-center gap-3">
+                <a asp-page="./Create" class="btn btn-outline-secondary"
+                   style="width:180px; padding:10px 0">
+                    ← Quay lại bước 1
+                </a>
+                <button type="submit" asp-page-handler="Save"
+                        class="btn btn-success" style="width:220px; padding:10px 0">
+                    ✓ Tạo Tour
+                </button>
+            </div>
+        </form>
+    }
 </div>
 
-@* ════════════════════════════════════════════════════════════════════════
-   Helper: format giá VN để hiện vào display input sau khi reload trang
-   ════════════════════════════════════════════════════════════════════════ *@
 @functions {
     string FormatPrice(string? raw)
     {
         if (string.IsNullOrEmpty(raw)) return "";
-        // Bỏ mọi ký tự không phải số rồi format N0 theo vi-VN
         var digits = new string(raw.Where(char.IsDigit).ToArray());
         if (!long.TryParse(digits, out var num)) return raw;
         return num.ToString("N0", new System.Globalization.CultureInfo("vi-VN"));
@@ -470,41 +471,74 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
     <script>
 
-        // ── Preview ảnh khi chọn file mới ────────────────────────────────────
+        // ── Preview ảnh ───────────────────────────────────────────────────────
         function onImageChange(event) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = e => {
                 const img = document.getElementById("preview");
                 img.src = e.target.result;
                 img.style.visibility = "visible";
-                // Khi chọn ảnh mới thì xóa giá trị ảnh cũ
                 document.getElementById("existingImageHidden").value = "";
             };
             reader.readAsDataURL(file);
         }
 
-        // ── Format tiền VND ───────────────────────────────────────────────────
-        function formatMoney(raw) {
-            if (!raw) return "";
-            return Number(raw).toLocaleString("vi-VN");
+        // ── Load tỉnh/thành ───────────────────────────────────────────────────
+        const startProvinceEl = document.getElementById("startProvince");
+        if (startProvinceEl) {
+            fetch("https://provinces.open-api.vn/api/p/")
+                .then(r => r.json())
+                .then(data => {
+                    const current = startProvinceEl.getAttribute("data-current") || "";
+                    data.forEach(p => {
+                        const opt = document.createElement("option");
+                        opt.value = p.name;
+                        opt.text  = p.name;
+                        if (p.name === current) opt.selected = true;
+                        startProvinceEl.appendChild(opt);
+                    });
+                });
         }
 
+        // ── Filter dịch vụ theo điểm đến ─────────────────────────────────────
+        function filterServices() {
+            const ep = document.getElementById("endPlaceSelect");
+            if (!ep) return;
+            ["restaurantSelect", "hotelSelect", "entertainmentSelect"].forEach(id => {
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                Array.from(sel.options).forEach(opt => {
+                    const addr = opt.getAttribute("data-address") || "";
+                    if (!ep.value || addr === ep.value) {
+                        opt.style.display = "";
+                    } else {
+                        opt.style.display = "none";
+                        opt.selected = false;
+                    }
+                });
+            });
+        }
+
+        function clearSelect(id) {
+            const sel = document.getElementById(id);
+            if (sel) Array.from(sel.options).forEach(o => o.selected = false);
+        }
+
+        // ── Format tiền VND ───────────────────────────────────────────────────
         function setupMoneyInput(displayId, hiddenId) {
             const display = document.getElementById(displayId);
             const hidden  = document.getElementById(hiddenId);
             if (!display || !hidden) return;
-
             display.addEventListener("input", function () {
                 const pos    = this.selectionStart;
                 const oldLen = this.value.length;
                 const raw    = this.value.replace(/\D/g, "");
-                if (raw === "") { this.value = ""; hidden.value = ""; return; }
-                this.value   = formatMoney(raw);
+                this.value   = raw ? Number(raw).toLocaleString("vi-VN") : "";
                 hidden.value = raw;
                 const newPos = pos + (this.value.length - oldLen);
-                this.setSelectionRange(newPos, newPos);
+                try { this.setSelectionRange(newPos, newPos); } catch {}
             });
         }
 
@@ -521,105 +555,67 @@
 
         setupMoneyInput("adultPriceDisplay", "adultPriceHidden");
         setupMoneyInput("childPriceDisplay",  "childPriceHidden");
-        setupIntInput("quantityDisplay",      "quantityHidden");
+        setupIntInput("capacityDisplay",      "capacityHidden");
 
-        // ── Min date = ngày mai ───────────────────────────────────────────────
-        (function () {
-            const sd = document.getElementById("startDay");
-            const ed = document.getElementById("endDay");
-            if (!sd || !ed) return;
+        // ── Bước 2: tự tính ngày kết thúc & hint số ngày ─────────────────────
+        const numberOfDay = @(Model.Tour.NumberOfDay > 0 ? Model.Tour.NumberOfDay : 0);
+        const depStart    = document.getElementById("depStartDate");
+        const depEnd      = document.getElementById("depEndDate");
+
+        if (depStart && depEnd) {
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
-            const minDate = tomorrow.toISOString().split("T")[0];
-            sd.setAttribute("min", minDate);
-            ed.setAttribute("min", minDate);
-        })();
+            depStart.setAttribute("min", tomorrow.toISOString().split("T")[0]);
 
-        const startDayEl = document.getElementById("startDay");
-        if (startDayEl) {
-            startDayEl.addEventListener("change", function () {
-                const ed = document.getElementById("endDay");
-                ed.setAttribute("min", this.value);
-                if (ed.value && ed.value < this.value) ed.value = this.value;
-            });
-        }
-
-        // ── Load tỉnh/thành  ─────────────────────
-        fetch("https://provinces.open-api.vn/api/p/")
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                const select  = document.getElementById("startProvince");
-                if (!select) return;
-                const current = select.getAttribute("data-current") || "";
-                data.forEach(function (p) {
-                    const opt   = document.createElement("option");
-                    opt.value   = p.name;
-                    opt.text    = p.name;
-                    if (p.name === current) opt.selected = true;
-                    select.appendChild(opt);
-                });
-            })
-            .catch(function () {
-                const select = document.getElementById("startProvince");
-                if (select) {
-                    const opt = document.createElement("option");
-                    opt.text  = "Lỗi tải danh sách tỉnh/thành";
-                    select.appendChild(opt);
+            depStart.addEventListener("change", function () {
+                if (!this.value) return;
+                if (numberOfDay > 0) {
+                    const start = new Date(this.value);
+                    const end   = new Date(start);
+                    end.setDate(end.getDate() + numberOfDay - 1);
+                    depEnd.value = end.toISOString().split("T")[0];
                 }
+                depEnd.setAttribute("min", this.value);
+                updateDayHint();
             });
 
-        // ── Filter dịch vụ theo điểm đến ─────────────────────────────────────
-        function filterServices() {
-            const ep = document.getElementById("endPlaceSelect");
-            if (!ep) return;
-            const selected = ep.value;
-            filterSelect("restaurantSelect",   selected);
-            filterSelect("hotelSelect",         selected);
-            filterSelect("entertainmentSelect", selected);
+            depEnd.addEventListener("change", updateDayHint);
         }
 
-        function filterSelect(selectId, address) {
-            const select = document.getElementById(selectId);
-            if (!select) return;
-            Array.from(select.options).forEach(function (opt) {
-                const optAddr = opt.getAttribute("data-address") || "";
-                if (!address || optAddr === address) {
-                    opt.style.display = "";
-                } else {
-                    opt.style.display = "none";
-                    opt.selected      = false;
-                }
-            });
+        function updateDayHint() {
+            const hint = document.getElementById("dayCountHint");
+            if (!hint || !depStart?.value || !depEnd?.value) return;
+            const days = Math.round(
+                (new Date(depEnd.value) - new Date(depStart.value)) / 86400000
+            ) + 1;
+            if (numberOfDay > 0 && days !== numberOfDay) {
+                hint.style.color = "#dc3545";
+                hint.textContent = `⚠ ${days} ngày — tour yêu cầu ${numberOfDay} ngày`;
+            } else {
+                hint.style.color = "#28a745";
+                hint.textContent = `✓ ${days} ngày`;
+            }
         }
 
-        // ── Xóa lựa chọn select ──────────────
-        function clearSelect(selectId) {
-            const select = document.getElementById(selectId);
-            if (!select) return;
-            Array.from(select.options).forEach(function (opt) { opt.selected = false; });
-        }
-
-        // ── DOMContentLoaded: sync hidden fields & filter dịch vụ ────────────
+        // ── DOMContentLoaded: filter dịch vụ + sync hidden ───────────────────
         document.addEventListener("DOMContentLoaded", function () {
-            // Filter dịch vụ theo điểm đến hiện tại
             filterServices();
+            updateDayHint();
 
-            // Sync hidden fields khi trang reload sau lỗi
-            const adultDisplay = document.getElementById("adultPriceDisplay");
-            const childDisplay = document.getElementById("childPriceDisplay");
-            const qtyDisplay   = document.getElementById("quantityDisplay");
+            // Sync giá sau khi reload bước 2 lỗi
+            const syncMoney = (displayId, hiddenId) => {
+                const el = document.getElementById(displayId);
+                if (el?.value)
+                    document.getElementById(hiddenId).value =
+                        el.value.replace(/\./g, "").replace(/,/g, "");
+            };
+            syncMoney("adultPriceDisplay", "adultPriceHidden");
+            syncMoney("childPriceDisplay",  "childPriceHidden");
 
-            if (adultDisplay && adultDisplay.value)
-                document.getElementById("adultPriceHidden").value =
-                    adultDisplay.value.replace(/\./g, "").replace(/,/g, "");
-
-            if (childDisplay && childDisplay.value)
-                document.getElementById("childPriceHidden").value =
-                    childDisplay.value.replace(/\./g, "").replace(/,/g, "");
-
-            if (qtyDisplay && qtyDisplay.value)
-                document.getElementById("quantityHidden").value =
-                    qtyDisplay.value.replace(/\D/g, "");
+            const cap = document.getElementById("capacityDisplay");
+            if (cap?.value)
+                document.getElementById("capacityHidden").value = cap.value.replace(/\D/g, "");
         });
+
     </script>
 }

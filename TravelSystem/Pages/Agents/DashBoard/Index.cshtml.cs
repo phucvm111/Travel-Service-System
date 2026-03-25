@@ -51,7 +51,7 @@ namespace TravelSystem.Pages.Agents.Dashboard
                 .CountAsync(t => t.TravelAgentId == agent.TravelAgentId);
 
             var agentServiceIds = await _context.Services
-                .Where(s => s.TravelAgentId == agent.TravelAgentId)
+                .Where(s => s.AgentId == agent.TravelAgentId)
                 .Select(s => s.ServiceId)
                 .ToListAsync();
 
@@ -64,9 +64,9 @@ namespace TravelSystem.Pages.Agents.Dashboard
             TotalAccommodations = await _context.Accommodations
                 .CountAsync(a => agentServiceIds.Contains(a.ServiceId));
 
-            RecentBookings = await _context.BookDetails
-                .Include(b => b.Tour)
-                .Where(b => b.Tour != null && b.Tour.TravelAgentId == agent.TravelAgentId)
+            RecentBookings = await _context.Bookings
+                .Include(b => b.TourDeparture)
+                .Where(b => b.TourDeparture != null && b.TourDeparture.Tour.TravelAgentId == agent.TravelAgentId)
                 .OrderByDescending(b => b.BookDate)
                 .ThenByDescending(b => b.BookId)
                 .Take(5)
