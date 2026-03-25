@@ -13,10 +13,10 @@ namespace TravelSystem.Pages.Users.Profiles
 {
     public class EditModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IHubContext<HubServer> _hub;
 
-        public EditModel(Prn222PrjContext context, IHubContext<HubServer> hub)
+        public EditModel(FinalPrnContext context, IHubContext<HubServer> hub)
         {
             _context = context;
             _hub = hub;

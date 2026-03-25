@@ -7,9 +7,9 @@ namespace TravelSystem.Pages.Agents.Restaurants
 {
     public class DetailModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public DetailModel(Prn222PrjContext context)
+        public DetailModel(FinalPrnContext context)
         {
             _context = context;
         }

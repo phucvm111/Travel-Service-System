@@ -8,10 +8,10 @@ namespace TravelSystem.Pages.Agents.Accommodations
 {
     public class EditModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(Prn222PrjContext context, IWebHostEnvironment env)
+        public EditModel(FinalPrnContext context, IWebHostEnvironment env)
         {
             _context = context;
             _env = env;
@@ -38,10 +38,10 @@ namespace TravelSystem.Pages.Agents.Accommodations
 
             Accommodation = await _context.Accommodations
                 .Include(a => a.Service)
-                .FirstOrDefaultAsync(a => a.AccommodationId == id
+                .FirstOrDefaultAsync(a => a.ServiceId == id
                     && a.Service != null
-                    && a.Service.TravelAgentId == agent.TravelAgentId
-                    && a.Service.ServiceType == "ACCOMMODATION");
+                    && a.Service.AgentId == agent.TravelAgentId
+                    && a.Service.ServiceType == 1);
 
             if (Accommodation == null) return NotFound();
 
@@ -60,7 +60,7 @@ namespace TravelSystem.Pages.Agents.Accommodations
 
             Accommodation = new Accommodation
             {
-                AccommodationId = accommodationId,
+                ServiceId = accommodationId,
                 Name = Request.Form["Accommodation.Name"].ToString().Trim(),
                 Address = Request.Form["Accommodation.Address"].ToString().Trim(),
                 Phone = Request.Form["Accommodation.Phone"].ToString().Trim(),

@@ -10,10 +10,10 @@ namespace TravelSystem.Pages.Users.Registers
 {
     public class RegisterUserModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IHubContext<HubServer> _hub;
 
-        public RegisterUserModel(Prn222PrjContext context, IHubContext<HubServer> hub)
+        public RegisterUserModel(FinalPrnContext context, IHubContext<HubServer> hub)
         {
             _context = context;
             _hub = hub;

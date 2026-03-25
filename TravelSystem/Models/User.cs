@@ -29,21 +29,25 @@ public partial class User
 
     public int? Status { get; set; }
 
-    public int RoleId { get; set; }
+    public int? RoleId { get; set; }
 
-    public virtual ICollection<BookDetail> BookDetails { get; set; } = new List<BookDetail>();
+    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
-    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+    public virtual ICollection<FundRequest> FundRequestApproveByNavigations { get; set; } = new List<FundRequest>();
 
-    public virtual ICollection<PendingRecharge> PendingRecharges { get; set; } = new List<PendingRecharge>();
-
-    public virtual ICollection<RequestCancel> RequestCancels { get; set; } = new List<RequestCancel>();
+    public virtual ICollection<FundRequest> FundRequestCreateByNavigations { get; set; } = new List<FundRequest>();
 
     public virtual Role? Role { get; set; }
 
+    public virtual Staff? Staff { get; set; }
+
+    public virtual Tourist? Tourist { get; set; }
+
+    public virtual ICollection<TransactionHistory> TransactionHistories { get; set; } = new List<TransactionHistory>();
+
     public virtual ICollection<TravelAgent> TravelAgents { get; set; } = new List<TravelAgent>();
 
-    public virtual Wallet? Wallet { get; set; }
+    public virtual ICollection<Vat> Vats { get; set; } = new List<Vat>();
 
-    public virtual ICollection<WithdrawRequest> WithdrawRequests { get; set; } = new List<WithdrawRequest>();
+    public virtual Wallet? Wallet { get; set; }
 }

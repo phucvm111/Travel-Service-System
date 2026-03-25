@@ -7,27 +7,17 @@ public partial class Tour
 {
     public int TourId { get; set; }
 
-    public int? TravelAgentId { get; set; }
+    public int TravelAgentId { get; set; }
 
-    public string? TourName { get; set; }
+    public string TourName { get; set; } = null!;
 
-    public int? NumberOfDay { get; set; }
+    public int NumberOfDay { get; set; }
 
-    public string? StartPlace { get; set; }
+    public string StartPlace { get; set; } = null!;
 
-    public string? EndPlace { get; set; }
+    public string EndPlace { get; set; } = null!;
 
-    public int? Quantity { get; set; }
-
-    public string? Image { get; set; }
-
-    public DateOnly? StartDay { get; set; }
-
-    public DateOnly? EndDay { get; set; }
-
-    public double? AdultPrice { get; set; }
-
-    public double? ChildrenPrice { get; set; }
+    public string Image { get; set; } = null!;
 
     public string? TourIntroduce { get; set; }
 
@@ -41,9 +31,9 @@ public partial class Tour
 
     public int? Status { get; set; }
 
-    public virtual ICollection<BookDetail> BookDetails { get; set; } = new List<BookDetail>();
+    public virtual ICollection<TourDeparture> TourDepartures { get; set; } = new List<TourDeparture>();
 
     public virtual ICollection<TourServiceDetail> TourServiceDetails { get; set; } = new List<TourServiceDetail>();
 
-    public virtual TravelAgent? TravelAgent { get; set; }
+    public virtual TravelAgent TravelAgent { get; set; } = null!;
 }

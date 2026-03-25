@@ -7,10 +7,10 @@ namespace TravelSystem.Pages.Admin.Statistic
 {
     public class DetailsModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private const int CompletedStatus = 3;
 
-        public DetailsModel(Prn222PrjContext context)
+        public DetailsModel(FinalPrnContext context)
         {
             _context = context;
         }

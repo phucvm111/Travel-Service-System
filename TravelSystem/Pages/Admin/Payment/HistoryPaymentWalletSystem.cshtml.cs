@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace TravelSystem.Pages.Admin.Payment;
 public class HistoryPaymentWalletSystemModel : PageModel
 {
-    private readonly Prn222PrjContext _context;
-    public HistoryPaymentWalletSystemModel(Prn222PrjContext context) => _context = context;
+    private readonly FinalPrnContext _context;
+    public HistoryPaymentWalletSystemModel(FinalPrnContext context) => _context = context;
 
     public List<TransactionHistory> TransactionList { get; set; } = new();
 

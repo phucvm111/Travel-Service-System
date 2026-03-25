@@ -7,9 +7,9 @@ namespace YourProject.Pages.Admin.Vouchers
 {
     public class EditModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public EditModel(Prn222PrjContext context)
+        public EditModel(FinalPrnContext context)
         {
             _context = context;
         }

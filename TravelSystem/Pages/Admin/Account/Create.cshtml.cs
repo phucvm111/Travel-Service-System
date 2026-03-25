@@ -8,10 +8,10 @@ namespace TravelSystem.Pages.Admin.Account
 {
     public class CreateModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IHubContext<HubServer> _hubContext;
 
-        public CreateModel(Prn222PrjContext context, IHubContext<HubServer> hubContext)
+        public CreateModel(FinalPrnContext context, IHubContext<HubServer> hubContext)
         {
             _context = context;
             _hubContext = hubContext;

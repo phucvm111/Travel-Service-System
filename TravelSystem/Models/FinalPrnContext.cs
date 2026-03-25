@@ -4,28 +4,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TravelSystem.Models;
 
-public partial class Prn222PrjContext : DbContext
+public partial class FinalPrnContext : DbContext
 {
-    public Prn222PrjContext()
+    public FinalPrnContext()
     {
     }
 
-    public Prn222PrjContext(DbContextOptions<Prn222PrjContext> options)
+    public FinalPrnContext(DbContextOptions<FinalPrnContext> options)
         : base(options)
     {
     }
 
     public virtual DbSet<Accommodation> Accommodations { get; set; }
 
-    public virtual DbSet<BookDetail> BookDetails { get; set; }
+    public virtual DbSet<Booking> Bookings { get; set; }
 
     public virtual DbSet<Entertainment> Entertainments { get; set; }
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
-    public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
+    public virtual DbSet<FundRequest> FundRequests { get; set; }
 
-    public virtual DbSet<PendingRecharge> PendingRecharges { get; set; }
+    public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
     public virtual DbSet<RequestCancel> RequestCancels { get; set; }
 
@@ -33,13 +33,17 @@ public partial class Prn222PrjContext : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<Room> Rooms { get; set; }
-
     public virtual DbSet<Service> Services { get; set; }
+
+    public virtual DbSet<Staff> Staff { get; set; }
 
     public virtual DbSet<Tour> Tours { get; set; }
 
+    public virtual DbSet<TourDeparture> TourDepartures { get; set; }
+
     public virtual DbSet<TourServiceDetail> TourServiceDetails { get; set; }
+
+    public virtual DbSet<Tourist> Tourists { get; set; }
 
     public virtual DbSet<TransactionHistory> TransactionHistories { get; set; }
 
@@ -53,49 +57,36 @@ public partial class Prn222PrjContext : DbContext
 
     public virtual DbSet<Wallet> Wallets { get; set; }
 
-    public virtual DbSet<WithdrawRequest> WithdrawRequests { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-       // => optionsBuilder.UseSqlServer("Data Source=DESKTOP-AQ0BKFI\\SQLEXPRESS;Initial Catalog=PRN222_Prj; Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
+     //   => optionsBuilder.UseSqlServer("Data Source=DESKTOP-AQ0BKFI\\SQLEXPRESS;Initial Catalog=FinalPRN; Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Accommodation>(entity =>
         {
-            entity.HasKey(e => e.AccommodationId).HasName("PK__Accommod__20C0A5FDB071B2C9");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Accommod__4550733F95CE94F3");
 
-            entity.ToTable("Accommodation");
-
-            entity.Property(e => e.AccommodationId).HasColumnName("accommodationId");
-            entity.Property(e => e.Address)
-                .HasMaxLength(255)
-                .HasColumnName("address");
+            entity.Property(e => e.ServiceId)
+                .ValueGeneratedNever()
+                .HasColumnName("serviceID");
             entity.Property(e => e.CheckInTime).HasColumnName("checkInTime");
             entity.Property(e => e.CheckOutTime).HasColumnName("checkOutTime");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Image).HasColumnName("image");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-            entity.Property(e => e.ServiceId).HasColumnName("serviceId");
+            entity.Property(e => e.StarRating).HasColumnName("starRating");
 
-            entity.HasOne(d => d.Service).WithMany(p => p.Accommodations)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__Accommoda__servi__49C3F6B7");
+            entity.HasOne(d => d.Service).WithOne(p => p.Accommodation)
+                .HasForeignKey<Accommodation>(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Accommodations_Service");
         });
 
-        modelBuilder.Entity<BookDetail>(entity =>
+        modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookId).HasName("PK__BookDeta__8BE5A12DA6D55BAC");
+            entity.HasKey(e => e.BookId).HasName("PK__Booking__8BE5A12DEDDAAAED");
 
-            entity.ToTable("BookDetail");
+            entity.ToTable("Booking");
 
-            entity.HasIndex(e => e.BookCode, "UQ__BookDeta__3BB8DAE64B4A7B93").IsUnique();
+            entity.HasIndex(e => e.BookCode, "UQ__Booking__3BB8DAE658A9F243").IsUnique();
 
             entity.Property(e => e.BookId).HasColumnName("bookID");
             entity.Property(e => e.BookCode).HasColumnName("bookCode");
@@ -106,7 +97,6 @@ public partial class Prn222PrjContext : DbContext
             entity.Property(e => e.Gmail)
                 .HasMaxLength(255)
                 .HasColumnName("gmail");
-            entity.Property(e => e.IsBookedForOther).HasColumnName("isBookedForOther");
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
                 .HasColumnName("lastName");
@@ -119,61 +109,52 @@ public partial class Prn222PrjContext : DbContext
                 .HasColumnName("phone");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.TotalPrice).HasColumnName("totalPrice");
-            entity.Property(e => e.TourId).HasColumnName("tourID");
+            entity.Property(e => e.TourDepartureId).HasColumnName("tourDepartureID");
             entity.Property(e => e.UserId).HasColumnName("userID");
             entity.Property(e => e.VoucherId).HasColumnName("voucherID");
 
-            entity.HasOne(d => d.PaymentMethod).WithMany(p => p.BookDetails)
+            entity.HasOne(d => d.PaymentMethod).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.PaymentMethodId)
-                .HasConstraintName("FK__BookDetai__bookC__5EBF139D");
+                .HasConstraintName("FK_Booking_PaymentMethod");
 
-            entity.HasOne(d => d.Tour).WithMany(p => p.BookDetails)
-                .HasForeignKey(d => d.TourId)
-                .HasConstraintName("FK__BookDetai__tourI__5CD6CB2B");
+            entity.HasOne(d => d.TourDeparture).WithMany(p => p.Bookings)
+                .HasForeignKey(d => d.TourDepartureId)
+                .HasConstraintName("FK_Booking_TourDeparture");
 
-            entity.HasOne(d => d.User).WithMany(p => p.BookDetails)
+            entity.HasOne(d => d.User).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__BookDetai__userI__5BE2A6F2");
+                .HasConstraintName("FK_Booking_User");
 
-            entity.HasOne(d => d.Voucher).WithMany(p => p.BookDetails)
+            entity.HasOne(d => d.Voucher).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.VoucherId)
-                .HasConstraintName("FK__BookDetai__vouch__5DCAEF64");
+                .HasConstraintName("FK_Booking_Voucher");
         });
 
         modelBuilder.Entity<Entertainment>(entity =>
         {
-            entity.HasKey(e => e.EntertainmentId).HasName("PK__Entertai__E9EE723F653E8843");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Entertai__4550733FC8ADA18B");
 
             entity.ToTable("Entertainment");
 
-            entity.Property(e => e.EntertainmentId).HasColumnName("entertainmentId");
-            entity.Property(e => e.Address)
-                .HasMaxLength(255)
-                .HasColumnName("address");
+            entity.Property(e => e.ServiceId)
+                .ValueGeneratedNever()
+                .HasColumnName("serviceID");
+            entity.Property(e => e.CloseTime).HasColumnName("closeTime");
             entity.Property(e => e.DayOfWeekOpen)
                 .HasMaxLength(100)
                 .HasColumnName("dayOfWeekOpen");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Image).HasColumnName("image");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-            entity.Property(e => e.ServiceId).HasColumnName("serviceId");
+            entity.Property(e => e.OpenTime).HasColumnName("openTime");
             entity.Property(e => e.TicketPrice).HasColumnName("ticketPrice");
-            entity.Property(e => e.TimeClose).HasColumnName("timeClose");
-            entity.Property(e => e.TimeOpen).HasColumnName("timeOpen");
 
-            entity.HasOne(d => d.Service).WithMany(p => p.Entertainments)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__Entertain__servi__52593CB8");
+            entity.HasOne(d => d.Service).WithOne(p => p.Entertainment)
+                .HasForeignKey<Entertainment>(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Entertainment_Service");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__2613FDC4189FED7A");
+            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__2613FDC4C99E5FC6");
 
             entity.ToTable("Feedback");
 
@@ -181,26 +162,65 @@ public partial class Prn222PrjContext : DbContext
             entity.Property(e => e.BookId).HasColumnName("bookID");
             entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("createDate");
             entity.Property(e => e.Image).HasColumnName("image");
             entity.Property(e => e.Rate).HasColumnName("rate");
-            entity.Property(e => e.Status).HasColumnName("status");
-            entity.Property(e => e.UserId).HasColumnName("userID");
 
             entity.HasOne(d => d.Book).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.BookId)
-                .HasConstraintName("FK__Feedback__bookID__693CA210");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Feedback_Booking");
+        });
 
-            entity.HasOne(d => d.User).WithMany(p => p.Feedbacks)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Feedback__userID__6A30C649");
+        modelBuilder.Entity<FundRequest>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__FundRequ__3214EC27924AB025");
+
+            entity.ToTable("FundRequest");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Amount)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("amount");
+            entity.Property(e => e.ApproveBy).HasColumnName("approveBy");
+            entity.Property(e => e.ApprovedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("approvedDate");
+            entity.Property(e => e.BankAccountSnapshot)
+                .HasMaxLength(100)
+                .HasColumnName("bankAccountSnapshot");
+            entity.Property(e => e.BankNameSnapshot)
+                .HasMaxLength(100)
+                .HasColumnName("bankNameSnapshot");
+            entity.Property(e => e.CreateBy).HasColumnName("createBy");
+            entity.Property(e => e.ReferenceCode)
+                .HasMaxLength(100)
+                .HasColumnName("referenceCode");
+            entity.Property(e => e.RequestDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("requestDate");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasDefaultValue("pending")
+                .HasColumnName("status");
+            entity.Property(e => e.Type)
+                .HasMaxLength(100)
+                .HasColumnName("type");
+
+            entity.HasOne(d => d.ApproveByNavigation).WithMany(p => p.FundRequestApproveByNavigations)
+                .HasForeignKey(d => d.ApproveBy)
+                .HasConstraintName("FK_FundRequest_ApproveBy");
+
+            entity.HasOne(d => d.CreateByNavigation).WithMany(p => p.FundRequestCreateByNavigations)
+                .HasForeignKey(d => d.CreateBy)
+                .HasConstraintName("FK_FundRequest_CreateBy");
         });
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__46612FD87ED41A6A");
+            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__46612FD835397F25");
 
             entity.ToTable("PaymentMethod");
 
@@ -210,105 +230,55 @@ public partial class Prn222PrjContext : DbContext
                 .HasColumnName("methodName");
         });
 
-        modelBuilder.Entity<PendingRecharge>(entity =>
-        {
-            entity.HasKey(e => e.RechargeId).HasName("PK__PendingR__04E7F6ACB786719B");
-
-            entity.ToTable("PendingRecharge");
-
-            entity.HasIndex(e => e.ReferenceCode, "UQ__PendingR__024E23F16B4CF835").IsUnique();
-
-            entity.Property(e => e.RechargeId).HasColumnName("rechargeID");
-            entity.Property(e => e.Amount)
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("amount");
-            entity.Property(e => e.ApproveDate)
-                .HasColumnType("datetime")
-                .HasColumnName("approveDate");
-            entity.Property(e => e.PaymentMethodId).HasColumnName("paymentMethodID");
-            entity.Property(e => e.ReferenceCode)
-                .HasMaxLength(50)
-                .HasColumnName("referenceCode");
-            entity.Property(e => e.RequestDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("requestDate");
-            entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .HasDefaultValue("PENDING")
-                .HasColumnName("status");
-            entity.Property(e => e.UserId).HasColumnName("userID");
-
-            entity.HasOne(d => d.PaymentMethod).WithMany(p => p.PendingRecharges)
-                .HasForeignKey(d => d.PaymentMethodId)
-                .HasConstraintName("FK__PendingRe__payme__7B5B524B");
-
-            entity.HasOne(d => d.User).WithMany(p => p.PendingRecharges)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PendingRe__userI__7C4F7684");
-        });
-
         modelBuilder.Entity<RequestCancel>(entity =>
         {
-            entity.HasKey(e => e.RequestCancelId).HasName("PK__Request___ED69358CE0065122");
+            entity.HasKey(e => e.RequestCancelId).HasName("PK__RequestC__ED69358C19E6E99E");
 
-            entity.ToTable("Request_Cancel");
+            entity.ToTable("RequestCancel");
 
             entity.Property(e => e.RequestCancelId).HasColumnName("requestCancelID");
             entity.Property(e => e.BookId).HasColumnName("bookID");
             entity.Property(e => e.Reason).HasColumnName("reason");
-            entity.Property(e => e.RequestDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnName("requestDate");
+            entity.Property(e => e.RequestDate).HasColumnName("requestDate");
+            entity.Property(e => e.StaffId).HasColumnName("staffID");
             entity.Property(e => e.Status)
                 .HasMaxLength(10)
                 .IsUnicode(false)
-                .HasDefaultValue("PENDING")
                 .HasColumnName("status");
-            entity.Property(e => e.UserId).HasColumnName("userID");
 
             entity.HasOne(d => d.Book).WithMany(p => p.RequestCancels)
                 .HasForeignKey(d => d.BookId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Request_C__bookI__619B8048");
+                .HasConstraintName("FK_RequestCancel_Booking");
 
-            entity.HasOne(d => d.User).WithMany(p => p.RequestCancels)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Request_C__userI__628FA481");
+            entity.HasOne(d => d.Staff).WithMany(p => p.RequestCancels)
+                .HasForeignKey(d => d.StaffId)
+                .HasConstraintName("FK_RequestCancel_Staff");
         });
 
         modelBuilder.Entity<Restaurant>(entity =>
         {
-            entity.HasKey(e => e.RestaurantId).HasName("PK__Restaura__09D80A30441D6DDA");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Restaura__4550733F80F924F4");
 
             entity.ToTable("Restaurant");
 
-            entity.Property(e => e.RestaurantId).HasColumnName("restaurantId");
-            entity.Property(e => e.Address)
-                .HasMaxLength(255)
-                .HasColumnName("address");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Image).HasColumnName("image");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-            entity.Property(e => e.ServiceId).HasColumnName("serviceId");
-            entity.Property(e => e.TimeClose).HasColumnName("timeClose");
-            entity.Property(e => e.TimeOpen).HasColumnName("timeOpen");
+            entity.Property(e => e.ServiceId)
+                .ValueGeneratedNever()
+                .HasColumnName("serviceID");
+            entity.Property(e => e.CloseTime).HasColumnName("closeTime");
+            entity.Property(e => e.OpenTime).HasColumnName("openTime");
+            entity.Property(e => e.RestaurantType)
+                .HasMaxLength(100)
+                .HasColumnName("restaurantType");
 
-            entity.HasOne(d => d.Service).WithMany(p => p.Restaurants)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__Restauran__servi__4F7CD00D");
+            entity.HasOne(d => d.Service).WithOne(p => p.Restaurant)
+                .HasForeignKey<Restaurant>(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Restaurant_Service");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__CD98460A397300A7");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__CD98460A4A79764D");
 
             entity.ToTable("Role");
 
@@ -318,69 +288,75 @@ public partial class Prn222PrjContext : DbContext
                 .HasColumnName("roleName");
         });
 
-        modelBuilder.Entity<Room>(entity =>
-        {
-            entity.HasKey(e => e.RoomId).HasName("PK__Room__6C3BF5DEBCBEBD11");
-
-            entity.ToTable("Room");
-
-            entity.Property(e => e.RoomId).HasColumnName("roomID");
-            entity.Property(e => e.AccommodationId).HasColumnName("accommodationID");
-            entity.Property(e => e.NumberOfRooms).HasColumnName("numberOfRooms");
-            entity.Property(e => e.PriceOfRoom).HasColumnName("priceOfRoom");
-            entity.Property(e => e.RoomTypes)
-                .HasMaxLength(50)
-                .HasColumnName("roomTypes");
-
-            entity.HasOne(d => d.Accommodation).WithMany(p => p.Rooms)
-                .HasForeignKey(d => d.AccommodationId)
-                .HasConstraintName("FK__Room__accommodat__4CA06362");
-        });
-
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__Service__455070DFC439E42C");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Service__4550733FF35A495F");
 
             entity.ToTable("Service");
 
-            entity.Property(e => e.ServiceId).HasColumnName("serviceId");
+            entity.Property(e => e.ServiceId).HasColumnName("serviceID");
+            entity.Property(e => e.Address)
+                .HasMaxLength(255)
+                .HasColumnName("address");
+            entity.Property(e => e.AgentId).HasColumnName("agentID");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("createdAt");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Image).HasColumnName("image");
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .HasColumnName("phoneNumber");
             entity.Property(e => e.ServiceName)
                 .HasMaxLength(255)
                 .HasColumnName("serviceName");
-            entity.Property(e => e.ServiceType)
-                .HasMaxLength(255)
-                .HasColumnName("serviceType");
-            entity.Property(e => e.TravelAgentId).HasColumnName("travelAgentID");
+            entity.Property(e => e.ServiceType).HasColumnName("serviceType");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("updatedAt");
 
-            entity.HasOne(d => d.TravelAgent).WithMany(p => p.Services)
-                .HasForeignKey(d => d.TravelAgentId)
-                .HasConstraintName("FK__Service__travelA__4316F928");
+            entity.HasOne(d => d.Agent).WithMany(p => p.Services)
+                .HasForeignKey(d => d.AgentId)
+                .HasConstraintName("FK_Service_TravelAgent");
+        });
+
+        modelBuilder.Entity<Staff>(entity =>
+        {
+            entity.HasKey(e => e.StaffId).HasName("PK__Staff__6465E19E157EBE9B");
+
+            entity.Property(e => e.StaffId)
+                .ValueGeneratedNever()
+                .HasColumnName("staffID");
+            entity.Property(e => e.EmployeeCode).HasColumnName("employeeCode");
+            entity.Property(e => e.HireDate).HasColumnName("hireDate");
+            entity.Property(e => e.WorkStatus)
+                .HasMaxLength(50)
+                .HasColumnName("workStatus");
+
+            entity.HasOne(d => d.StaffNavigation).WithOne(p => p.Staff)
+                .HasForeignKey<Staff>(d => d.StaffId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Staff_User");
         });
 
         modelBuilder.Entity<Tour>(entity =>
         {
-            entity.HasKey(e => e.TourId).HasName("PK__Tour__519D1D03F99BE582");
+            entity.HasKey(e => e.TourId).HasName("PK__Tour__519D1D0367813E06");
 
             entity.ToTable("Tour");
 
             entity.Property(e => e.TourId).HasColumnName("tourID");
-            entity.Property(e => e.AdultPrice).HasColumnName("adultPrice");
-            entity.Property(e => e.ChildrenPrice).HasColumnName("childrenPrice");
-            entity.Property(e => e.EndDay).HasColumnName("endDay");
             entity.Property(e => e.EndPlace)
                 .HasMaxLength(255)
                 .HasColumnName("endPlace");
             entity.Property(e => e.Image).HasColumnName("image");
             entity.Property(e => e.NumberOfDay).HasColumnName("numberOfDay");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.Rate).HasColumnName("rate");
-            entity.Property(e => e.StartDay).HasColumnName("startDay");
             entity.Property(e => e.StartPlace)
                 .HasMaxLength(255)
                 .HasColumnName("startPlace");
-            entity.Property(e => e.Status)
-                .HasDefaultValue(1)
-                .HasColumnName("status");
+            entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.TourInclude).HasColumnName("tourInclude");
             entity.Property(e => e.TourIntroduce).HasColumnName("tourIntroduce");
             entity.Property(e => e.TourName)
@@ -392,17 +368,42 @@ public partial class Prn222PrjContext : DbContext
 
             entity.HasOne(d => d.TravelAgent).WithMany(p => p.Tours)
                 .HasForeignKey(d => d.TravelAgentId)
-                .HasConstraintName("FK__Tour__travelAgen__3F466844");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Tour_TravelAgent");
+        });
+
+        modelBuilder.Entity<TourDeparture>(entity =>
+        {
+            entity.HasKey(e => e.DepartureId).HasName("PK__TourDepa__2BFAAAF5F65235C8");
+
+            entity.ToTable("TourDeparture");
+
+            entity.Property(e => e.DepartureId).HasColumnName("departureID");
+            entity.Property(e => e.AdultPrice).HasColumnName("adultPrice");
+            entity.Property(e => e.AvailableSeat).HasColumnName("availableSeat");
+            entity.Property(e => e.Capacity).HasColumnName("capacity");
+            entity.Property(e => e.ChildPrice).HasColumnName("childPrice");
+            entity.Property(e => e.EndDate).HasColumnName("endDate");
+            entity.Property(e => e.StartDate).HasColumnName("startDate");
+            entity.Property(e => e.Status)
+                .HasMaxLength(10)
+                .IsFixedLength()
+                .HasColumnName("status");
+            entity.Property(e => e.TourId).HasColumnName("tourID");
+
+            entity.HasOne(d => d.Tour).WithMany(p => p.TourDepartures)
+                .HasForeignKey(d => d.TourId)
+                .HasConstraintName("FK_TourDeparture_Tour");
         });
 
         modelBuilder.Entity<TourServiceDetail>(entity =>
         {
-            entity.HasKey(e => e.DetailId).HasName("PK__Tour_Ser__83077839ABE646DC");
+            entity.HasKey(e => e.DetailId).HasName("PK__Tour_Ser__830778397AFF279A");
 
             entity.ToTable("Tour_Service_Detail");
 
             entity.Property(e => e.DetailId).HasColumnName("detailID");
-            entity.Property(e => e.ServiceId).HasColumnName("serviceId");
+            entity.Property(e => e.ServiceId).HasColumnName("serviceID");
             entity.Property(e => e.ServiceName)
                 .HasMaxLength(255)
                 .HasColumnName("serviceName");
@@ -410,16 +411,50 @@ public partial class Prn222PrjContext : DbContext
 
             entity.HasOne(d => d.Service).WithMany(p => p.TourServiceDetails)
                 .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__Tour_Serv__servi__46E78A0C");
+                .HasConstraintName("FK_TourServiceDetail_Service");
 
             entity.HasOne(d => d.Tour).WithMany(p => p.TourServiceDetails)
                 .HasForeignKey(d => d.TourId)
-                .HasConstraintName("FK__Tour_Serv__tourI__45F365D3");
+                .HasConstraintName("FK_TourServiceDetail_Tour");
+        });
+
+        modelBuilder.Entity<Tourist>(entity =>
+        {
+            entity.HasKey(e => e.TouristId).HasName("PK__Tourist__BBB2E8D79FC166B6");
+
+            entity.ToTable("Tourist");
+
+            entity.Property(e => e.TouristId)
+                .ValueGeneratedNever()
+                .HasColumnName("touristID");
+            entity.Property(e => e.AccountHolderName)
+                .HasMaxLength(100)
+                .HasColumnName("accountHolderName");
+            entity.Property(e => e.BankName)
+                .HasMaxLength(100)
+                .HasColumnName("bankName");
+            entity.Property(e => e.BankNumber)
+                .HasMaxLength(50)
+                .HasColumnName("bankNumber");
+            entity.Property(e => e.IdCard)
+                .HasMaxLength(100)
+                .HasColumnName("idCard");
+            entity.Property(e => e.IdCardBackImage)
+                .HasMaxLength(255)
+                .HasColumnName("idCardBackImage");
+            entity.Property(e => e.IdCardFrontImage)
+                .HasMaxLength(255)
+                .HasColumnName("idCardFrontImage");
+
+            entity.HasOne(d => d.TouristNavigation).WithOne(p => p.Tourist)
+                .HasForeignKey<Tourist>(d => d.TouristId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Tourist_User");
         });
 
         modelBuilder.Entity<TransactionHistory>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__9B57CF527C076C10");
+            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__9B57CF520DB8C06C");
 
             entity.ToTable("TransactionHistory");
 
@@ -427,9 +462,6 @@ public partial class Prn222PrjContext : DbContext
             entity.Property(e => e.Amount)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("amount");
-            entity.Property(e => e.AmountAfterTransaction)
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("amountAfterTransaction");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
@@ -444,13 +476,12 @@ public partial class Prn222PrjContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.TransactionHistories)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Transacti__userI__74AE54BC");
+                .HasConstraintName("FK_TransactionHistory_User");
         });
 
         modelBuilder.Entity<TravelAgent>(entity =>
         {
-            entity.HasKey(e => e.TravelAgentId).HasName("PK__TravelAg__8F86E844AF45ED9D");
+            entity.HasKey(e => e.TravelAgentId).HasName("PK__TravelAg__8F86E844D538F44C");
 
             entity.ToTable("TravelAgent");
 
@@ -462,7 +493,7 @@ public partial class Prn222PrjContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("businessLicense");
             entity.Property(e => e.DateOfIssue).HasColumnName("dateOfIssue");
-            entity.Property(e => e.EstablishmentDate).HasColumnName("establishmentDate");
+            entity.Property(e => e.EstablishMentDate).HasColumnName("establishMentDate");
             entity.Property(e => e.FrontIdcard)
                 .HasMaxLength(100)
                 .HasColumnName("frontIDCard");
@@ -478,9 +509,9 @@ public partial class Prn222PrjContext : DbContext
             entity.Property(e => e.TravelAgentAddress)
                 .HasMaxLength(255)
                 .HasColumnName("travelAgentAddress");
-            entity.Property(e => e.TravelAgentGmail)
+            entity.Property(e => e.TravelAgentEmail)
                 .HasMaxLength(255)
-                .HasColumnName("travelAgentGmail");
+                .HasColumnName("travelAgentEmail");
             entity.Property(e => e.TravelAgentName)
                 .HasMaxLength(100)
                 .HasColumnName("travelAgentName");
@@ -488,14 +519,15 @@ public partial class Prn222PrjContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.TravelAgents)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__TravelAge__userI__3C69FB99");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TravelAgent_User");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__CB9A1CDF9C535816");
+            entity.HasKey(e => e.UserId).HasName("PK__User__CB9A1CDF1F4C29C4");
 
-            entity.ToTable("User", tb => tb.HasTrigger("trg_CreateWallet_AfterInsert_User"));
+            entity.ToTable("User");
 
             entity.Property(e => e.UserId).HasColumnName("userID");
             entity.Property(e => e.Address)
@@ -507,7 +539,7 @@ public partial class Prn222PrjContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("firstName");
             entity.Property(e => e.Gender)
-                .HasMaxLength(10)
+                .HasMaxLength(20)
                 .HasColumnName("gender");
             entity.Property(e => e.Gmail)
                 .HasMaxLength(255)
@@ -527,23 +559,20 @@ public partial class Prn222PrjContext : DbContext
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK__User__roleID__398D8EEE");
+                .HasConstraintName("FK_User_Role");
         });
 
         modelBuilder.Entity<Vat>(entity =>
         {
-            entity.HasKey(e => e.VatId).HasName("PK__VAT__429329E0D451AE3B");
+            entity.HasKey(e => e.VatId).HasName("PK__VAT__429329E08F061098");
 
             entity.ToTable("VAT");
 
             entity.Property(e => e.VatId).HasColumnName("vatID");
             entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("createDate");
-            entity.Property(e => e.Description)
-                .HasMaxLength(255)
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.EndDate).HasColumnName("endDate");
             entity.Property(e => e.StartDate).HasColumnName("startDate");
             entity.Property(e => e.Status)
@@ -552,24 +581,30 @@ public partial class Prn222PrjContext : DbContext
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("datetime")
                 .HasColumnName("updateDate");
+            entity.Property(e => e.UserId).HasColumnName("userID");
             entity.Property(e => e.VatRate).HasColumnName("vatRate");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Vats)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_VAT_User");
         });
 
         modelBuilder.Entity<Voucher>(entity =>
         {
-            entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__F5338989697EEFEC");
+            entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__F533898941E0789C");
 
             entity.ToTable("Voucher");
 
-            entity.HasIndex(e => e.VoucherCode, "UQ__Voucher__09FEFFB09AE7231F").IsUnique();
+            entity.HasIndex(e => e.VoucherCode, "UQ__Voucher__09FEFFB02BA32DEB").IsUnique();
 
             entity.Property(e => e.VoucherId).HasColumnName("voucherID");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.EndDate).HasColumnName("endDate");
             entity.Property(e => e.MaxDiscountAmount).HasColumnName("maxDiscountAmount");
-            entity.Property(e => e.MinAmountApply).HasColumnName("minAmountApply");
+            entity.Property(e => e.MinDiscountAmount).HasColumnName("minDiscountAmount");
             entity.Property(e => e.PercentDiscount).HasColumnName("percentDiscount");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.StaffId).HasColumnName("staffID");
             entity.Property(e => e.StartDate).HasColumnName("startDate");
             entity.Property(e => e.Status)
                 .HasDefaultValue(1)
@@ -580,11 +615,15 @@ public partial class Prn222PrjContext : DbContext
             entity.Property(e => e.VoucherName)
                 .HasMaxLength(255)
                 .HasColumnName("voucherName");
+
+            entity.HasOne(d => d.Staff).WithMany(p => p.Vouchers)
+                .HasForeignKey(d => d.StaffId)
+                .HasConstraintName("FK_Voucher_Staff");
         });
 
         modelBuilder.Entity<Wallet>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Wallet__CB9A1CDF58AF73E8");
+            entity.HasKey(e => e.UserId).HasName("PK__Wallet__CB9A1CDF17CBF287");
 
             entity.ToTable("Wallet");
 
@@ -595,66 +634,11 @@ public partial class Prn222PrjContext : DbContext
                 .HasDefaultValue(0m)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("balance");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("createDate");
 
             entity.HasOne(d => d.User).WithOne(p => p.Wallet)
                 .HasForeignKey<Wallet>(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Wallet__userID__6FE99F9F");
-        });
-
-        modelBuilder.Entity<WithdrawRequest>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Withdraw__3213E83FA94612D3");
-
-            entity.ToTable("WithdrawRequest");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.AccountHolderName)
-                .HasMaxLength(100)
-                .HasColumnName("accountHolderName");
-            entity.Property(e => e.Amount).HasColumnName("amount");
-            entity.Property(e => e.ApprovedAt)
-                .HasColumnType("datetime")
-                .HasColumnName("approvedAt");
-            entity.Property(e => e.BankAccountNumber)
-                .HasMaxLength(50)
-                .HasColumnName("bankAccountNumber");
-            entity.Property(e => e.BankName)
-                .HasMaxLength(100)
-                .HasColumnName("bankName");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("createdAt");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.IdCard)
-                .HasMaxLength(255)
-                .HasColumnName("idCard");
-            entity.Property(e => e.IdCardBackImage)
-                .HasMaxLength(255)
-                .HasColumnName("idCardBackImage");
-            entity.Property(e => e.IdCardFrontImage)
-                .HasMaxLength(255)
-                .HasColumnName("idCardFrontImage");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-            entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .HasDefaultValue("PENDING")
-                .HasColumnName("status");
-            entity.Property(e => e.UserId).HasColumnName("userId");
-
-            entity.HasOne(d => d.User).WithMany(p => p.WithdrawRequests)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Withdraw_User");
+                .HasConstraintName("FK_Wallet_User");
         });
 
         OnModelCreatingPartial(modelBuilder);

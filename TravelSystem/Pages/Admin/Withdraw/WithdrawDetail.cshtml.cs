@@ -8,10 +8,10 @@ namespace TravelSystem.Pages.Staff
 {
     public class WithdrawDetailModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IEmailService _emailService;
 
-        public WithdrawDetailModel(Prn222PrjContext context, IEmailService emailService)
+        public WithdrawDetailModel(FinalPrnContext context, IEmailService emailService)
         {
             _context = context;
             _emailService = emailService;

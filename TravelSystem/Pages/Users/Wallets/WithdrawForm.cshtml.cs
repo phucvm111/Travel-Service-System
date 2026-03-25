@@ -10,11 +10,11 @@ namespace TravelSystem.Pages.Users.Wallets
 {
     public class WithdrawFormModel : PageModel
     {
-        private readonly Prn222PrjContext _con;
+        private readonly FinalPrnContext _con;
         private readonly IEmailService _emailService;
         private readonly IWebHostEnvironment _environment;
 
-        public WithdrawFormModel(Prn222PrjContext con, IEmailService emailService, IWebHostEnvironment environment)
+        public WithdrawFormModel(FinalPrnContext con, IEmailService emailService, IWebHostEnvironment environment)
         {
             _con = con;
             _emailService = emailService;

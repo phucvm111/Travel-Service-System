@@ -7,16 +7,14 @@ namespace TravelSystem.Pages.Agents.Accommodations
 {
     public class DetailsModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public DetailsModel(Prn222PrjContext context)
+        public DetailsModel(FinalPrnContext context)
         {
             _context = context;
         }
 
         public Accommodation Accommodation { get; set; } = default!;
-        public List<TravelSystem.Models.Room> Rooms { get; set; } = new();
-
         public async Task<IActionResult> OnGetAsync(int id)
         {
             var userId = HttpContext.Session.GetInt32("UserID");
@@ -29,17 +27,12 @@ namespace TravelSystem.Pages.Agents.Accommodations
 
             Accommodation = await _context.Accommodations
                 .Include(a => a.Service)
-                .FirstOrDefaultAsync(a => a.AccommodationId == id
+                .FirstOrDefaultAsync(a => a.ServiceId == id
                     && a.Service != null
-                    && a.Service.TravelAgentId == agent.TravelAgentId
-                    && a.Service.ServiceType == "ACCOMMODATION");
+                    && a.Service.AgentId == agent.TravelAgentId
+                    && a.Service.ServiceType == 1);
 
             if (Accommodation == null) return NotFound();
-
-            Rooms = await _context.Rooms
-                .Where(r => r.AccommodationId == id)
-                .OrderBy(r => r.RoomId)
-                .ToListAsync();
 
             return Page();
         }

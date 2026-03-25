@@ -17,7 +17,7 @@ public partial class Voucher
 
     public double? MaxDiscountAmount { get; set; }
 
-    public double? MinAmountApply { get; set; }
+    public double? MinDiscountAmount { get; set; }
 
     public DateOnly? StartDate { get; set; }
 
@@ -27,5 +27,9 @@ public partial class Voucher
 
     public int? Status { get; set; }
 
-    public virtual ICollection<BookDetail> BookDetails { get; set; } = new List<BookDetail>();
+    public int? StaffId { get; set; }
+
+    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+
+    public virtual Staff? Staff { get; set; }
 }

@@ -9,10 +9,10 @@ namespace TravelSystem.Pages.Agents.Tours
 {
     public class IndexModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IHubContext<HubServer> _hub;
 
-        public IndexModel(Prn222PrjContext context, IHubContext<HubServer> hub)
+        public IndexModel(FinalPrnContext context, IHubContext<HubServer> hub)
         {
             _context = context;
             _hub = hub;

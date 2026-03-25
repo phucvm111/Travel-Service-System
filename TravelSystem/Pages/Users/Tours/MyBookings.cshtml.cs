@@ -7,9 +7,9 @@ namespace TravelSystem.Pages.Users.BookTours
 {
     public class MyBookingsModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public MyBookingsModel(Prn222PrjContext context)
+        public MyBookingsModel(FinalPrnContext context)
         {
             _context = context;
         }

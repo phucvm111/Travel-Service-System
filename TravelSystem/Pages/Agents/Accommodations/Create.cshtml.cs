@@ -8,10 +8,10 @@ namespace TravelSystem.Pages.Agents.Accommodations
 {
     public class CreateModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IWebHostEnvironment _env;
 
-        public CreateModel(Prn222PrjContext context, IWebHostEnvironment env)
+        public CreateModel(FinalPrnContext context, IWebHostEnvironment env)
         {
             _context = context;
             _env = env;

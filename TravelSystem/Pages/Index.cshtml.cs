@@ -6,9 +6,9 @@ namespace TravelSystem.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public IndexModel(Prn222PrjContext context)
+        public IndexModel(FinalPrnContext context)
         {
             _context = context;
         }

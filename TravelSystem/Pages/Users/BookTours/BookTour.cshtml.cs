@@ -11,10 +11,10 @@ namespace TravelSystem.Pages.Users.BookTours
 {
     public class BookTourModel : PageModel
     {
-        private readonly Prn222PrjContext _con;
+        private readonly FinalPrnContext _con;
         private readonly IEmailService _emailService;
 
-        public BookTourModel(Prn222PrjContext con, IEmailService emailService)
+        public BookTourModel(FinalPrnContext con, IEmailService emailService)
         {
             _con = con;
             _emailService = emailService;

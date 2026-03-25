@@ -7,9 +7,9 @@ namespace TravelSystem.Pages.Auths
 {
     public class LoginModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public LoginModel(Prn222PrjContext context)
+        public LoginModel(FinalPrnContext context)
         {
             _context = context;
         }

@@ -86,7 +86,7 @@
         <div class="alert alert-danger">@err.ErrorMessage</div>
     }
 
-    <div id="formWrapper">
+    @* <div id="formWrapper">
         <form method="post" enctype="multipart/form-data" novalidate>
             @Html.AntiForgeryToken()
 
@@ -204,7 +204,7 @@
                         @ViewData.ModelState["Accommodation.Description"].Errors[0].ErrorMessage
                     </span>
                 }
-            </div>
+            </div> *@
 
             <br />
             <div class="d-flex justify-content-center">

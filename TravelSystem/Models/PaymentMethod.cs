@@ -7,9 +7,7 @@ public partial class PaymentMethod
 {
     public int PaymentMethodId { get; set; }
 
-    public string MethodName { get; set; } = null!;
+    public string? MethodName { get; set; }
 
-    public virtual ICollection<BookDetail> BookDetails { get; set; } = new List<BookDetail>();
-
-    public virtual ICollection<PendingRecharge> PendingRecharges { get; set; } = new List<PendingRecharge>();
+    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 }

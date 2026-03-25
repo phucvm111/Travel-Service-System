@@ -8,10 +8,10 @@ namespace TravelSystem.Pages.Admin.CancelBookingTourist
 {
     public class RequestCancelDetailModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IEmailService _emailService;
 
-        public RequestCancelDetailModel(Prn222PrjContext context, IEmailService emailService)
+        public RequestCancelDetailModel(FinalPrnContext context, IEmailService emailService)
         {
             _context = context;
             _emailService = emailService;

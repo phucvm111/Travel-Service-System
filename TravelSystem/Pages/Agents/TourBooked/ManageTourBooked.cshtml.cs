@@ -8,10 +8,10 @@ namespace TravelSystem.Pages.Agents.TourBooked
 {
     public class ManageTourBookedModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IEmailService _emailService;
 
-        public ManageTourBookedModel(Prn222PrjContext context, IEmailService emailService)
+        public ManageTourBookedModel(FinalPrnContext context, IEmailService emailService)
         {
             _context = context;
             _emailService = emailService;

@@ -9,10 +9,10 @@ namespace TravelSystem.Pages.Agents.Entertainments
 {
     public class EditModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
         private readonly IWebHostEnvironment _environment;
 
-        public EditModel(Prn222PrjContext context, IWebHostEnvironment environment)
+        public EditModel(FinalPrnContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _environment = environment;

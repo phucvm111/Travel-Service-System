@@ -7,9 +7,9 @@ namespace TravelSystem.Pages.Admin.Requests
 {
     public class RequestCancelManageModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public RequestCancelManageModel(Prn222PrjContext context)
+        public RequestCancelManageModel(FinalPrnContext context)
         {
             _context = context;
         }

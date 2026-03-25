@@ -7,8 +7,8 @@ namespace TravelSystem.Pages.Agents.AgentProfiles
 {
     public class ProfileModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
-        public ProfileModel(Prn222PrjContext context) => _context = context;
+        private readonly FinalPrnContext _context;
+        public ProfileModel(FinalPrnContext context) => _context = context;
 
         public TravelAgent? Agent { get; set; }
         public User? CurrentUser { get; set; }

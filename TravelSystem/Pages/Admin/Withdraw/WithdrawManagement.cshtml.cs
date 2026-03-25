@@ -8,9 +8,9 @@ namespace TravelSystem.Pages.Admin.Withdraw
     // ??m b?o tên Class là WithdrawManagementModel
     public class WithdrawManagementModel : PageModel
     {
-        private readonly Prn222PrjContext _context;
+        private readonly FinalPrnContext _context;
 
-        public WithdrawManagementModel(Prn222PrjContext context)
+        public WithdrawManagementModel(FinalPrnContext context)
         {
             _context = context;
         }
