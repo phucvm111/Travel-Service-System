@@ -1,0 +1,140 @@
+﻿@page
+@model TravelSystem.Pages.Agents.TourBooked.DetailTourBookedModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Chi tiết chuyến đi";
+}
+
+<style>
+    .detail-card {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+        padding: 35px;
+        border: 1px solid #eee;
+    }
+
+    .img-container img {
+        width: 100%;
+        border-radius: 12px;
+        object-fit: cover;
+        max-height: 420px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .info-row {
+        margin-bottom: 12px;
+        font-size: 1.05rem;
+    }
+
+    .label-text {
+        font-weight: 600;
+        color: #7f8c8d;
+        width: 160px;
+        display: inline-block;
+    }
+
+    .value-text {
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    .tour-title {
+        color: #0d6efd;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    /* Box Ghi chú khách hàng (Màu xanh) */
+    .customer-note-box {
+        background: #f0f7ff;
+        border-left: 4px solid #0d6efd;
+        padding: 15px;
+        border-radius: 4px;
+        margin-top: 25px;
+    }
+    /* Box Lý do hủy (Màu đỏ) */
+    .cancel-log-box {
+        background: #fff5f5;
+        border: 1px dashed #fc8181;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+    }
+
+    .log-item {
+        color: #e53e3e;
+        font-size: 0.95rem;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .price-tag {
+        font-size: 1.6rem;
+        color: #e74c3c;
+        font-weight: 800;
+        margin: 20px 0;
+    }
+</style>
+
+<div id="layoutSidenav">
+
+    <div id="layoutSidenav_content" style="background-color: #f8f9fa;">
+        <main class="container-fluid px-4 py-4">
+            <div class="detail-card">
+                <h2 class="tour-title"><i class="fas fa-info-circle me-2"></i>Chi tiết chuyến đi được đặt</h2>
+
+                <div class="row">
+                    <div class="col-lg-5 mb-4">
+                        <div class="img-container">
+                            <img src="/@Model.BookingItem.TourDeparture?.Tour?.Image" onerror="this.src='/img/default-tour.jpg'">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <h3 class="fw-bold text-dark">@Model.BookingItem.TourDeparture?.Tour?.TourName</h3>
+                        <hr />
+
+                        <div class="info-row"><span class="label-text">Khách hàng:</span><span class="value-text">@Model.BookingItem.FirstName @Model.BookingItem.LastName</span></div>
+                        <div class="info-row"><span class="label-text">Ngày đặt:</span><span class="value-text">@Model.BookingItem.BookDate?.ToString("dd/MM/yyyy")</span></div>
+                        <div class="info-row"><span class="label-text">Số điện thoại:</span><span class="value-text">@Model.BookingItem.Phone</span></div>
+                        <div class="info-row"><span class="label-text">Email:</span><span class="value-text">@Model.BookingItem.Gmail</span></div>
+                        <div class="info-row"><span class="label-text">Mã giảm giá:</span><span class="badge bg-light text-primary border border-primary">@(Model.BookingItem.Voucher?.VoucherCode ?? "N/A")</span></div>
+
+                        <div class="d-flex gap-3 mt-3">
+                            <div class="badge bg-primary bg-opacity-10 text-primary p-2 px-3 fs-6">Người lớn: @Model.BookingItem.NumberAdult</div>
+                            <div class="badge bg-info bg-opacity-10 text-info p-2 px-3 fs-6">Trẻ em: @Model.BookingItem.NumberChildren</div>
+                        </div>
+
+                        <div class="price-tag">
+                            <span class="fs-6 text-muted fw-normal">Tổng giá trị đơn hàng:</span><br />
+                            @Model.BookingItem.TotalPrice?.ToString("N0") VNĐ
+                        </div>
+
+                        <div class="customer-note-box">
+                            <div class="fw-bold text-primary mb-1"><i class="far fa-comment-dots me-2"></i>Ghi chú của khách:</div>
+                            <div class="text-secondary italic">"@Model.CustomerNote"</div>
+                        </div>
+
+                        @if (Model.CancelLogs.Any())
+                        {
+                            <div class="cancel-log-box">
+                                <div class="fw-bold text-danger mb-2"><i class="fas fa-exclamation-triangle me-2"></i>Thông tin hủy chuyến:</div>
+                                @foreach (var log in Model.CancelLogs)
+                                {
+                                    <span class="log-item"><i class="fas fa-angle-right me-2"></i>@log</span>
+                                }
+                            </div>
+                        }
+
+                        <div class="mt-4">
+                            <a asp-page="./ManageTourBooked" class="btn btn-primary px-4 shadow-sm" style="border-radius: 25px;">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

@@ -1,0 +1,134 @@
+﻿@page
+@model TravelSystem.Pages.Staffs.ManageTransaction.HistoryPaymentWalletSystemModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Lịch sử giao dịch hệ thống";
+}
+
+<div id="layoutSidenav">
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h2 class="mt-4 fw-bold">Lịch sử giao dịch hệ thống</h2>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><a asp-page="/Staffs/CancelBooking/RequestCancelManage">Bảng điều khiển</a></li>
+                    <li class="breadcrumb-item active">Giao dịch ví hệ thống</li>
+                </ol>
+
+                <div class="card mb-4 shadow-sm border-0">
+                    <div class="card-body">
+                        <form method="get" id="filterForm" class="row g-3 mb-4 align-items-end">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Từ ngày</label>
+                                <input type="date" name="FromDate" id="fromDate" class="form-control" value="@Model.FromDate">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Đến ngày</label>
+                                <input type="date" name="ToDate" id="toDate" class="form-control" value="@Model.ToDate">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Loại giao dịch</label>
+                                <select name="Status" class="form-select" onchange="this.form.submit()">
+                                    <option value="0">Tất cả loại</option>
+                                    <option value="RECEIVE" selected="@(Model.Status == "RECEIVE")">Khách thanh toán Tour</option>
+                                    <option value="REFUND" selected="@(Model.Status == "REFUND")">Hoàn tiền cho khách</option>
+                                    <option value="PURCHASE" selected="@(Model.Status == "PURCHASE")">Đại lý rút tiền</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex gap-2">
+                                <button type="submit" class="btn btn-primary flex-grow-1"><i class="fas fa-search me-1"></i> Lọc</button>
+                                <a asp-page="./HistoryPaymentWalletSystem" class="btn btn-secondary">Xóa lọc</a>
+                            </div>
+                        </form>
+
+                        <div id="dateError" class="text-danger small mb-3"></div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr class="text-center">
+                                        <th>STT</th>
+                                        <th>Ngày giao dịch</th>
+                                        <th>Nội dung</th>
+                                        <th>Loại</th>
+                                        <th>Số tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.TransactionList != null && Model.TransactionList.Any())
+                                    {
+                                        int count = (Model.CurrentPage - 1) * 10 + 1;
+                                        foreach (var tx in Model.TransactionList)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@(count++)</td>
+                                                <td class="text-center">@tx.TransactionDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                                <td>@tx.Description</td>
+                                                <td class="text-center">
+                                                    @if (tx.TransactionType == "RECEIVE")
+                                                    {
+                                                        <span class="badge bg-success">Nhận tiền</span>
+                                                    }
+                                                    else if (tx.TransactionType == "REFUND")
+                                                    {
+
+                                                        <span class="badge bg-warning text-dark">Hoàn tiền khách</span>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <span class="badge bg-info text-dark">@tx.TransactionType</span>
+                                                    }
+                                                </td>
+                                                <td class="text-end fw-bold @(tx.TransactionType == "RECEIVE" ? "text-success" : "text-danger")">
+                                                    @(tx.TransactionType == "RECEIVE" ? "+" : "-") @tx.Amount?.ToString("N0") đ
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr><td colspan="5" class="text-center py-4 text-muted">Không có dữ liệu giao dịch.</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        @if (Model.TotalPages > 1)
+                        {
+                            <nav class="mt-4">
+                                <ul class="pagination justify-content-center">
+                                    @for (int i = 1; i <= Model.TotalPages; i++)
+                                    {
+                                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                            <a class="page-link" asp-page="./HistoryPaymentWalletSystem"
+                                               asp-route-p="@i" asp-route-FromDate="@Model.FromDate"
+                                               asp-route-ToDate="@Model.ToDate" asp-route-Status="@Model.Status">@i</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        }
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("filterForm").addEventListener("submit", function (e) {
+            const fromDate = document.getElementById("fromDate").value;
+            const toDate = document.getElementById("toDate").value;
+            const errorDiv = document.getElementById("dateError");
+
+            errorDiv.textContent = "";
+            if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
+                e.preventDefault();
+                errorDiv.textContent = "Lỗi: Ngày kết thúc không thể nhỏ hơn ngày bắt đầu.";
+            }
+        });
+    </script>
+}
