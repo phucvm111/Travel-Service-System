@@ -1,8 +1,9 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using TravelSystem.Hubs;
 using TravelSystem.Models;
 using TravelSystem.Services;
+using TravelSystemService.Services;
 
 namespace TravelSystem
 {
@@ -17,8 +18,15 @@ namespace TravelSystem
             builder.Services.AddRazorPages();
             builder.Services.AddSession();
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Auths/Login";
+                options.AccessDeniedPath = "/Auths/Login"; // Nếu bị từ chối quyền cũng quay về đây
+            });
+
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<PayOSService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

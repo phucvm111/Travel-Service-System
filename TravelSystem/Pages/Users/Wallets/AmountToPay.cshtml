@@ -1,0 +1,91 @@
+﻿@page
+@model TravelSystem.Pages.Wallet.AmountToPayModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="container" style="padding-top: 20px; padding-bottom: 20px">
+    @* --- Khối Số Dư --- *@
+    <div class="balance-box text-center shadow-sm p-4 mb-4 bg-white border rounded">
+        <h5 class="text-muted">Số dư khả dụng</h5>
+        <h2 class="text-success fw-bold">@Model.UserWallet.Balance?.ToString("N0") VNĐ</h2>
+    </div>
+
+    @* --- Form Nạp Tiền --- *@
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Nạp tiền vào ví</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-page-handler="Deposit" id="depositForm">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Số tiền nạp (VNĐ)</label>
+                    <input type="number" name="amount" id="amountInput" class="form-control form-control-lg" placeholder="Ví dụ: 50000" min="10000" required />
+                    <small class="text-muted">Nạp tối thiểu 10,000 VNĐ</small>
+                </div>
+                <button type="submit" id="btnSubmit" class="btn btn-success btn-lg px-5" disabled>
+                    Nạp thêm
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @* --- Lịch Sử Giao Dịch --- *@
+    <div class="card shadow-sm ">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Lịch sử giao dịch</h5>
+            <form method="get" id="filterForm">
+                <select name="type" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">Tất cả loại hình</option>
+                    <option value="DEPOSIT" selected="@(Model.SelectedType == "DEPOSIT")">Nạp tiền</option>
+                    <option value="PURCHASE" selected="@(Model.SelectedType == "PURCHASE")">Thanh toán</option>
+                    <option value="REFUND" selected="@(Model.SelectedType == "REFUND")">Hoàn tiền</option>
+                </select>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ngày thực hiện</th>
+                        <th>Nội dung</th>
+                        <th>Loại</th>
+                        <th class="text-end">Số tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Transactions != null && Model.Transactions.Any())
+                    {
+                        foreach (var item in Model.Transactions)
+                        {
+                            <tr>
+                                <td>@item.TransactionDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <span class="badge @(item.TransactionType == "DEPOSIT" ? "bg-success" : "bg-danger")">
+                                        @item.TransactionType
+                                    </span>
+                                </td>
+                                <td class="text-end fw-bold">@item.Amount?.ToString("N0") VNĐ</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="4" class="text-center py-4">Chưa có giao dịch nào.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const input = document.getElementById('amountInput');
+        const btn = document.getElementById('btnSubmit');
+        input.addEventListener('input', () => {
+            btn.disabled = input.value < 10000;
+        });
+    </script>
+}
