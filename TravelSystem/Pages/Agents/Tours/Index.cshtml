@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model TravelSystem.Pages.Agents.Tours.IndexModel
 
 <div class="d-flex">
@@ -25,30 +25,20 @@
         }
 
 
-        <!-- FILTER: Trạng thái chuyến đi -->
-        <div class="mb-3">
-            <span class="fw-semibold me-2">Trạng thái chuyến đi:</span>
-            <a asp-page="./Index"
-               asp-route-tourStatus="@Model.TourStatus"
-               asp-route-departureStatus=""
-               asp-route-pageNumber="1"
-               class="btn btn-sm btn-secondary @(string.IsNullOrEmpty(Model.DepartureStatus) ? "active" : "")">Tất cả</a>
-            <a asp-page="./Index"
-               asp-route-tourStatus="@Model.TourStatus"
-               asp-route-departureStatus="active"
-               asp-route-pageNumber="1"
-               class="btn btn-sm btn-warning @(Model.DepartureStatus == "active" ? "active" : "")">Sắp diễn ra</a>
-            <a asp-page="./Index"
-               asp-route-tourStatus="@Model.TourStatus"
-               asp-route-departureStatus="ongoing"
-               asp-route-pageNumber="1"
-               class="btn btn-sm btn-success @(Model.DepartureStatus == "ongoing" ? "active" : "")">Đang diễn ra</a>
-            <a asp-page="./Index"
-               asp-route-tourStatus="@Model.TourStatus"
-               asp-route-departureStatus="completed"
-               asp-route-pageNumber="1"
-               class="btn btn-sm btn-primary @(Model.DepartureStatus == "completed" ? "active" : "")">Đã hoàn thành</a>
-        </div>
+        <!-- SEARCH -->
+        <form method="get" class="mb-3">
+            <div class="input-group" style="max-width:500px">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" name="searchKeyword" class="form-control"
+                       placeholder="Tìm theo tên tour, điểm đi, điểm đến..."
+                       value="@Model.SearchKeyword" />
+                <button type="submit" class="btn btn-primary">Tìm</button>
+                @if (!string.IsNullOrEmpty(Model.SearchKeyword))
+                {
+                    <a asp-page="./Index" class="btn btn-outline-secondary">Xóa lọc</a>
+                }
+            </div>
+        </form>
 
         <!-- TABLE -->
         <table class="table table-bordered table-striped align-middle">
@@ -58,8 +48,7 @@
                     <th>Tên Tour</th>
                     <th>Điểm bắt đầu</th>
                     <th>Điểm đến</th>
-                    <th>Trạng thái Tour</th>
-                    <th>Chuyến đi</th>
+                    <th>Thống kê chuyến đi</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -78,74 +67,31 @@
                         <td>@item.Tour.StartPlace</td>
                         <td>@item.Tour.EndPlace</td>
 
-                        <!-- Danh sách TourDeparture -->
-                        <td style="min-width:460px">
-                            @if (!item.Departures.Any())
-                            {
-                                <span class="text-muted fst-italic">Chưa có chuyến đi</span>
+                        <!-- Thống kê chuyến đi -->
+                        <td>
+                            @{
+                                int activeCount = item.Departures.Count(d => d.Status?.Trim() == "active");
+                                int ongoingCount = item.Departures.Count(d => d.Status?.Trim() == "ongoing");
+                                int completedCount = item.Departures.Count(d => d.Status?.Trim() == "completed");
                             }
-                            else
-                            {
-                                <table class="table table-sm table-bordered mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Ngày đi</th>
-                                            <th>Ngày về</th>
-                                            <th>Còn chỗ</th>
-                                            <th>Giá người lớn</th>
-                                            <th>Trạng thái</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var dep in item.Departures)
-                                        {
-                                            <tr>
-                                                <td>@dep.StartDate?.ToString("dd/MM/yyyy")</td>
-                                                <td>@dep.EndDate?.ToString("dd/MM/yyyy")</td>
-                                                <td>@dep.AvailableSeat / @dep.Capacity</td>
-                                                <td>@dep.AdultPrice?.ToString("N0") đ</td>
-                                                <td>
-                                                    @switch (dep.Status?.Trim())
-                                                    {
-                                                        case "active":
-                                                            <span class="badge bg-warning text-dark">Sắp diễn ra</span>
-                                                            break;
-                                                        case "ongoing":
-                                                            <span class="badge bg-success">Đang diễn ra</span>
-                                                            break;
-                                                        case "completed":
-                                                            <span class="badge bg-primary">Đã hoàn thành</span>
-                                                            break;
-                                                        default:
-                                                            <span class="badge bg-secondary">@dep.Status</span>
-                                                            break;
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @if (dep.Status?.Trim() == "active")
-                                                    {
-                                                        <button type="button"
-                                                                class="btn btn-danger btn-sm"
-                                                                onclick="confirmDeleteDeparture(@dep.DepartureId, '@dep.StartDate?.ToString("dd/MM/yyyy")')">
-                                                            Xóa
-                                                        </button>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            }
-
-                            @if (item.Tour.Status == 1)
-                            {
-                                <a asp-page="./CreateDeparture"
-                                   asp-route-tourId="@item.Tour.TourId"
-                                   class="btn btn-outline-success btn-sm mt-1">
-                                    + Thêm chuyến đi
-                                </a>
-                            }
+                            <div class="d-flex flex-column gap-1" style="font-size: 0.85rem;">
+                                @if (activeCount > 0)
+                                {
+                                    <span class="badge bg-warning text-dark text-start">Sắp diễn ra: @activeCount</span>
+                                }
+                                @if (ongoingCount > 0)
+                                {
+                                    <span class="badge bg-success text-start">Đang diễn ra: @ongoingCount</span>
+                                }
+                                @if (completedCount > 0)
+                                {
+                                    <span class="badge bg-primary text-start">Đã hoàn thành: @completedCount</span>
+                                }
+                                @if (activeCount == 0 && ongoingCount == 0 && completedCount == 0)
+                                {
+                                    <span class="text-muted fst-italic">Chưa có chuyến</span>
+                                }
+                            </div>
                         </td>
 
                         <!-- Hành động Tour -->
@@ -153,8 +99,12 @@
                             <a asp-page="./Details"
                                asp-route-id="@item.Tour.TourId"
                                class="btn btn-info btn-sm mb-1">Chi tiết</a>
-                            <a asp-page="/Agents/TourDepartures/Index" asp-route-tourId="@item.Tour.TourId" class="btn btn-sm btn-outline-info">
-                            <i class="fas fa-calendar-alt"></i> Lịch khởi hành</a>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-info mb-1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#departureModal-@item.Tour.TourId">
+                                <i class="fas fa-calendar-alt"></i> Lịch khởi hành
+                            </button>
                             @if (!isBooked)
                             {
                                 <a asp-page="./Edit"
@@ -178,6 +128,200 @@
             </tbody>
         </table>
 
+        @* ══ Departure Modals ══ *@
+        @foreach (var item in Model.TourList)
+        {
+            <div class="modal fade" id="departureModal-@item.Tour.TourId" tabindex="-1"
+                 aria-labelledby="departureModalLabel-@item.Tour.TourId" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-dark text-white">
+                            <h5 class="modal-title" id="departureModalLabel-@item.Tour.TourId">
+                                <i class="fas fa-calendar-alt me-2"></i>Lịch khởi hành — @item.Tour.TourName
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            @if (!item.Departures.Any())
+                            {
+                                <div class="text-center text-muted py-4">
+                                    <i class="fas fa-info-circle fs-3 d-block mb-2"></i>
+                                    Chưa có chuyến đi nào.
+                                </div>
+                            }
+                            else
+                            {
+                                <table class="table table-sm table-bordered table-striped align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Ngày đi</th>
+                                            <th>Ngày về</th>
+                                            <th>Còn chỗ</th>
+                                            <th>Giá người lớn</th>
+                                            <th>Giá trẻ em</th>
+                                            <th>Trạng thái</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var dep in item.Departures)
+                                        {
+                                            <tr>
+                                                <td>@dep.StartDate?.ToString("dd/MM/yyyy")</td>
+                                                <td>@dep.EndDate?.ToString("dd/MM/yyyy")</td>
+                                                <td>@dep.AvailableSeat / @dep.Capacity</td>
+                                                <td>@dep.AdultPrice?.ToString("N0") đ</td>
+                                                <td>@dep.ChildPrice?.ToString("N0") đ</td>
+                                                <td>
+                                                    @switch (dep.Status?.Trim())
+                                                    {
+                                                        case "active":
+                                                            <span class="badge bg-warning text-dark">Sắp diễn ra</span>
+                                                            break;
+                                                        case "ongoing":
+                                                            <span class="badge bg-success">Đang diễn ra</span>
+                                                            break;
+                                                        case "completed":
+                                                            <span class="badge bg-primary">Đã hoàn thành</span>
+                                                            break;
+                                                        default:
+                                                            <span class="badge bg-secondary">@dep.Status</span>
+                                                            break;
+                                                    }
+                                                </td>
+                                                <td style="white-space:nowrap">
+                                                    @if (dep.Status?.Trim() == "active")
+                                                    {
+                                                        <button type="button"
+                                                                class="btn btn-warning btn-sm me-1"
+                                                                onclick="toggleEditRow('editRow-@dep.DepartureId')">
+                                                            Sửa
+                                                        </button>
+                                                        <button type="button"
+                                                                class="btn btn-danger btn-sm"
+                                                                onclick="confirmDeleteDeparture(@dep.DepartureId, '@dep.StartDate?.ToString("dd/MM/yyyy")')">
+                                                            Xóa
+                                                        </button>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            @* ── Edit row (hidden) ── *@
+                                            <tr id="editRow-@dep.DepartureId" style="display:none" class="table-warning">
+                                                <td colspan="7">
+                                                    <form method="post" asp-page-handler="EditDeparture" class="edit-dep-form" novalidate>
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="EditDepId" value="@dep.DepartureId" />
+                                                        <input type="hidden" name="EditDepTourId" value="@item.Tour.TourId" />
+                                                        <input type="hidden" name="EditDepNumberOfDay" value="@item.Tour.NumberOfDay" />
+                                                        <input type="hidden" name="EditDepAdultPriceRaw" class="dep-adult-hidden" value="@dep.AdultPrice?.ToString("0")" />
+                                                        <input type="hidden" name="EditDepChildPriceRaw" class="dep-child-hidden" value="@dep.ChildPrice?.ToString("0")" />
+                                                        <input type="hidden" name="EditDepCapacityRaw" class="dep-cap-hidden" value="@dep.Capacity" />
+                                                        <div class="row g-2 mb-1">
+                                                            <div class="col-md-3">
+                                                                <label class="form-label mb-0 small">Ngày đi</label>
+                                                                <input type="date" name="EditDepStartDate" class="form-control form-control-sm dep-start"
+                                                                       data-days="@item.Tour.NumberOfDay"
+                                                                       value="@dep.StartDate?.ToString("yyyy-MM-dd")" />
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="form-label mb-0 small">Ngày về</label>
+                                                                <input type="date" name="EditDepEndDate" class="form-control form-control-sm dep-end"
+                                                                       value="@dep.EndDate?.ToString("yyyy-MM-dd")" />
+                                                                <small class="dep-day-hint text-muted"></small>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label class="form-label mb-0 small">Giá NL (đ)</label>
+                                                                <input type="text" class="form-control form-control-sm dep-adult-display"
+                                                                       value="@dep.AdultPrice?.ToString("N0")" autocomplete="off" />
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label class="form-label mb-0 small">Giá TE (đ)</label>
+                                                                <input type="text" class="form-control form-control-sm dep-child-display"
+                                                                       value="@dep.ChildPrice?.ToString("N0")" autocomplete="off" />
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label class="form-label mb-0 small">Số chỗ</label>
+                                                                <input type="text" class="form-control form-control-sm dep-cap-display"
+                                                                       value="@dep.Capacity" autocomplete="off" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-end gap-2 mt-1">
+                                                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                                    onclick="toggleEditRow('editRow-@dep.DepartureId')">Hủy</button>
+                                                            <button type="submit" class="btn btn-success btn-sm">✓ Lưu</button>
+                                                        </div>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                        <div class="modal-footer d-block">
+                            @if (item.Tour.Status == 1)
+                            {
+                                <div class="mb-2">
+                                    <button class="btn btn-outline-success btn-sm" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#addDepForm-@item.Tour.TourId">
+                                        + Thêm chuyến đi
+                                    </button>
+                                </div>
+
+                                <div class="collapse" id="addDepForm-@item.Tour.TourId">
+                                    <form method="post" asp-page-handler="CreateDeparture" novalidate>
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="NewDepTourId" value="@item.Tour.TourId" />
+                                        <input type="hidden" name="NewDepNumberOfDay" value="@item.Tour.NumberOfDay" />
+                                        <input type="hidden" name="NewDepAdultPriceRaw" class="dep-adult-hidden" value="" />
+                                        <input type="hidden" name="NewDepChildPriceRaw" class="dep-child-hidden" value="" />
+                                        <input type="hidden" name="NewDepCapacityRaw" class="dep-cap-hidden" value="" />
+
+                                        <div class="row g-2 mb-2">
+                                            <div class="col-md-6">
+                                                <label class="form-label mb-0 small">Ngày khởi hành <span class="text-danger">*</span></label>
+                                                <input type="date" name="NewDepStartDate" class="form-control form-control-sm dep-start"
+                                                       data-days="@item.Tour.NumberOfDay" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label mb-0 small">Ngày kết thúc <span class="text-danger">*</span></label>
+                                                <input type="date" name="NewDepEndDate" class="form-control form-control-sm dep-end" />
+                                                <small class="dep-day-hint text-muted"></small>
+                                            </div>
+                                        </div>
+                                        <div class="row g-2 mb-2">
+                                            <div class="col-md-4">
+                                                <label class="form-label mb-0 small">Giá người lớn (đ) <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm dep-adult-display"
+                                                       placeholder="VD: 2.000.000" autocomplete="off" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label mb-0 small">Giá trẻ em (đ) <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm dep-child-display"
+                                                       placeholder="VD: 1.200.000" autocomplete="off" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label mb-0 small">Số chỗ <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm dep-cap-display"
+                                                       placeholder="VD: 30" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <button type="submit" class="btn btn-success btn-sm">✓ Lưu chuyến đi</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                            <div class="text-end mt-2">
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
         <!-- PAGINATION -->
         @if (Model.TotalPages > 1)
         {
@@ -187,7 +331,7 @@
                         <a class="page-link"
                            asp-page="./Index"
                            asp-route-pageNumber="@(Model.PageNumber - 1)"
-                           asp-route-departureStatus="@Model.DepartureStatus"
+                           asp-route-searchKeyword="@Model.SearchKeyword"
                            asp-route-tourStatus="@Model.TourStatus">«</a>
                     </li>
                     @for (int i = 1; i <= Model.TotalPages; i++)
@@ -196,7 +340,7 @@
                             <a class="page-link"
                                asp-page="./Index"
                                asp-route-pageNumber="@i"
-                               asp-route-departureStatus="@Model.DepartureStatus"
+                               asp-route-searchKeyword="@Model.SearchKeyword"
                                asp-route-tourStatus="@Model.TourStatus">@i</a>
                         </li>
                     }
@@ -204,7 +348,7 @@
                         <a class="page-link"
                            asp-page="./Index"
                            asp-route-pageNumber="@(Model.PageNumber + 1)"
-                           asp-route-departureStatus="@Model.DepartureStatus"
+                           asp-route-searchKeyword="@Model.SearchKeyword"
                            asp-route-tourStatus="@Model.TourStatus">»</a>
                     </li>
                 </ul>
@@ -263,6 +407,11 @@
             });
         }
 
+        function toggleEditRow(rowId) {
+            var row = document.getElementById(rowId);
+            if (row) row.style.display = row.style.display === 'none' ? '' : 'none';
+        }
+
         @if (TempData["CreateSuccess"] != null)
         {
             <text>
@@ -272,7 +421,9 @@
                 icon: 'success',
                 confirmButtonColor: '#28a745',
                 confirmButtonText: 'OK',
-                allowOutsideClick: false
+                allowOutsideClick: false,
+                timer: 5000,
+                timerProgressBar: true
             });
             </text>
         }
@@ -286,10 +437,144 @@
                 icon: 'success',
                 confirmButtonColor: '#28a745',
                 confirmButtonText: 'OK',
-                allowOutsideClick: false
+                allowOutsideClick: false,
+                timer: 5000,
+                timerProgressBar: true
             });
             </text>
         }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+            Swal.fire({
+                title: 'Thành công!',
+                text: '@Html.Raw(TempData["SuccessMessage"])',
+                icon: 'success',
+                confirmButtonColor: '#28a745',
+                confirmButtonText: 'OK',
+                allowOutsideClick: false,
+                timer: 5000,
+                timerProgressBar: true
+            });
+            </text>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+            Swal.fire({
+                title: 'Lỗi!',
+                text: '@Html.Raw(TempData["ErrorMessage"])',
+                icon: 'error',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Đóng',
+                timer: 10000,
+                timerProgressBar: true
+            });
+            </text>
+        }
+
+        // ── Inline departure form: money format + date auto-calc ──
+        document.addEventListener('DOMContentLoaded', function () {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const minDate = tomorrow.toISOString().split('T')[0];
+
+            // Reset forms when modal is closed
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('hidden.bs.modal', function () {
+                    // Hide all edit rows
+                    this.querySelectorAll('tr[id^="editRow-"]').forEach(r => r.style.display = 'none');
+                    // Collapse add-form
+                    this.querySelectorAll('.collapse.show').forEach(c => {
+                        var bsCollapse = bootstrap.Collapse.getInstance(c);
+                        if (bsCollapse) bsCollapse.hide();
+                        else c.classList.remove('show');
+                    });
+                });
+            });
+
+            // Money format helper
+            function setupMoney(display, hidden) {
+                display.addEventListener('input', function () {
+                    const pos = this.selectionStart;
+                    const oldLen = this.value.length;
+                    const raw = this.value.replace(/\D/g, '');
+                    this.value = raw ? Number(raw).toLocaleString('vi-VN') : '';
+                    hidden.value = raw;
+                    const newPos = pos + (this.value.length - oldLen);
+                    try { this.setSelectionRange(newPos, newPos); } catch {}
+                });
+            }
+
+            function setupInt(display, hidden) {
+                display.addEventListener('input', function () {
+                    const raw = this.value.replace(/\D/g, '');
+                    this.value = raw;
+                    hidden.value = raw;
+                });
+            }
+
+            // Setup each modal add-form
+            document.querySelectorAll('.collapse[id^="addDepForm-"]').forEach(container => {
+                const form = container.querySelector('form');
+                if (!form) return;
+                setupDepForm(form);
+            });
+
+            // Setup each edit-dep-form
+            document.querySelectorAll('.edit-dep-form').forEach(form => {
+                setupDepForm(form);
+            });
+
+            function setupDepForm(form) {
+                const startEl = form.querySelector('.dep-start');
+                const endEl = form.querySelector('.dep-end');
+                const hintEl = form.querySelector('.dep-day-hint');
+                const days = parseInt(startEl?.dataset.days) || 0;
+
+                if (startEl) startEl.min = minDate;
+
+                const adultD = form.querySelector('.dep-adult-display');
+                const adultH = form.querySelector('.dep-adult-hidden');
+                const childD = form.querySelector('.dep-child-display');
+                const childH = form.querySelector('.dep-child-hidden');
+                const capD   = form.querySelector('.dep-cap-display');
+                const capH   = form.querySelector('.dep-cap-hidden');
+
+                if (adultD && adultH) setupMoney(adultD, adultH);
+                if (childD && childH) setupMoney(childD, childH);
+                if (capD && capH) setupInt(capD, capH);
+
+                if (startEl && endEl) {
+                    startEl.addEventListener('change', function () {
+                        if (!this.value) return;
+                        if (days > 0) {
+                            const s = new Date(this.value);
+                            s.setDate(s.getDate() + days - 1);
+                            endEl.value = s.toISOString().split('T')[0];
+                        }
+                        endEl.min = this.value;
+                        updateHint();
+                    });
+                    endEl.addEventListener('change', updateHint);
+                    updateHint(); // init
+                }
+
+                function updateHint() {
+                    if (!hintEl || !startEl?.value || !endEl?.value) return;
+                    const d = Math.round((new Date(endEl.value) - new Date(startEl.value)) / 86400000) + 1;
+                    if (days > 0 && d !== days) {
+                        hintEl.style.color = '#dc3545';
+                        hintEl.textContent = `⚠ ${d} ngày — tour yêu cầu ${days} ngày`;
+                    } else {
+                        hintEl.style.color = '#28a745';
+                        hintEl.textContent = `✓ ${d} ngày`;
+                    }
+                }
+            }
+        });
 
     </script>
 }

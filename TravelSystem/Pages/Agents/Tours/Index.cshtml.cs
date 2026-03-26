@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -21,9 +21,9 @@ namespace TravelSystem.Pages.Agents.Tours
         public IList<TourWithDepartures> TourList { get; set; } = new List<TourWithDepartures>();
         public HashSet<int> BookedTourIds { get; set; } = new();
 
-        // Filter theo status TourDeparture: "active" | "ongoing" | "completed" | null = tất cả
+        // Search keyword
         [BindProperty(SupportsGet = true)]
-        public string? DepartureStatus { get; set; }
+        public string? SearchKeyword { get; set; }
 
         // Filter theo status Tour: 1 = hoạt động, 0 = không hoạt động, null = tất cả
         [BindProperty(SupportsGet = true)]
@@ -47,36 +47,8 @@ namespace TravelSystem.Pages.Agents.Tours
             var today = DateOnly.FromDateTime(DateTime.Today);
 
             // ── Tự động cập nhật status TourDeparture theo ngày ──
+            // Lógica này đã được chuyển sang BackgroundService: Services/TourDepartureStatusUpdaterService.cs
 
-            // "active" → "ongoing" khi đã đến startDate
-            var toOngoing = await _context.TourDepartures
-                .Where(d => d.Tour!.TravelAgentId == agent.TravelAgentId
-                         && d.Status != null && d.Status.Trim() == "active"
-                         && d.StartDate != null
-                         && d.StartDate <= today)
-                .ToListAsync();
-
-            if (toOngoing.Any())
-            {
-                toOngoing.ForEach(d => d.Status = "ongoing");
-                await _context.SaveChangesAsync();
-                try { await _hub.Clients.All.SendAsync("loadAll"); } catch { }
-            }
-
-            // "ongoing" → "completed" khi đã qua endDate
-            var toCompleted = await _context.TourDepartures
-                .Where(d => d.Tour!.TravelAgentId == agent.TravelAgentId
-                         && d.Status != null && d.Status.Trim() == "ongoing"
-                         && d.EndDate != null
-                         && d.EndDate < today)
-                .ToListAsync();
-
-            if (toCompleted.Any())
-            {
-                toCompleted.ForEach(d => d.Status = "completed");
-                await _context.SaveChangesAsync();
-                try { await _hub.Clients.All.SendAsync("loadAll"); } catch { }
-            }
 
             // ── Query Tour ──
             var tourQuery = _context.Tours
@@ -87,10 +59,15 @@ namespace TravelSystem.Pages.Agents.Tours
             if (TourStatus.HasValue)
                 tourQuery = tourQuery.Where(t => t.Status == TourStatus);
 
-            // Lọc theo departure status → chỉ lấy tour có ít nhất 1 departure khớp
-            if (!string.IsNullOrEmpty(DepartureStatus))
+            // Tìm kiếm theo tên tour, điểm đi, điểm đến
+            if (!string.IsNullOrWhiteSpace(SearchKeyword))
+            {
+                var kw = SearchKeyword.Trim().ToLower();
                 tourQuery = tourQuery.Where(t =>
-                    t.TourDepartures.Any(d => d.Status != null && d.Status.Trim() == DepartureStatus));
+                    t.TourName.ToLower().Contains(kw)
+                    || t.StartPlace.ToLower().Contains(kw)
+                    || t.EndPlace.ToLower().Contains(kw));
+            }
 
             int totalItems = await tourQuery.CountAsync();
             TotalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
@@ -104,15 +81,9 @@ namespace TravelSystem.Pages.Agents.Tours
 
             var tourIds = pagedTours.Select(t => t.TourId).ToList();
 
-            // Load departures cho các tour trong trang hiện tại
-            var departureQuery = _context.TourDepartures
-                .Where(d => tourIds.Contains(d.TourId ?? 0));
-
-            if (!string.IsNullOrEmpty(DepartureStatus))
-                departureQuery = departureQuery.Where(d =>
-                    d.Status != null && d.Status.Trim() == DepartureStatus);
-
-            var departures = await departureQuery
+            // Load departures cho các tour trong trang hiện tại (tất cả)
+            var departures = await _context.TourDepartures
+                .Where(d => tourIds.Contains(d.TourId ?? 0))
                 .OrderBy(d => d.StartDate)
                 .ToListAsync();
 
@@ -154,7 +125,7 @@ namespace TravelSystem.Pages.Agents.Tours
             if (hasActiveDeparture)
             {
                 TempData["ErrorMessage"] = "Không thể xóa tour đã có chuyến đang diễn ra hoặc đã hoàn thành!";
-                return RedirectToPage("./Index", new { DepartureStatus, TourStatus, PageNumber });
+                return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
             }
 
             var departureIds = tour.TourDepartures.Select(d => d.DepartureId).ToList();
@@ -164,7 +135,7 @@ namespace TravelSystem.Pages.Agents.Tours
             if (hasBooking)
             {
                 TempData["ErrorMessage"] = "Không thể xóa tour đã có khách đặt!";
-                return RedirectToPage("./Index", new { DepartureStatus, TourStatus, PageNumber });
+                return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
             }
 
             var serviceDetails = _context.TourServiceDetails.Where(x => x.TourId == id);
@@ -176,7 +147,7 @@ namespace TravelSystem.Pages.Agents.Tours
             try { await _hub.Clients.All.SendAsync("loadAll"); } catch { }
 
             TempData["SuccessMessage"] = "Xóa tour thành công!";
-            return RedirectToPage("./Index", new { DepartureStatus, TourStatus, PageNumber });
+            return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
         }
 
         // Xóa TourDeparture
@@ -194,7 +165,7 @@ namespace TravelSystem.Pages.Agents.Tours
             if (departure.Status?.Trim() != "active")
             {
                 TempData["ErrorMessage"] = "Chỉ có thể xóa chuyến đi ở trạng thái Sắp diễn ra!";
-                return RedirectToPage("./Index", new { DepartureStatus, TourStatus, PageNumber });
+                return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
             }
 
             bool hasBooking = await _context.Bookings
@@ -203,7 +174,7 @@ namespace TravelSystem.Pages.Agents.Tours
             if (hasBooking)
             {
                 TempData["ErrorMessage"] = "Không thể xóa chuyến đi đã có khách đặt!";
-                return RedirectToPage("./Index", new { DepartureStatus, TourStatus, PageNumber });
+                return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
             }
 
             _context.TourDepartures.Remove(departure);
@@ -212,7 +183,93 @@ namespace TravelSystem.Pages.Agents.Tours
             try { await _hub.Clients.All.SendAsync("loadAll"); } catch { }
 
             TempData["SuccessMessage"] = "Xóa chuyến đi thành công!";
-            return RedirectToPage("./Index", new { DepartureStatus, TourStatus, PageNumber });
+            return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
+        }
+
+        // Thêm TourDeparture từ modal
+        public async Task<IActionResult> OnPostCreateDepartureAsync()
+        {
+            var userId = HttpContext.Session.GetInt32("UserID");
+            if (userId == null) return RedirectToPage("/Auths/Login");
+
+            var agent = await _context.TravelAgents.FirstOrDefaultAsync(a => a.UserId == userId);
+            if (agent == null) return RedirectToPage("/Auths/Login");
+
+            int tourId = int.TryParse(Request.Form["NewDepTourId"], out var tid) ? tid : 0;
+            var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourId == tourId && t.TravelAgentId == agent.TravelAgentId);
+            if (tour == null) return NotFound();
+
+            var startDateStr = Request.Form["NewDepStartDate"].ToString();
+            var endDateStr = Request.Form["NewDepEndDate"].ToString();
+            var adultRaw = Request.Form["NewDepAdultPriceRaw"].ToString().Replace(".", "").Replace(",", "");
+            var childRaw = Request.Form["NewDepChildPriceRaw"].ToString().Replace(".", "").Replace(",", "");
+            var capRaw = Request.Form["NewDepCapacityRaw"].ToString();
+
+            var dep = new TourDeparture
+            {
+                TourId = tourId,
+                StartDate = DateOnly.TryParse(startDateStr, out var sd) ? sd : null,
+                EndDate = DateOnly.TryParse(endDateStr, out var ed) ? ed : null,
+                AdultPrice = double.TryParse(adultRaw, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var ap) ? ap : 0,
+                ChildPrice = double.TryParse(childRaw, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var cp) ? cp : 0,
+                Capacity = int.TryParse(capRaw, out var cap) ? cap : 0,
+                Status = "active"
+            };
+            dep.AvailableSeat = dep.Capacity;
+
+            _context.TourDepartures.Add(dep);
+            await _context.SaveChangesAsync();
+
+            try { await _hub.Clients.All.SendAsync("loadAll"); } catch { }
+
+            TempData["SuccessMessage"] = "Thêm chuyến đi thành công!";
+            return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
+        }
+
+        // Chỉnh sửa TourDeparture từ modal
+        public async Task<IActionResult> OnPostEditDepartureAsync()
+        {
+            var userId = HttpContext.Session.GetInt32("UserID");
+            if (userId == null) return RedirectToPage("/Auths/Login");
+
+            var agent = await _context.TravelAgents.FirstOrDefaultAsync(a => a.UserId == userId);
+            if (agent == null) return RedirectToPage("/Auths/Login");
+
+            int depId = int.TryParse(Request.Form["EditDepId"], out var did) ? did : 0;
+            int tourId = int.TryParse(Request.Form["EditDepTourId"], out var tid) ? tid : 0;
+
+            var tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourId == tourId && t.TravelAgentId == agent.TravelAgentId);
+            if (tour == null) return NotFound();
+
+            var dep = await _context.TourDepartures.FirstOrDefaultAsync(d => d.DepartureId == depId && d.TourId == tourId);
+            if (dep == null) return NotFound();
+
+            if (dep.Status?.Trim() != "active")
+            {
+                TempData["ErrorMessage"] = "Chỉ có thể sửa chuyến đi ở trạng thái Sắp diễn ra!";
+                return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
+            }
+
+            var adultRaw = Request.Form["EditDepAdultPriceRaw"].ToString().Replace(".", "").Replace(",", "");
+            var childRaw = Request.Form["EditDepChildPriceRaw"].ToString().Replace(".", "").Replace(",", "");
+            var capRaw = Request.Form["EditDepCapacityRaw"].ToString();
+
+            dep.StartDate = DateOnly.TryParse(Request.Form["EditDepStartDate"], out var sd) ? sd : dep.StartDate;
+            dep.EndDate = DateOnly.TryParse(Request.Form["EditDepEndDate"], out var ed) ? ed : dep.EndDate;
+            dep.AdultPrice = double.TryParse(adultRaw, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var ap) ? ap : dep.AdultPrice;
+            dep.ChildPrice = double.TryParse(childRaw, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var cp) ? cp : dep.ChildPrice;
+
+            int newCap = int.TryParse(capRaw, out var c) ? c : dep.Capacity ?? 0;
+            int oldCap = dep.Capacity ?? 0;
+            int booked = oldCap - (dep.AvailableSeat ?? 0);
+            dep.Capacity = newCap;
+            dep.AvailableSeat = Math.Max(0, newCap - booked);
+
+            await _context.SaveChangesAsync();
+            try { await _hub.Clients.All.SendAsync("loadAll"); } catch { }
+
+            TempData["SuccessMessage"] = "Cập nhật chuyến đi thành công!";
+            return RedirectToPage("./Index", new { SearchKeyword, TourStatus, PageNumber });
         }
     }
 

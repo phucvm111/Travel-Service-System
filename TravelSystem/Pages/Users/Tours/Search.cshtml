@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model TravelSystem.Pages.Users.Tours.SearchModel
 @{
     ViewData["Title"] = "Tìm kiếm Tour";
@@ -305,7 +305,7 @@
                         <option value="">Tất cả</option>
                         @foreach (var p in Model.EndPlaces)
                         {
-                            <option value="@p" selected="@(p.Contains(Model.Destination) ? "selected" : null)">@p</option>
+                            <option value="@p" selected="@(!string.IsNullOrEmpty(Model.Destination) && p.Contains(Model.Destination) ? "selected" : null)">@p</option>
                         }
                     </select>
                 </div>
