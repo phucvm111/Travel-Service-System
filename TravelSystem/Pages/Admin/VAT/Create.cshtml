@@ -1,0 +1,61 @@
+﻿@page
+@model TravelSystem.Pages.Admin.VAT.CreateModel
+
+<div class="container-fluid p-4">
+    <h2 class="mb-4">Thêm VAT</h2>
+
+    <div class="card shadow-sm col-md-10 mx-auto">
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Vat.VatRate" class="form-label fw-bold">Tỷ lệ VAT (%)</label>
+                        <input asp-for="Vat.VatRate" class="form-control" type="number" step="0.01" min="0" max="100" />
+                        <span asp-validation-for="Vat.VatRate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Vat.Description" class="form-label fw-bold">Mô tả</label>
+                        <input asp-for="Vat.Description" class="form-control" />
+                        <span asp-validation-for="Vat.Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Vat.StartDate" class="form-label fw-bold">Ngày bắt đầu</label>
+                        <input asp-for="Vat.StartDate" type="date" class="form-control" />
+                        <span asp-validation-for="Vat.StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Vat.EndDate" class="form-label fw-bold">Ngày kết thúc</label>
+                        <input asp-for="Vat.EndDate" type="date" class="form-control" />
+                        <span asp-validation-for="Vat.EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4 col-md-4">
+                    <label asp-for="Vat.Status" class="form-label fw-bold">Trạng thái</label>
+                    <select asp-for="Vat.Status" class="form-select">
+                        <option value="">Chọn trạng thái</option>
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Ngừng hoạt động</option>
+                    </select>
+                    <span asp-validation-for="Vat.Status" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-page="./Index" class="btn btn-secondary">Quay lại</a>
+                    <button type="submit" class="btn btn-success">Thêm VAT</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
