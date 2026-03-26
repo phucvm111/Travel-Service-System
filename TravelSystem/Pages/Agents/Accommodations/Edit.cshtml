@@ -1,0 +1,97 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Agents.Accommodations.EditModel
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-warning">
+            <h4 class="mb-0">Chỉnh sửa khách sạn</h4>
+        </div>
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Accommodation.ServiceId" />
+                <input type="hidden" asp-for="ExistingImage" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Service.ServiceName" class="form-label">Tên khách sạn</label>
+                        <input asp-for="Service.ServiceName" class="form-control" />
+                        <span asp-validation-for="Service.ServiceName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Service.PhoneNumber" class="form-label">Số điện thoại</label>
+                        <input asp-for="Service.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Service.PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Service.Address" class="form-label">Địa chỉ</label>
+                        <input asp-for="Service.Address" class="form-control" />
+                        <span asp-validation-for="Service.Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Accommodation.CheckInTime" class="form-label">Giờ check-in</label>
+                        <input asp-for="Accommodation.CheckInTime" type="time" class="form-control" />
+                        <span asp-validation-for="Accommodation.CheckInTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Accommodation.CheckOutTime" class="form-label">Giờ check-out</label>
+                        <input asp-for="Accommodation.CheckOutTime" type="time" class="form-control" />
+                        <span asp-validation-for="Accommodation.CheckOutTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Accommodation.StarRating" class="form-label">Hạng sao</label>
+                        <input asp-for="Accommodation.StarRating" type="number" min="1" max="5" class="form-control" />
+                        <span asp-validation-for="Accommodation.StarRating" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Service.Status" class="form-label">Trạng thái</label>
+                        <select asp-for="Service.Status" class="form-select">
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Ngừng hoạt động</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Service.Description" class="form-label">Mô tả</label>
+                        <textarea asp-for="Service.Description" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Service.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Ảnh hiện tại</label><br />
+                        @if (!string.IsNullOrWhiteSpace(Model.ExistingImage))
+                        {
+                            <img src="~/@Model.ExistingImage" style="max-width:250px;max-height:180px;object-fit:cover;border:1px solid #ddd;padding:5px;" />
+                        }
+                        else
+                        {
+                            <p class="text-muted">Chưa có ảnh</p>
+                        }
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="ImageFile" class="form-label">Chọn ảnh mới</label>
+                        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-warning">Cập nhật</button>
+                    <a asp-page="./Index" class="btn btn-secondary">Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

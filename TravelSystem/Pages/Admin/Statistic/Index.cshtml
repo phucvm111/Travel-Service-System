@@ -1,0 +1,187 @@
+﻿@page
+@model TravelSystem.Pages.Admin.Statistic.IndexModel
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Quản lý doanh thu";
+    var monthlyLabelsJson = JsonSerializer.Serialize(Model.MonthlyRevenue.Select(x => x.Label));
+    var monthlyValuesJson = JsonSerializer.Serialize(Model.MonthlyRevenue.Select(x => x.Revenue));
+}
+
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Quản lý doanh thu</h2>
+    </div>
+
+    <form method="get" class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Từ ngày</label>
+                    <input asp-for="FromDate" type="date" class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Đến ngày</label>
+                    <input asp-for="ToDate" type="date" class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Phương thức thanh toán</label>
+                    <select asp-for="PaymentMethodId" class="form-select">
+                        <option value="">Tất cả</option>
+                        @foreach (var item in Model.PaymentMethods)
+                        {
+                            <option value="@item.PaymentMethodId">@item.MethodName</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Lọc</button>
+                    <a asp-page="./Index" class="btn btn-secondary">Xóa lọc</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="text-muted">Tổng doanh thu</div>
+                    <h4 class="mt-2 mb-0 text-success">@Model.FormatCurrency(Model.TotalRevenue)</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="text-muted">Số booking</div>
+                    <h4 class="mt-2 mb-0">@Model.TotalBookings</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="text-muted">Doanh thu hôm nay</div>
+                    <h4 class="mt-2 mb-0 text-primary">@Model.FormatCurrency(Model.TodayRevenue)</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="text-muted">Doanh thu tháng này</div>
+                    <h4 class="mt-2 mb-0 text-warning">@Model.FormatCurrency(Model.ThisMonthRevenue)</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <strong>Biểu đồ doanh thu theo tháng</strong>
+        </div>
+        <div class="card-body">
+            <canvas id="revenueChart" height="100"></canvas>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <strong>Danh sách booking tạo doanh thu</strong>
+            <span class="badge bg-success">@(Model.TotalBookings) booking</span>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã đơn</th>
+                        <th>Ngày đặt</th>
+                        <th>Khách hàng</th>
+                        <th>SĐT</th>
+                        <th>Tour</th>
+                        <th>Ngày khởi hành</th>
+                        <th>Thanh toán</th>
+                        <th>Doanh thu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.RevenueRows.Any())
+                    {
+                        int stt = 0;
+                        foreach (var item in Model.RevenueRows)
+                        {
+                            stt++;
+                            <tr>
+                                <td>@stt</td>
+                                <td>@item.BookCode</td>
+                                <td>@item.BookDate?.ToString("dd/MM/yyyy")</td>
+                                <td>@item.CustomerName</td>
+                                <td>@item.Phone</td>
+                                <td>@item.TourName</td>
+                                <td>@item.DepartureDate?.ToString("dd/MM/yyyy")</td>
+                                <td>@item.PaymentMethodName</td>
+                                <td class="text-end fw-bold text-success">@Model.FormatCurrency(item.TotalPrice)</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted">Không có dữ liệu doanh thu.</td>
+                        </tr>
+                    }
+                </tbody>
+                @if (Model.RevenueRows.Any())
+                {
+                    <tfoot>
+                        <tr class="table-light">
+                            <th colspan="8" class="text-end">Tổng cộng</th>
+                            <th class="text-end text-success">@Model.FormatCurrency(Model.TotalRevenue)</th>
+                        </tr>
+                    </tfoot>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const revenueLabels = @Html.Raw(monthlyLabelsJson);
+        const revenueValues = @Html.Raw(monthlyValuesJson);
+
+        const ctx = document.getElementById('revenueChart');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: revenueLabels,
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: revenueValues,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}

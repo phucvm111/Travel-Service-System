@@ -1,0 +1,83 @@
+﻿@page
+@model TravelSystem.Pages.Agents.Accommodations.CreateModel
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Thêm khách sạn</h4>
+        </div>
+        <div class="card-body">
+            <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+            <form method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Service.ServiceName" class="form-label">Tên khách sạn</label>
+                        <input asp-for="Service.ServiceName" class="form-control" />
+                        <span asp-validation-for="Service.ServiceName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Service.PhoneNumber" class="form-label">Số điện thoại</label>
+                        <input asp-for="Service.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Service.PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Service.Address" class="form-label">Địa chỉ</label>
+                        <input asp-for="Service.Address" class="form-control" />
+                        <span asp-validation-for="Service.Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Accommodation.CheckInTime" class="form-label">Giờ check-in</label>
+                        <input asp-for="Accommodation.CheckInTime" type="time" class="form-control" />
+                        <span asp-validation-for="Accommodation.CheckInTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Accommodation.CheckOutTime" class="form-label">Giờ check-out</label>
+                        <input asp-for="Accommodation.CheckOutTime" type="time" class="form-control" />
+                        <span asp-validation-for="Accommodation.CheckOutTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Accommodation.StarRating" class="form-label">Hạng sao</label>
+                        <input asp-for="Accommodation.StarRating" type="number" min="1" max="5" class="form-control" />
+                        <span asp-validation-for="Accommodation.StarRating" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Service.Status" class="form-label">Trạng thái</label>
+                        <select asp-for="Service.Status" class="form-select">
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Ngừng hoạt động</option>
+                        </select>
+                        <span asp-validation-for="Service.Status" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Service.Description" class="form-label">Mô tả</label>
+                        <textarea asp-for="Service.Description" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Service.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="ImageFile" class="form-label">Hình ảnh</label>
+                        <input asp-for="ImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp,image/*" />
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">Lưu</button>
+                    <a asp-page="./Index" class="btn btn-secondary">Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
