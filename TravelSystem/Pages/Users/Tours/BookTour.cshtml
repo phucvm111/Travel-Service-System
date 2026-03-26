@@ -1,0 +1,316 @@
+﻿@page
+@model TravelSystem.Pages.Users.Tours.BookTourModel
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    .tour-description {
+        white-space: pre-line;
+    }
+
+    .voucher-tile:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    .btn-qty {
+        width: 2.5rem;
+    }
+
+    .form-control-qty {
+        text-align: center;
+    }
+
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .scrollable-voucher-list {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .tour-banner {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    .sticky-sidebar {
+        position: sticky;
+        top: 110px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="mb-3">
+        <a href="javascript:history.back()" class="btn btn-success">
+            <i class="fa fa-arrow-left"></i> Quay lại
+        </a>
+    </div>
+
+    <form method="post">
+        <input type="hidden" name="departureId" value="@Model.Departure.DepartureId" />
+        <input type="hidden" id="selectedVoucherId" name="voucherId" value="">
+        <input type="hidden" id="finalAmount" name="finalAmount" value="">
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card mb-4 shadow-sm">
+                    <img src="~/@Model.Tour.Image" class="tour-banner card-img-top" alt="Tour Image">
+                    <div class="card-body">
+                        <h4 class="text-primary fw-bold">@Model.Tour.TourName</h4>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong><i class="fa fa-calendar-alt me-2"></i>Khởi hành:</strong> @Model.Departure.StartDate?.ToString("dd/MM/yyyy")</p>
+                                <p><strong><i class="fa fa-map-marker-alt me-2"></i>Nơi khởi hành:</strong> @Model.Tour.StartPlace</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong><i class="fa fa-clock me-2"></i>Thời gian:</strong> @Model.Tour.NumberOfDay Ngày</p>
+                                <p><strong><i class="fa fa-user-friends me-2"></i>Chỗ còn nhận:</strong> <span class="text-danger fw-bold">@Model.Departure.AvailableSeat</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title border-bottom pb-2 mb-3"><i class="fa fa-user-edit me-2"></i>Thông tin liên hệ</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Họ & Tên lót</label>
+                                <input asp-for="BookingInput.FirstName" class="form-control" value="@Model.CurrentUser.FirstName" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Tên</label>
+                                <input asp-for="BookingInput.LastName" class="form-control" value="@Model.CurrentUser.LastName" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Email</label>
+                                <input asp-for="BookingInput.Gmail" type="email" class="form-control" value="@Model.CurrentUser.Gmail" readonly />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Số điện thoại</label>
+                                <input asp-for="BookingInput.Phone" class="form-control" value="@Model.CurrentUser.Phone" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Người lớn (≥12 tuổi)</label>
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-outline-secondary btn-qty" onclick="changeQty('adultCount', -1)">−</button>
+                                    <input asp-for="BookingInput.NumberAdult" id="adultCount" type="number" class="form-control form-control-qty" value="1" min="1" oninput="updateTotalPrice()" />
+                                    <button type="button" class="btn btn-outline-secondary btn-qty" onclick="changeQty('adultCount', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Trẻ em (<12 tuổi)</label>
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-outline-secondary btn-qty" onclick="changeQty('childrenCount', -1)">−</button>
+                                    <input asp-for="BookingInput.NumberChildren" id="childrenCount" type="number" class="form-control form-control-qty" value="0" min="0" oninput="updateTotalPrice()" />
+                                    <button type="button" class="btn btn-outline-secondary btn-qty" onclick="changeQty('childrenCount', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Ghi chú</label>
+                                <textarea asp-for="BookingInput.Note" class="form-control" rows="3" placeholder="Yêu cầu đặc biệt (ví dụ: dị ứng thực phẩm, phòng gần nhau...)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title border-bottom pb-2 mb-3"><i class="fa fa-credit-card me-2"></i>Phương thức thanh toán</h5>
+                        <div class="form-check p-2 border rounded mb-2">
+                            <input class="form-check-input ms-1" type="radio" name="paymentMethodId" id="walletPay" value="1" checked>
+                            <label class="form-check-label ms-4 fw-bold" for="walletPay">
+                                Thanh toán bằng Ví GoViet
+                                <span class="badge bg-success ms-2">Số dư: @Model.CurrentUser.Wallet?.Balance?.ToString("N0") đ</span>
+                            </label>
+                        </div>
+                        <div class="form-check p-2 border rounded">
+                            <input class="form-check-input ms-1" type="radio" name="paymentMethodId" id="payosPay" value="2">
+                            <label class="form-check-label ms-4 fw-bold text-primary" for="payosPay">
+                                Thanh toán Online qua PayOS (QR/ATM)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sticky-sidebar">
+                    <div class="card shadow-sm border-primary">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h5 class="card-title mb-0 text-center fw-bold">TÓM TẮT THANH TOÁN</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Người lớn (@Model.Departure.AdultPrice?.ToString("N0") đ)</span>
+                                <span id="adultTotalDisplay">0 đ</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Trẻ em (@Model.Departure.ChildPrice?.ToString("N0") đ)</span>
+                                <span id="childTotalDisplay">0 đ</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Tổng tiền gốc:</strong>
+                                <strong id="totalPriceDisplay">0 đ</strong>
+                            </div>
+
+                            <div id="voucher-section" class="border border-dashed rounded p-3 mb-2 text-center voucher-tile" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                                <i class="fa fa-plus-circle me-2"></i>Chọn mã giảm giá
+                            </div>
+                            <div id="voucher-applied" class="d-none border rounded bg-light p-2 mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span><strong id="vCode">--</strong> (<span id="vPercent">0</span>%)</span>
+                                    <button type="button" class="btn btn-link text-danger p-0" onclick="removeVoucher()">Hủy</button>
+                                </div>
+                                <div class="text-danger small">Giảm: <span id="discountAmount">0 đ</span></div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2 text-muted">
+                                <span>Phí VAT (@Model.ActiveVat?.VatRate%):</span>
+                                <span id="vatDisplay">0 đ</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="fw-bold">TỔNG CỘNG:</h5>
+                                <h4 class="text-success fw-bold" id="finalDisplay">0 đ</h4>
+                            </div>
+
+                            @if (ViewData.ModelState.ErrorCount > 0)
+                            {
+                                <div class="alert alert-danger py-2 small">
+                                    <div asp-validation-summary="All"></div>
+                                </div>
+                            }
+
+                            <button type="submit" class="btn btn-danger btn-lg w-100 fw-bold">XÁC NHẬN ĐẶT TOUR</button>
+                            <p class="text-center mt-3 text-muted" style="font-size: 0.8rem;">Đảm bảo thông tin liên hệ chính xác để chúng tôi gửi vé điện tử qua Email.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="voucherModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ưu đãi dành cho bạn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="vSearch" class="form-control mb-3" placeholder="Tìm mã giảm giá...">
+                <div class="list-group scrollable-voucher-list">
+                    @foreach (var v in Model.Vouchers)
+                    {
+                        <label class="list-group-item voucher-item-label">
+                            <input type="radio" name="vRadio" value="@v.VoucherId"
+                                   data-code="@v.VoucherCode"
+                                   data-percent="@v.PercentDiscount"
+                                   data-max="@v.MaxDiscountAmount"
+                                   class="form-check-input me-2">
+                            <strong>@v.VoucherCode</strong> – @v.VoucherName
+                            <div class="small text-muted">Giảm @v.PercentDiscount% - HSD: @v.EndDate?.ToString("dd/MM/yyyy")</div>
+                        </label>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger w-100" onclick="applyVoucher()">SỬ DỤNG NGAY</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const ADULT_PRICE = @(Model.Departure.AdultPrice ?? 0);
+        const CHILD_PRICE = @(Model.Departure.ChildPrice ?? 0);
+        const VAT_RATE = @(Model.ActiveVat?.VatRate ?? 0);
+
+        let selPercent = 0;
+        let selMax = 0;
+
+        function changeQty(id, delta) {
+            const input = document.getElementById(id);
+            let val = parseInt(input.value) + delta;
+            if (val < input.min) val = input.min;
+            input.value = val;
+            updateTotalPrice();
+        }
+
+        function updateTotalPrice() {
+            const adults = parseInt(document.getElementById('adultCount').value) || 0;
+            const children = parseInt(document.getElementById('childrenCount').value) || 0;
+
+            const adultTotal = adults * ADULT_PRICE;
+            const childTotal = children * CHILD_PRICE;
+            const subTotal = adultTotal + childTotal;
+
+            // Tính giảm giá
+            let discount = (subTotal * selPercent) / 100;
+            if (selMax > 0 && discount > selMax) discount = selMax;
+
+            const afterDiscount = subTotal - discount;
+            const vat = afterDiscount * (VAT_RATE / 100);
+            const final = afterDiscount + vat;
+
+            // Hiển thị
+            const fmt = new Intl.NumberFormat('vi-VN');
+            document.getElementById('adultTotalDisplay').innerText = fmt.format(adultTotal) + ' đ';
+            document.getElementById('childTotalDisplay').innerText = fmt.format(childTotal) + ' đ';
+            document.getElementById('totalPriceDisplay').innerText = fmt.format(subTotal) + ' đ';
+            document.getElementById('discountAmount').innerText = '- ' + fmt.format(discount) + ' đ';
+            document.getElementById('vatDisplay').innerText = fmt.format(vat) + ' đ';
+            document.getElementById('finalDisplay').innerText = fmt.format(final) + ' đ';
+
+            document.getElementById('finalAmount').value = final;
+        }
+
+        function applyVoucher() {
+            const rb = document.querySelector('input[name="vRadio"]:checked');
+            if (!rb) return;
+
+            selPercent = parseFloat(rb.dataset.percent);
+            selMax = parseFloat(rb.dataset.max);
+
+            document.getElementById('selectedVoucherId').value = rb.value;
+            document.getElementById('vCode').innerText = rb.dataset.code;
+            document.getElementById('vPercent').innerText = rb.dataset.percent;
+
+            document.getElementById('voucher-applied').classList.remove('d-none');
+            document.getElementById('voucher-section').classList.add('d-none');
+
+            bootstrap.Modal.getInstance(document.getElementById('voucherModal')).hide();
+            updateTotalPrice();
+        }
+
+        function removeVoucher() {
+            selPercent = 0; selMax = 0;
+            document.getElementById('selectedVoucherId').value = "";
+            document.getElementById('voucher-applied').classList.add('d-none');
+            document.getElementById('voucher-section').classList.remove('d-none');
+            updateTotalPrice();
+        }
+
+        // Search voucher
+        document.getElementById('vSearch').oninput = function() {
+            let k = this.value.toLowerCase();
+            document.querySelectorAll('.voucher-item-label').forEach(el => {
+                el.style.display = el.innerText.toLowerCase().includes(k) ? "" : "none";
+            });
+        };
+
+        window.onload = updateTotalPrice;
+    </script>
+}

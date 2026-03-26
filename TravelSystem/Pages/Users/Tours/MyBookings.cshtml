@@ -1,0 +1,260 @@
+﻿@page
+@model TravelSystem.Pages.Users.Tours.MyBookingsModel
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .sidebar {
+        background: #fff;
+        border-right: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+            .sidebar a.active {
+                background-color: #f50057;
+                color: white;
+                font-weight: bold;
+            }
+
+            .sidebar a:hover:not(.active) {
+                background-color: #f8f9fa;
+                color: #f50057;
+            }
+
+    .booking-card {
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border: none;
+    }
+
+    .star-rating {
+        font-size: 28px;
+        color: #ccc;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            cursor: pointer;
+            padding: 0 5px;
+            transition: 0.2s;
+        }
+
+            .star-rating label:before {
+                content: "\f005";
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+            }
+
+            .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label {
+                color: #ffc107;
+            }
+
+    .preview-image {
+        max-width: 150px;
+        border-radius: 8px;
+        margin-top: 10px;
+        display: none;
+        border: 1px solid #ddd;
+    }
+</style>
+
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar shadow-sm">
+                <h5 class="mb-4 fw-bold">Đơn hàng của tôi</h5>
+                <a asp-page="./MyBookings" asp-route-filter="current" class="@(Model.Filter == "current" ? "active" : "")">
+                    <i class="fas fa- suitcase-rolling me-2"></i>Chuyến đi sắp tới
+                </a>
+                <a asp-page="./MyBookings" asp-route-filter="finished" class="@(Model.Filter == "finished" ? "active" : "")">
+                    <i class="fas fa-check-double me-2"></i>Chuyến đi đã xong
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <h4 class="mb-4 fw-bold">@(Model.Filter == "current" ? "Lịch trình sắp tới" : "Lịch sử chuyến đi")</h4>
+
+            @if (!Model.BookingList.Any())
+            {
+                <div class="text-center py-5 bg-white rounded shadow-sm">
+                    <img src="~/img/empty-cart.png" style="width: 100px; opacity: 0.5;" />
+                    <p class="mt-3 text-muted">Không tìm thấy đơn hàng nào trong mục này.</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var item in Model.BookingList)
+                {
+                    <div class="booking-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="fw-bold text-dark">@item.TourDeparture?.Tour?.TourName</h5>
+                            <span class="badge @GetStatusClass(item.Status)">@GetStatusName(item.Status)</span>
+                        </div>
+                        <div class="row mt-3 text-muted" style="font-size: 0.95rem;">
+                            <div class="col-md-6">
+                                <p class="mb-1"><i class="far fa-calendar-alt me-2"></i>Ngày đặt: @item.BookDate?.ToString("dd/MM/yyyy")</p>
+                                <p class="mb-1"><i class="fas fa-users me-2"></i>Hành khách: @item.NumberAdult người lớn, @item.NumberChildren trẻ em</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><i class="fas fa-money-bill-wave me-2"></i>Tổng tiền: <strong class="text-danger">@item.TotalPrice?.ToString("N0") VNĐ</strong></p>
+                                <p class="mb-1"><i class="fas fa-barcode me-2"></i>Mã đơn: #@item.BookCode</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top d-flex gap-2">
+                            <a asp-page="./BookingDetail" asp-route-id="@item.BookId" class="btn btn-outline-primary btn-sm px-4">Xem chi tiết</a>
+
+                            @if (item.Status == 1 || item.Status == 7)
+                            {
+                                <button class="btn btn-outline-danger btn-sm px-4"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelModal-@item.BookId">
+                                    Huỷ chuyến
+                                </button>
+                            }
+                            @if (item.Status == 4)
+                            {
+                                <button class="btn btn-outline-success btn-sm px-4" data-bs-toggle="modal" data-bs-target="#feedbackModal-@item.BookId">Đánh giá ngay</button>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="feedbackModal-@item.BookId" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title">Chia sẻ trải nghiệm về chuyến đi</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form method="post" asp-page-handler="Feedback" enctype="multipart/form-data">
+                                    <div class="modal-body p-4">
+                                        <input type="hidden" name="bookId" value="@item.BookId" />
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Bạn thấy tour này thế nào? <span class="text-danger">*</span></label>
+                                            <div class="star-rating">
+                                                @for (int i = 5; i >= 1; i--)
+                                                {
+                                                    <input type="radio" id="star@(i)-@item.BookId" name="rate" value="@i" required />
+                                                    <label for="star@(i)-@item.BookId" class="fas"></label>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Hình ảnh thực tế</label>
+                                            <input type="file" class="form-control" name="image" accept="image/*" onchange="previewImage(event, 'preview-@item.BookId')" />
+                                            <img id="preview-@item.BookId" class="preview-image" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Cảm nghĩ của bạn <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" name="content" rows="4" placeholder="Chuyến đi rất tuyệt vời, hướng dẫn viên nhiệt tình..." required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                        <button type="submit" class="btn btn-success px-4">Gửi đánh giá</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="cancelModal-@item.BookId" tabindex="-1">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title">Yêu cầu huỷ đơn hàng #@item.BookCode</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form method="post" asp-page-handler="Cancel" onsubmit="return validateCancelForm(this)">
+                                    <div class="modal-body p-4">
+                                        <input type="hidden" name="bookId" value="@item.BookId" />
+                                        <div class="row">
+                                            <div class="col-md-6 border-end">
+                                                <h6 class="fw-bold"><i class="fas fa-info-circle me-2"></i>Chính sách hoàn tiền</h6>
+                                                <ul class="small text-muted mt-3">
+                                                    <li>Huỷ trong 24h đầu: Hoàn 100%.</li>
+                                                    <li>Huỷ trước 7 ngày: Hoàn 80%.</li>
+                                                    <li>Huỷ từ 3-6 ngày: Hoàn 50%.</li>
+                                                    <li>Huỷ dưới 3 ngày: <strong>Không hỗ trợ hoàn tiền</strong>.</li>
+                                                    <li>Tiền hoàn sẽ vào ví sau 1-3 ngày làm việc.</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">Lý do huỷ chuyến đi <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" name="reason" rows="5" placeholder="Vui lòng cho chúng tôi biết lý do bạn muốn hủy..." required></textarea>
+                                                    <div class="reason-error text-danger small mt-1"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                        <button type="submit" class="btn btn-danger px-4">Xác nhận huỷ</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <nav class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-page="./MyBookings" asp-route-filter="@Model.Filter" asp-route-p="@i">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusClass(int? s) => s switch { 1 => "bg-success", 2 or 3 => "bg-danger", 4 => "bg-primary", 5 => "bg-warning text-dark", 6 => "bg-info text-dark", 7 => "bg-secondary", _ => "bg-dark" };
+    string GetStatusName(int? s) => s switch { 1 => "Đã thanh toán", 2 => "Bạn đã hủy", 3 => "Đại lý hủy", 4 => "Đã hoàn thành", 5 => "Chờ hoàn tiền", 6 => "Đã hoàn tiền", 7 => "Chờ thanh toán", _ => "Không rõ" };
+}
+
+@section Scripts {
+    <script>
+        function previewImage(event, previewId) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById(previewId);
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+}

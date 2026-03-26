@@ -1,0 +1,37 @@
+﻿@page
+@model TravelSystem.Pages.Payment.ReturnPaymentModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="container" style="max-width: 1000px; margin: 100px auto; padding: 40px; background-color: #fff; border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+    <div class="text-center mb-5">
+        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+        <h3 class="text-success mt-3">Thanh toán đơn hàng thành công</h3>
+    </div>
+
+    <div class="row border-bottom pb-4 mb-4">
+        <div class="col-md-12">
+            <h5 class="text-primary">Tour: @Model.Tour?.TourName</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Họ tên khách:</strong> @Model.BookDetail?.FirstName @Model.BookDetail?.LastName</p>
+            <p><strong>Ngày khởi hành:</strong> @Model.BookDetail?.TourDeparture?.StartDate?.ToString("dd/MM/yyyy")</p>
+            <p><strong>Số lượng người lớn:</strong> @Model.BookDetail?.NumberAdult</p>
+            <p><strong>Email:</strong> @Model.BookDetail?.Gmail</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <p><strong>Mã đơn hàng:</strong> #@Model.BookDetail?.BookCode</p>
+            <p><strong>Ngày kết thúc:</strong> @Model.BookDetail?.TourDeparture?.EndDate?.ToString("dd/MM/yyyy")</p>
+            <p><strong>Số lượng trẻ em:</strong> @Model.BookDetail?.NumberChildren</p>
+            <h4 class="text-danger fw-bold">Tổng: @string.Format("{0:N0}", Model.BookDetail?.TotalPrice) VNĐ</h4>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a asp-page="/Index" class="btn btn-success px-5">Quay lại trang chủ</a>
+    </div>
+</div>
