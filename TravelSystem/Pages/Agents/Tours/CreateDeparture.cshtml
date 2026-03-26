@@ -1,0 +1,271 @@
+@page
+@model TravelSystem.Pages.Agents.Tours.CreateDepartureModel
+@{
+    ViewData["Title"] = "Thêm chuyến đi";
+}
+
+@functions {
+    string FormatPrice(string? raw)
+    {
+        if (string.IsNullOrEmpty(raw)) return "";
+        var digits = new string(raw.Where(char.IsDigit).ToArray());
+        if (!long.TryParse(digits, out var num)) return raw;
+        return num.ToString("N0", new System.Globalization.CultureInfo("vi-VN"));
+    }
+}
+
+<style>
+    body { background: #f4f6f9; }
+
+    .create-box {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    h2 { color: #28A745; text-align: center; margin-bottom: 10px; }
+
+    .summary-box {
+        background: #f8f9fa; border: 1px solid #dee2e6;
+        border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; font-size: 14px;
+    }
+    .summary-box h6 { color: #28a745; font-weight: 700; margin-bottom: 10px; }
+    .summary-grid { display: flex; gap: 32px; flex-wrap: wrap; }
+    .summary-item { flex: 1; min-width: 160px; }
+    .summary-label { color: #6c757d; font-size: 12px; }
+    .summary-value { font-weight: 600; color: #212529; }
+
+    .row-2col { display: flex; gap: 16px; }
+    .row-2col > .col { flex: 1; }
+    .row-3col { display: flex; gap: 16px; }
+    .row-3col > .col { flex: 1; }
+
+    .field-error { color: #dc3545; font-size: 13px; margin-top: 4px; display: block; }
+    .required { color: red; font-weight: bold; }
+</style>
+
+<div class="create-box">
+    <h2>Thêm Chuyến Đi</h2>
+
+    <div class="d-flex align-items-center mb-4">
+        <a asp-page="./Index" class="btn btn-outline-secondary">← Quay lại danh sách</a>
+    </div>
+
+    @foreach (var err in ViewData.ModelState[""]?.Errors
+        ?? Enumerable.Empty<Microsoft.AspNetCore.Mvc.ModelBinding.ModelError>())
+    {
+        <div class="alert alert-danger">@err.ErrorMessage</div>
+    }
+
+    @* Tour summary *@
+    <div class="summary-box">
+        <h6>📋 Thông tin Tour</h6>
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="summary-label">Tên tour</div>
+                <div class="summary-value">@Model.Tour.TourName</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Điểm bắt đầu</div>
+                <div class="summary-value">@Model.Tour.StartPlace</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Điểm đến</div>
+                <div class="summary-value">@Model.Tour.EndPlace</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Số ngày</div>
+                <div class="summary-value">@Model.Tour.NumberOfDay ngày</div>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="mb-3">Thông tin chuyến đi mới</h5>
+
+    <form method="post" novalidate>
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="TourId" value="@Model.Tour.TourId" />
+
+        @* Hidden: giá raw *@
+        <input type="hidden" name="AdultPriceRaw" id="adultPriceHidden" value="@Model.AdultPriceRaw" />
+        <input type="hidden" name="ChildPriceRaw" id="childPriceHidden" value="@Model.ChildPriceRaw" />
+        <input type="hidden" name="CapacityRaw"   id="capacityHidden"   value="@Model.CapacityRaw" />
+
+        <div class="row-2col mb-3">
+            <div class="col">
+                <label>Ngày khởi hành <span class="required">*</span></label>
+                <input type="date" name="Departure.StartDate" id="depStartDate"
+                       class="form-control"
+                       value="@Model.Departure.StartDate?.ToString("yyyy-MM-dd")" />
+                @if (ViewData.ModelState["Departure.StartDate"]?.Errors.Count > 0)
+                {
+                    <span class="field-error">
+                        @ViewData.ModelState["Departure.StartDate"].Errors[0].ErrorMessage
+                    </span>
+                }
+            </div>
+            <div class="col">
+                <label>Ngày kết thúc <span class="required">*</span></label>
+                <input type="date" name="Departure.EndDate" id="depEndDate"
+                       class="form-control"
+                       value="@Model.Departure.EndDate?.ToString("yyyy-MM-dd")" />
+                <small id="dayCountHint" class="text-muted"></small>
+                @if (ViewData.ModelState["Departure.EndDate"]?.Errors.Count > 0)
+                {
+                    <span class="field-error">
+                        @ViewData.ModelState["Departure.EndDate"].Errors[0].ErrorMessage
+                    </span>
+                }
+            </div>
+        </div>
+
+        <div class="row-3col mb-3">
+            <div class="col">
+                <label>Giá người lớn (đ) <span class="required">*</span></label>
+                <input type="text" id="adultPriceDisplay" class="form-control"
+                       autocomplete="off" placeholder="Nhập giá"
+                       value="@FormatPrice(Model.AdultPriceRaw)" />
+                @if (ViewData.ModelState["AdultPriceRaw"]?.Errors.Count > 0)
+                {
+                    <span class="field-error">
+                        @ViewData.ModelState["AdultPriceRaw"].Errors[0].ErrorMessage
+                    </span>
+                }
+            </div>
+            <div class="col">
+                <label>Giá trẻ em (đ) <span class="required">*</span></label>
+                <input type="text" id="childPriceDisplay" class="form-control"
+                       autocomplete="off" placeholder="Nhập giá"
+                       value="@FormatPrice(Model.ChildPriceRaw)" />
+                @if (ViewData.ModelState["ChildPriceRaw"]?.Errors.Count > 0)
+                {
+                    <span class="field-error">
+                        @ViewData.ModelState["ChildPriceRaw"].Errors[0].ErrorMessage
+                    </span>
+                }
+            </div>
+            <div class="col">
+                <label>Số chỗ <span class="required">*</span></label>
+                <input type="text" id="capacityDisplay" class="form-control"
+                       autocomplete="off" placeholder="Nhập số chỗ"
+                       value="@Model.CapacityRaw" />
+                @if (ViewData.ModelState["CapacityRaw"]?.Errors.Count > 0)
+                {
+                    <span class="field-error">
+                        @ViewData.ModelState["CapacityRaw"].Errors[0].ErrorMessage
+                    </span>
+                }
+            </div>
+        </div>
+
+        <br />
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-page="./Index" class="btn btn-outline-secondary"
+               style="width:180px; padding:10px 0">
+                ← Quay lại
+            </a>
+            <button type="submit" class="btn btn-success"
+                    style="width:220px; padding:10px 0">
+                ✓ Tạo chuyến đi
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@@11"></script>
+    <script>
+        // ── Format tiền VND ───────────────────────────────────────────
+        function setupMoneyInput(displayId, hiddenId) {
+            const display = document.getElementById(displayId);
+            const hidden  = document.getElementById(hiddenId);
+            if (!display || !hidden) return;
+            display.addEventListener("input", function () {
+                const pos    = this.selectionStart;
+                const oldLen = this.value.length;
+                const raw    = this.value.replace(/\D/g, "");
+                this.value   = raw ? Number(raw).toLocaleString("vi-VN") : "";
+                hidden.value = raw;
+                const newPos = pos + (this.value.length - oldLen);
+                try { this.setSelectionRange(newPos, newPos); } catch {}
+            });
+        }
+
+        function setupIntInput(displayId, hiddenId) {
+            const display = document.getElementById(displayId);
+            const hidden  = document.getElementById(hiddenId);
+            if (!display || !hidden) return;
+            display.addEventListener("input", function () {
+                const raw    = this.value.replace(/\D/g, "");
+                this.value   = raw;
+                hidden.value = raw;
+            });
+        }
+
+        setupMoneyInput("adultPriceDisplay", "adultPriceHidden");
+        setupMoneyInput("childPriceDisplay",  "childPriceHidden");
+        setupIntInput("capacityDisplay",      "capacityHidden");
+
+        // ── Tự tính ngày kết thúc & hint số ngày ──────────────────────
+        const numberOfDay = @(Model.Tour.NumberOfDay > 0 ? Model.Tour.NumberOfDay : 0);
+        const depStart    = document.getElementById("depStartDate");
+        const depEnd      = document.getElementById("depEndDate");
+
+        if (depStart && depEnd) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            depStart.setAttribute("min", tomorrow.toISOString().split("T")[0]);
+
+            depStart.addEventListener("change", function () {
+                if (!this.value) return;
+                if (numberOfDay > 0) {
+                    const start = new Date(this.value);
+                    const end   = new Date(start);
+                    end.setDate(end.getDate() + numberOfDay - 1);
+                    depEnd.value = end.toISOString().split("T")[0];
+                }
+                depEnd.setAttribute("min", this.value);
+                updateDayHint();
+            });
+
+            depEnd.addEventListener("change", updateDayHint);
+        }
+
+        function updateDayHint() {
+            const hint = document.getElementById("dayCountHint");
+            if (!hint || !depStart?.value || !depEnd?.value) return;
+            const days = Math.round(
+                (new Date(depEnd.value) - new Date(depStart.value)) / 86400000
+            ) + 1;
+            if (numberOfDay > 0 && days !== numberOfDay) {
+                hint.style.color = "#dc3545";
+                hint.textContent = `⚠ ${days} ngày — tour yêu cầu ${numberOfDay} ngày`;
+            } else {
+                hint.style.color = "#28a745";
+                hint.textContent = `✓ ${days} ngày`;
+            }
+        }
+
+        // ── DOMContentLoaded: sync hidden ───────────────────────
+        document.addEventListener("DOMContentLoaded", function () {
+            updateDayHint();
+
+            const syncMoney = (displayId, hiddenId) => {
+                const el = document.getElementById(displayId);
+                if (el?.value)
+                    document.getElementById(hiddenId).value =
+                        el.value.replace(/\./g, "").replace(/,/g, "");
+            };
+            syncMoney("adultPriceDisplay", "adultPriceHidden");
+            syncMoney("childPriceDisplay",  "childPriceHidden");
+
+            const cap = document.getElementById("capacityDisplay");
+            if (cap?.value)
+                document.getElementById("capacityHidden").value = cap.value.replace(/\D/g, "");
+        });
+
+    </script>
+}

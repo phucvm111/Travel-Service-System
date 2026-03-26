@@ -155,10 +155,13 @@ namespace TravelSystem.Pages.Users.Registers
 
             if (User.Dob == null)
                 ModelState.AddModelError("User.Dob", "Ngày sinh không được để trống!");
-            else if (User.Dob.Value >= today)
-                ModelState.AddModelError("User.Dob", "Ngày sinh phải trước ngày hiện tại!");
-            else if (today.Year - User.Dob.Value.Year < 16)
-                ModelState.AddModelError("User.Dob", "Bạn phải đủ 16 tuổi trở lên!");
+            else
+            {
+                DateOnly dob = User.Dob.Value;
+                if (dob > today) ModelState.AddModelError("User.Dob", "Ngày sinh không được lớn hơn hiện tại!");
+                else if (dob.AddYears(18) > today) ModelState.AddModelError("User.Dob", "Bạn phải đủ 18 tuổi!");
+                else if (dob < today.AddYears(-100)) ModelState.AddModelError("User.Dob", "Tuổi không được lớn hơn 100!");
+            }
 
             if (string.IsNullOrWhiteSpace(User.Gender))
                 ModelState.AddModelError("User.Gender", "Vui lòng chọn giới tính!");

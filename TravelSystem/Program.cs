@@ -2,6 +2,7 @@
 using System;
 using TravelSystem.Hubs;
 using TravelSystem.Models;
+using TravelSystem.Pages.Services;
 using TravelSystem.Services;
 using TravelSystemService.Services;
 
@@ -27,6 +28,9 @@ namespace TravelSystem
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<PayOSService>();
+            
+            // Register auto-updater
+            builder.Services.AddHostedService<TourDepartureStatusUpdaterService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

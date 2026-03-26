@@ -8,71 +8,129 @@ namespace TravelSystem.Pages.Users.Tours
     public class MyBookingsModel : PageModel
     {
         private readonly FinalPrnContext _context;
-        public MyBookingsModel(FinalPrnContext context) => _context = context;
+        private readonly IWebHostEnvironment _environment;
 
-        public List<Booking> BookingList { get; set; }
-        public int CurrentPage { get; set; }
+        public MyBookingsModel(FinalPrnContext context, IWebHostEnvironment environment)
+        {
+            _context = context;
+            _environment = environment;
+        }
+
+        public IList<Booking> BookingList { get; set; } = new List<Booking>();
+
+        [BindProperty(SupportsGet = true)]
+        public string Filter { get; set; } = "current";
+
+        [BindProperty(SupportsGet = true, Name = "p")]
+        public int CurrentPage { get; set; } = 1;
+
         public int TotalPages { get; set; }
-        public string Filter { get; set; }
+        public int PageSize { get; set; } = 5;
 
-        public async Task<IActionResult> OnGetAsync(string filter = "current", int p = 1)
+        public async Task<IActionResult> OnGetAsync()
         {
             int? userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null) return RedirectToPage("/Auths/Login");
-
-            Filter = filter;
-            CurrentPage = p;
-            int pageSize = 5;
+            if (userId == null)
+            {
+                return RedirectToPage("/Auths/Login");
+            }
 
             var query = _context.Bookings
-                .Include(b => b.TourDeparture).ThenInclude(d => d.Tour)
-                .Where(b => b.UserId == userId)
-                .OrderByDescending(b => b.BookDate)
-                .AsQueryable();
+                .Include(b => b.TourDeparture)
+                    .ThenInclude(td => td.Tour)
+                .Include(b => b.Feedbacks)
+                .Include(b => b.RequestCancels)
+                .Where(b => b.UserId == userId);
 
-            // Logic lọc theo tab (Giống logic Java của bạn)
-            if (filter == "current")
+            if (Filter == "finished")
             {
-                // Chuyến đi sắp tới: Status 1 (Đã thanh toán), 7 (Chờ thanh toán), 5 (Đang hoàn tiền)
-                query = query.Where(b => b.Status == 1 || b.Status == 7 || b.Status == 5);
+                query = query.Where(b => b.Status == 4);
             }
             else
             {
-                // Chuyến đi đã xong: Status 4 (Hoàn thành), 2 (Hủy), 3 (Đại lý hủy), 6 (Đã hoàn tiền)
-                query = query.Where(b => b.Status == 4 || b.Status == 2 || b.Status == 3 || b.Status == 6);
+                query = query.Where(b => b.Status != 4);
             }
 
             int totalItems = await query.CountAsync();
-            TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            TotalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
 
-            BookingList = await query.Skip((CurrentPage - 1) * pageSize).Take(pageSize).ToListAsync();
+            if (CurrentPage < 1) CurrentPage = 1;
+            if (TotalPages > 0 && CurrentPage > TotalPages) CurrentPage = TotalPages;
+
+            BookingList = await query
+                .OrderByDescending(b => b.BookDate)
+                .Skip((CurrentPage - 1) * PageSize)
+                .Take(PageSize)
+                .ToListAsync();
 
             return Page();
         }
 
-        // Handler cho việc gửi Feedback (AddFeedback)
-        public async Task<IActionResult> OnPostFeedbackAsync(int bookId, int rate, string content, IFormFile image)
+        public async Task<IActionResult> OnPostFeedbackAsync(int bookId, int rate, string content, IFormFile? image)
         {
-            var booking = await _context.Bookings.FindAsync(bookId);
-            if (booking == null) return NotFound();
-
-            string imagePath = null;
-            if (image != null)
+            int? userId = HttpContext.Session.GetInt32("UserID");
+            if (userId == null)
             {
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/feedbacks", fileName);
+                return RedirectToPage("/Auths/Login");
+            }
+
+            var booking = await _context.Bookings
+                .Include(b => b.Feedbacks)
+                .FirstOrDefaultAsync(b => b.BookId == bookId && b.UserId == userId);
+
+            if (booking == null)
+            {
+                TempData["Error"] = "Không tìm thấy đơn hàng.";
+                return RedirectToPage(new { filter = "finished" });
+            }
+
+            if (booking.Status != 4)
+            {
+                TempData["Error"] = "Chỉ có thể đánh giá chuyến đi đã hoàn thành.";
+                return RedirectToPage(new { filter = "finished" });
+            }
+
+            if (booking.Feedbacks.Any())
+            {
+                TempData["Error"] = "Bạn đã đánh giá chuyến đi này rồi.";
+                return RedirectToPage(new { filter = "finished" });
+            }
+
+            string? imagePath = null;
+
+            if (image != null && image.Length > 0)
+            {
+                var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    TempData["Error"] = "Ảnh chỉ chấp nhận jpg, jpeg, png hoặc webp.";
+                    return RedirectToPage(new { filter = "finished" });
+                }
+
+                string uploadFolder = Path.Combine(_environment.WebRootPath, "images", "feedback");
+                if (!Directory.Exists(uploadFolder))
+                {
+                    Directory.CreateDirectory(uploadFolder);
+                }
+
+                string fileName = $"feedback_{bookId}_{Guid.NewGuid():N}{extension}";
+                string filePath = Path.Combine(uploadFolder, fileName);
+
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
                 }
-                imagePath = "uploads/feedbacks/" + fileName;
+
+                imagePath = $"/images/feedback/{fileName}";
             }
 
             var feedback = new Feedback
             {
                 BookId = bookId,
                 Rate = rate,
-                Content = content,
+                Content = content?.Trim(),
                 Image = imagePath,
                 CreateDate = DateTime.Now
             };
@@ -80,43 +138,45 @@ namespace TravelSystem.Pages.Users.Tours
             _context.Feedbacks.Add(feedback);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage(new { filter = "finished", success = "Đã gửi đánh giá thành công!" });
+            TempData["Success"] = "Gửi đánh giá thành công.";
+            return RedirectToPage(new { filter = "finished" });
         }
 
-        public async Task<IActionResult> OnPostCancelAsync(int bookId, string reason)
+        public async Task<IActionResult> OnPostCancelAsync(int bookId, string? reason)
         {
             int? userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null) return RedirectToPage("/Auths/Login");
-
-            var booking = await _context.Bookings.FindAsync(bookId);
-            if (booking == null) return NotFound();
-
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            if (userId == null)
             {
-                // 1. Tạo yêu cầu hủy trong bảng RequestCancel (giống RequestCancelDAO)
-                var cancelRequest = new RequestCancel
-                {
-                    BookId = bookId,
-                    RequestDate = DateOnly.FromDateTime(DateTime.Now),
-                    Reason = reason,
-                    Status = "PENDING" // Trạng thái yêu cầu chờ Staff duyệt
-                };
-                _context.RequestCancels.Add(cancelRequest);
-
-                // 2. Cập nhật trạng thái Booking thành 5 (Đã yêu cầu hoàn tiền/hủy)
-                booking.Status = 5;
-
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return RedirectToPage(new { filter = "current", cancelSuccess = "true" });
+                return RedirectToPage("/Auths/Login");
             }
-            catch (Exception)
+
+            var booking = await _context.Bookings
+                .FirstOrDefaultAsync(b => b.BookId == bookId && b.UserId == userId);
+
+            if (booking == null)
             {
-                await transaction.RollbackAsync();
-                return RedirectToPage(new { filter = "current", cancelSuccess = "false" });
+                TempData["Error"] = "Không tìm thấy đơn hàng.";
+                return RedirectToPage(new { filter = Filter });
             }
+
+            if (booking.Status != 1 && booking.Status != 7)
+            {
+                TempData["Error"] = "Đơn hàng này không thể hủy.";
+                return RedirectToPage(new { filter = Filter });
+            }
+
+            var requestCancel = new RequestCancel
+            {
+                BookId = bookId,
+                Reason = string.IsNullOrWhiteSpace(reason) ? "Khách hàng muốn hủy chuyến đi." : reason.Trim(),
+                RequestDate = DateOnly.FromDateTime(DateTime.Now), // Fix: Convert DateTime to DateOnly
+            };
+
+            _context.RequestCancels.Add(requestCancel);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Gửi yêu cầu hủy thành công.";
+            return RedirectToPage(new { filter = Filter });
         }
     }
 }
