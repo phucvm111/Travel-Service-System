@@ -6,9 +6,13 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="Pages\Agents\TourDepartures\**" />
+	  <Compile Remove="Pages\Staff\**" />
 	  <Content Remove="Pages\Agents\TourDepartures\**" />
+	  <Content Remove="Pages\Staff\**" />
 	  <EmbeddedResource Remove="Pages\Agents\TourDepartures\**" />
+	  <EmbeddedResource Remove="Pages\Staff\**" />
 	  <None Remove="Pages\Agents\TourDepartures\**" />
+	  <None Remove="Pages\Staff\**" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.23">
