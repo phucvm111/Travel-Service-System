@@ -1,0 +1,129 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Staffs.Vouchers.DetailsModel
+
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Chi tiết voucher</h2>
+        <div class="d-flex gap-2">
+            <a asp-page="./Index" class="btn btn-secondary">Trở lại</a>
+        </div>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    @if (Model.Voucher != null)
+    {
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Mã voucher:</div>
+                    <div class="col-md-9">
+                        @if (!string.IsNullOrWhiteSpace(Model.Voucher.VoucherCode))
+                        {
+                            @Model.Voucher.VoucherCode
+                        }
+                        else
+                        {
+                            <span class="text-warning">Chưa có dữ liệu</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Tên voucher:</div>
+                    <div class="col-md-9">
+                        @if (!string.IsNullOrWhiteSpace(Model.Voucher.VoucherName))
+                        {
+                            @Model.Voucher.VoucherName
+                        }
+                        else
+                        {
+                            <span class="text-warning">Chưa có dữ liệu</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Mô tả:</div>
+                    <div class="col-md-9">
+                        @if (!string.IsNullOrWhiteSpace(Model.Voucher.Description))
+                        {
+                            @Model.Voucher.Description
+                        }
+                        else
+                        {
+                            <span class="text-warning">Voucher chưa có mô tả.</span>
+                        }
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Phần trăm giảm giá:</div>
+                <div class="col-md-9">
+                    @(Model.Voucher.PercentDiscount.HasValue
+                                        ? Model.Voucher.PercentDiscount.Value.ToString("0.##") + "%"
+                                        : "Chưa có dữ liệu")
+                                                        </div>
+                                                    </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Giảm tối đa:</div>
+                <div class="col-md-9">
+                    @(Model.Voucher.MaxDiscountAmount.HasValue
+                                        ? Model.Voucher.MaxDiscountAmount.Value.ToString("N0") + " VNĐ"
+                                        : "Chưa có dữ liệu")
+                                                        </div>
+                                                    </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Giá trị đơn tối thiểu:</div>
+                <div class="col-md-9">
+                    @(Model.Voucher.MinDiscountAmount.HasValue
+                                        ? Model.Voucher.MinDiscountAmount.Value.ToString("N0") + " VNĐ"
+                                        : "Chưa có dữ liệu")
+                                                        </div>
+                                                    </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Ngày bắt đầu:</div>
+                <div class="col-md-9">
+                    @(Model.Voucher.StartDate?.ToString("dd/MM/yyyy") ?? "Chưa có dữ liệu")
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Ngày kết thúc:</div>
+                <div class="col-md-9">
+                    @(Model.Voucher.EndDate?.ToString("dd/MM/yyyy") ?? "Chưa có dữ liệu")
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 fw-bold">Số lượng:</div>
+                <div class="col-md-9">
+                    @(Model.Voucher.Quantity.HasValue
+                                        ? Model.Voucher.Quantity.Value.ToString()
+                                        : "Chưa có dữ liệu")
+                </div>
+            </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Trạng thái:</div>
+                    <div class="col-md-9">
+                    @if (Model.Voucher.Status == 1)
+                        {
+                            <span class="badge bg-success">Hoạt động</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Ngừng hoạt động</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

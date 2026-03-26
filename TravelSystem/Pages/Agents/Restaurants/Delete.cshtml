@@ -1,0 +1,59 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Agents.Restaurants.DeleteModel
+
+<div class="container-fluid p-4">
+    <div class="mb-3">
+        <h2>Thay đổi trạng thái nhà hàng</h2>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    @if (Model.Restaurant != null && Model.Service != null)
+    {
+        var newStatusText = Model.Service.Status == 1 ? "Dừng hoạt động" : "Đang hoạt động";
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="mb-3">Xác nhận thay đổi trạng thái</h4>
+
+                <p>
+                    Bạn có chắc chắn muốn thay đổi trạng thái nhà hàng
+                    <strong>@Model.Service.ServiceName</strong>
+                    thành <strong>@newStatusText</strong> không?
+                </p>
+
+                <div class="row mb-2">
+                    <div class="col-md-3 fw-bold">Tên nhà hàng:</div>
+                    <div class="col-md-9">@Model.Service.ServiceName</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-3 fw-bold">Loại nhà hàng:</div>
+                    <div class="col-md-9">@Model.Restaurant.RestaurantType</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-3 fw-bold">Trạng thái hiện tại:</div>
+                    <div class="col-md-9">
+                        @if (Model.Service.Status == 1)
+                        {
+                            <span class="badge bg-success">Đang hoạt động</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Dừng hoạt động</span>
+                        }
+                    </div>
+                </div>
+
+                <form method="post" class="mt-4">
+                    <button type="submit" class="btn btn-danger">Xác nhận</button>
+                    <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+                </form>
+            </div>
+        </div>
+    }
+</div>

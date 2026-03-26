@@ -1,0 +1,69 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Agents.Entertainments.DeleteModel
+
+<div class="container-fluid p-4">
+    <div class="mb-3">
+        <h2>Thay đổi trạng thái dịch vụ giải trí</h2>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    @if (Model.Entertainment != null && Model.Service != null)
+    {
+        var newStatusText = Model.Service.Status == 1 ? "Dừng hoạt động" : "Đang hoạt động";
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="mb-3">Xác nhận thay đổi trạng thái</h4>
+
+                <p>
+                    Bạn có chắc chắn muốn thay đổi trạng thái dịch vụ giải trí
+                    <strong>@Model.Service.ServiceName</strong>
+                    thành <strong>@newStatusText</strong> không?
+                </p>
+
+                <div class="row mb-2">
+                    <div class="col-md-3 fw-bold">Tên dịch vụ:</div>
+                    <div class="col-md-9">@Model.Service.ServiceName</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-3 fw-bold">Địa chỉ:</div>
+                    <div class="col-md-9">@Model.Service.Address</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-3 fw-bold">Giờ hoạt động:</div>
+                    <div class="col-md-9">
+                        @(Model.Entertainment.OpenTime?.ToString(@"HH\:mm"))
+                        -
+                        @(Model.Entertainment.CloseTime?.ToString(@"HH\:mm"))
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-3 fw-bold">Trạng thái hiện tại:</div>
+                    <div class="col-md-9">
+                        @if (Model.Service.Status == 1)
+                        {
+                            <span class="badge bg-success">Đang hoạt động</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Dừng hoạt động</span>
+                        }
+                    </div>
+                </div>
+
+                <form method="post" class="mt-4">
+                    <input type="hidden" name="id" value="@Model.Entertainment.ServiceId" />
+                    <button type="submit" class="btn btn-danger">Xác nhận</button>
+                    <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+                </form>
+            </div>
+        </div>
+    }
+</div>
