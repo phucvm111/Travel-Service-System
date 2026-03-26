@@ -7,11 +7,21 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container mt-5">
+
     <div class="card shadow p-4" style="max-width: 800px; margin: auto; border-radius: 15px;">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
         <h2 class="text-center text-primary mb-4">Xác Minh Danh Tính Tourist</h2>
 
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="Tourist.TouristId" />
+
             
             @if (Model.Errors.ContainsKey("Images") || Model.Errors.ContainsKey("System"))
             {

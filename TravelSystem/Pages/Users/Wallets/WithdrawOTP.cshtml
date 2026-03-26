@@ -1,0 +1,110 @@
+﻿@page
+@model TravelSystem.Pages.Users.Wallets.WithdrawOtpModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0" style="border-radius: 20px;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-block p-3 mb-3">
+                            <i class="fas fa-shield-alt fa-2x"></i>
+                        </div>
+                        <h3 class="fw-bold">Xác thực OTP</h3>
+                        <p class="text-muted small">Chúng tôi đã gửi mã 6 số đến email của bạn</p>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 fs-6">
+                            Mã hết hạn sau: <span id="countdown">05:00</span>
+                        </span>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger text-center border-0 small mb-4">
+                            <i class="fas fa-exclamation-triangle me-2"></i> @Model.ErrorMessage
+                        </div>
+                    }
+
+                    <form method="post">
+                        <div class="d-flex justify-content-between gap-2 mb-4">
+                            <input type="text" maxlength="1" asp-for="Digit1" class="form-control text-center fs-4 otp-input" required autofocus autocomplete="off" />
+                            <input type="text" maxlength="1" asp-for="Digit2" class="form-control text-center fs-4 otp-input" required autocomplete="off" />
+                            <input type="text" maxlength="1" asp-for="Digit3" class="form-control text-center fs-4 otp-input" required autocomplete="off" />
+                            <input type="text" maxlength="1" asp-for="Digit4" class="form-control text-center fs-4 otp-input" required autocomplete="off" />
+                            <input type="text" maxlength="1" asp-for="Digit5" class="form-control text-center fs-4 otp-input" required autocomplete="off" />
+                            <input type="text" maxlength="1" asp-for="Digit6" class="form-control text-center fs-4 otp-input" required autocomplete="off" />
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow-sm" style="border-radius: 10px;">
+                            XÁC NHẬN RÚT TIỀN
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <p class="small text-muted mb-0">Không nhận được mã?</p>
+                        <a asp-page="./WithdrawOtp" class="text-decoration-none fw-bold text-success">Gửi lại mã mới</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .otp-input {
+        height: 60px;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        transition: all 0.2s;
+    }
+
+        .otp-input:focus {
+            border-color: #28a745;
+            box-shadow: none;
+            background-color: #f8fff9;
+        }
+</style>
+
+@section Scripts {
+    <script>
+        // Tự động nhảy ô Input
+        const inputs = document.querySelectorAll('.otp-input');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Đếm ngược dựa trên thời gian hết hạn từ Server
+        const expiryTime = @Model.ExpiryTime;
+        const countdownEl = document.getElementById("countdown");
+
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const diff = expiryTime - now;
+
+            if (diff <= 0) {
+                clearInterval(timer);
+                countdownEl.innerText = "Hết hạn";
+                alert("Mã OTP đã hết hạn, vui lòng quay lại trang ví.");
+                window.location.href = "/Users/Wallets/AmountToPay";
+            } else {
+                const m = Math.floor(diff / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                countdownEl.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+            }
+        }, 1000);
+    </script>
+}

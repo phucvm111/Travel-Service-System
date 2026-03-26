@@ -66,7 +66,7 @@ namespace TravelSystem.Pages.Users.Tours
                     }
 
                     wallet.Balance -= finalAmount;
-                    var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 6);
+                    var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
                     if (systemWallet != null) systemWallet.Balance += finalAmount;
 
                     var booking = CreateBookingObject(userId.Value, departureId, voucherId, finalAmount, paymentMethodId, bookCode, 1);

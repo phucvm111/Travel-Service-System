@@ -1,0 +1,144 @@
+﻿@page
+@model TravelSystem.Pages.Agents.TourBooked.ManageTourBookedModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Quản lý đặt chuyến đi";
+}
+
+<div id="layoutSidenav">
+
+    <div id="layoutSidenav_content">
+        <main class="container-fluid px-4">
+            <h1 class="mt-4 fw-bold">Quản lý đặt chuyến đi</h1>
+
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-body">
+                    <form method="get" class="row g-3 mb-4 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Trạng thái:</label>
+                            <select class="form-select" name="StatusType" onchange="this.form.submit()">
+                                <option value="">-- Tất cả trạng thái --</option>
+                                <option value="1" selected="@(Model.StatusType == 1)">Đã thanh toán</option>
+                                <option value="2" selected="@(Model.StatusType == 2)">Đại lý yêu cầu hủy</option>
+                                <option value="3" selected="@(Model.StatusType == 3)">Hủy bởi đại lý</option>
+                                <option value="4" selected="@(Model.StatusType == 4)">Hoàn thành chuyến đi</option>
+                                <option value="5" selected="@(Model.StatusType == 5)">Đã yêu cầu hoàn tiền</option>
+                                <option value="6" selected="@(Model.StatusType == 6)">Hủy bởi du khách</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold">Tìm khách hàng:</label>
+                            <div class="input-group">
+                                <input type="text" name="SearchName" class="form-control" placeholder="Nhập tên khách..." value="@Model.SearchName" />
+                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-page="./ManageTourBooked" class="btn btn-outline-secondary w-100">Xóa lọc</a>
+                        </div>
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-light text-center">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Chuyến đi</th>
+                                    <th>Khách hàng</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Voucher</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.BookingList.Any())
+                                {
+                                    int count = Model.StartIndex;
+                                    foreach (var b in Model.BookingList)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@(count++)</td>
+                                            <td class="fw-bold text-primary">@b.TourDeparture?.Tour?.TourName</td>
+                                            <td>@b.FirstName @b.LastName<br /><small class="text-muted">@b.Phone</small></td>
+                                            <td class="text-center">@b.BookDate?.ToString("dd/MM/yyyy")</td>
+                                            <td class="text-center">@(b.Voucher?.VoucherCode ?? "Không có")</td>
+                                            <td class="text-end fw-bold text-danger">@b.TotalPrice?.ToString("N0") đ</td>
+                                            <td class="text-center">
+                                                <span class="badge @GetStatusClass(b.Status)">@GetStatusName(b.Status)</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="d-flex gap-1 justify-content-center">
+                                                    <a asp-page="./DetailTourBooked" asp-route-id="@b.BookId" class="btn btn-sm btn-info text-white">Chi tiết</a>
+                                                    @if (b.Status == 1)
+                                                    {
+                                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal-@b.BookId">Hủy tour</button>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <div class="modal fade" id="cancelModal-@b.BookId" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <form method="post" asp-page-handler="Cancel">
+                                                    <input type="hidden" name="bookId" value="@b.BookId" />
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-danger text-white"><h5>Xác nhận hủy chuyến</h5></div>
+                                                        <div class="modal-body">
+                                                            <p>Bạn đang yêu cầu hủy tour cho khách <strong>@b.FirstName @b.LastName</strong></p>
+                                                            <label class="form-label fw-bold">Lý do hủy tour:</label>
+                                                            <textarea name="reason" class="form-control" rows="3" required minlength="10" placeholder="Vui lòng nhập lý do hủy..."></textarea>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                            <button type="submit" class="btn btn-danger">Gửi yêu cầu hủy</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="8" class="text-center py-4 text-muted">Chưa có đơn đặt tour nào.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (Model.TotalPages > 1)
+                    {
+                        <nav class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                @for (int i = 1; i <= Model.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                        <a class="page-link" asp-page="./ManageTourBooked" asp-route-p="@i"
+                                           asp-route-SearchName="@Model.SearchName" asp-route-StatusType="@Model.StatusType">@i</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@functions {
+    string GetStatusClass(int? s) => s switch { 1 => "bg-success", 2 => "bg-warning text-dark", 3 => "bg-danger", 4 => "bg-primary", 5 => "bg-secondary", 6 or 7 => "bg-dark", _ => "bg-light text-dark" };
+    string GetStatusName(int? s) => s switch { 1 => "Đã thanh toán", 2 => "Đại lý yêu cầu hủy", 3 => "Hủy bởi đại lý", 4 => "Đã hoàn thành", 5 => "Chờ hoàn tiền", 6 or 7 => "Hủy bởi du khách", _ => "Không rõ" };
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('cancel') === 'true') {
+            Swal.fire('Thành công', 'Yêu cầu hủy đã được gửi!', 'success');
+        }
+    </script>
+}

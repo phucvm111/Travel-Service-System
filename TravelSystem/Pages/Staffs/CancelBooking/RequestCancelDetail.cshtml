@@ -1,0 +1,137 @@
+﻿@page
+@model TravelSystem.Pages.Staffs.CancelBooking.RequestCancelDetailModel
+@{
+    Layout = "_Layout";
+}
+
+<div id="layoutSidenav">
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center mt-4 mb-3">
+                    <a asp-page="./RequestCancelManage" class="btn btn-outline-secondary btn-sm me-3">
+                        <i class="fas fa-arrow-left"></i> Quay lại
+                    </a>
+                    <h3 class="mb-0">Chi tiết yêu cầu huỷ chuyến</h3>
+                </div>
+
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger">@TempData["Error"]</div>
+                }
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-white fw-bold">Thông tin khách hàng & Tour</div>
+                            <div class="card-body">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-4">Email người đặt:</dt>
+                                    <dd class="col-sm-8">@Model.RequestDetail.Book.Gmail</dd>
+
+                                    <dt class="col-sm-4">Mã đặt tour:</dt>
+                                    <dd class="col-sm-8">#@Model.RequestDetail.Book.BookCode</dd>
+
+                                    <dt class="col-sm-4">Tên tour:</dt>
+                                    <dd class="col-sm-8 text-primary fw-bold">@Model.RequestDetail.Book.TourDeparture.Tour.TourName</dd>
+
+                                    <dt class="col-sm-4">Giá tiền đơn hàng:</dt>
+                                    <dd class="col-sm-8">@Model.RequestDetail.Book.TotalPrice?.ToString("N0") VNĐ</dd>
+
+                                    <dt class="col-sm-4 text-danger">Số tiền hoàn trả:</dt>
+                                    <dd class="col-sm-8 text-danger fw-bold fs-5">@Model.CalculatedRefund.ToString("N0") VNĐ</dd>
+
+                                    <dt class="col-sm-4">Trạng thái:</dt>
+                                    <dd class="col-sm-8">
+                                        @if (Model.RequestDetail.Status == "PENDING")
+                                        {
+                                            <span class="badge bg-warning text-dark">Chờ xử lý</span>
+                                        }
+                                        else if (Model.RequestDetail.Status == "FINISHED")
+                                        {
+
+                                            <span class="badge bg-success">Đã duyệt & Hoàn tiền</span>
+                                        }
+                                        else
+                                        {
+
+                                            <span class="badge bg-danger">Đã từ chối</span>
+                                        }
+                                    </dd>
+
+                                    <dt class="col-sm-4">Lý do khách huỷ:</dt>
+                                    <dd class="col-sm-8 bg-light p-2 rounded">@Model.RequestDetail.Reason</dd>
+                                </dl>
+
+                                @if (Model.RequestDetail.Status == "PENDING")
+                                {
+                                    <div class="mt-4 pt-3 border-top d-flex gap-2">
+                                        <button type="button" class="btn btn-success px-4" data-bs-toggle="modal" data-bs-target="#approveModal">
+                                            <i class="fas fa-check me-1"></i> Duyệt hoàn tiền
+                                        </button>
+                                        <button type="button" class="btn btn-danger px-4" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                                            <i class="fas fa-times me-1"></i> Từ chối
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="approveModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="post" asp-page-handler="Approve" class="modal-content">
+            <input type="hidden" name="requestId" value="@Model.RequestDetail.RequestCancelId" />
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Xác nhận duyệt yêu cầu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <p class="mb-1">Hệ thống sẽ hoàn trả số tiền sau vào ví của khách:</p>
+                <h3 class="text-danger fw-bold">@Model.CalculatedRefund.ToString("N0") VNĐ</h3>
+                <p class="text-muted small">Thao tác này sẽ trừ tiền ví Admin và không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-success px-4">Xác nhận hoàn tiền</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="post" asp-page-handler="Reject" class="modal-content">
+            <input type="hidden" name="requestId" value="@Model.RequestDetail.RequestCancelId" />
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Từ chối yêu cầu hủy tour</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <label class="form-label fw-bold">Lý do từ chối (Gửi đến khách hàng):</label>
+                <textarea class="form-control" name="rejectReason" rows="4" required placeholder="Nhập lý do chi tiết để khách hàng nắm rõ..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="submit" class="btn btn-danger px-4">Gửi thông báo từ chối</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const action = urlParams.get('statusAction');
+        if (action === 'approved') Swal.fire('Thành công', 'Đã duyệt và hoàn tiền vào ví khách!', 'success');
+        if (action === 'rejected') Swal.fire('Đã từ chối', 'Đã gửi thông báo từ chối đến khách hàng.', 'info');
+        if (action === 'failed') Swal.fire('Lỗi', 'Có lỗi xảy ra trong quá trình xử lý giao dịch.', 'error');
+    </script>
+}
