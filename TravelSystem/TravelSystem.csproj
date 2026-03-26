@@ -28,7 +28,6 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Pages\Staff\" />
 		<Folder Include="Pages\Agents\TourDepartures\" />
 		<Folder Include="wwwroot\images\" />
 	</ItemGroup>

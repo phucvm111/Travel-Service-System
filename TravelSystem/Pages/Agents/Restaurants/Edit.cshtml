@@ -1,0 +1,100 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Agents.Restaurants.EditModel
+
+<div class="container-fluid p-4">
+    <div class="mb-3">
+        <h2>Cập nhật nhà hàng</h2>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <form method="post" enctype="multipart/form-data" onsubmit="return confirm('Bạn có chắc muốn cập nhật nhà hàng này không?');">
+        <input type="hidden" asp-for="Service.ServiceId" />
+        <input type="hidden" asp-for="Restaurant.ServiceId" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Service.ServiceName" class="form-label">Tên nhà hàng</label>
+                <input asp-for="Service.ServiceName" class="form-control" />
+                <span asp-validation-for="Service.ServiceName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Restaurant.RestaurantType" class="form-label">Loại nhà hàng</label>
+                <input asp-for="Restaurant.RestaurantType" class="form-control" placeholder="Ví dụ: Buffet, Hải sản, Chay..." />
+                <span asp-validation-for="Restaurant.RestaurantType" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Service.Address" class="form-label">Địa chỉ</label>
+                <input asp-for="Service.Address" class="form-control" />
+                <span asp-validation-for="Service.Address" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Service.PhoneNumber" class="form-label">Số điện thoại</label>
+                <input asp-for="Service.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Service.PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label asp-for="Service.Description" class="form-label">Mô tả</label>
+                <textarea asp-for="Service.Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Service.Description" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="Service.Status" class="form-label">Trạng thái</label>
+                <select asp-for="Service.Status" class="form-select">
+                    <option value="1">Hoạt động</option>
+                    <option value="0">Ngừng hoạt động</option>
+                </select>
+                <span asp-validation-for="Service.Status" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-8 mb-3">
+                <label class="form-label">Ảnh nhà hàng</label>
+                <input asp-for="UploadImage" type="file" class="form-control" accept="image/*" />
+            </div>
+
+            <div class="col-md-12 mb-3">
+                @if (!string.IsNullOrEmpty(Model.Service.Image))
+                {
+                    <div class="mb-2">
+                        <img src="@Model.Service.Image" alt="Restaurant Image" width="180" style="object-fit:cover; border-radius:8px;" />
+                    </div>
+                }
+                else
+                {
+                    <div class="text-muted">Chưa có ảnh hiện tại</div>
+                }
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label asp-for="Restaurant.OpenTime" class="form-label">Giờ mở cửa</label>
+                <input asp-for="Restaurant.OpenTime" type="time" class="form-control" />
+                <span asp-validation-for="Restaurant.OpenTime" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <label asp-for="Restaurant.CloseTime" class="form-label">Giờ đóng cửa</label>
+                <input asp-for="Restaurant.CloseTime" type="time" class="form-control" />
+                <span asp-validation-for="Restaurant.CloseTime" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mt-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
