@@ -1,0 +1,204 @@
+﻿@page
+@model TravelSystem.Pages.Users.Feedbacks.CreateModel
+@{
+    ViewData["Title"] = "Phản hồi chuyến đi";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .feedback-box {
+        background: #fff;
+        border-radius: 14px;
+        padding: 30px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .tour-info {
+        background: #fdfdfd;
+        border-left: 5px solid #f50057;
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 24px;
+    }
+
+    .rating-stars {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .star {
+        font-size: 36px;
+        color: #ccc;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .star.active {
+        color: #ffc107;
+    }
+
+    .readonly-box {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .readonly-label {
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .feedback-image {
+        max-width: 100%;
+        max-height: 350px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="feedback-box">
+
+                <h3 class="fw-bold mb-4">Phản hồi chuyến đi</h3>
+
+                @if (Model.Booking != null)
+                {
+                    <div class="tour-info">
+                        <h5 class="text-primary fw-bold">@Model.TourName</h5>
+                        <p class="mb-1 text-muted">
+                            Ngày đặt: @Model.BookDateText
+                        </p>
+                        <p class="mb-0 text-muted">
+                            @(Model.Booking.NumberAdult ?? 0) người lớn, @(Model.Booking.NumberChildren ?? 0) trẻ em
+                        </p>
+                    </div>
+                }
+
+                @if (Model.ExistingFeedback != null)
+                {
+                    <div class="alert alert-info">
+                        Bạn đã gửi phản hồi cho chuyến đi này rồi. Dưới đây là phản hồi của bạn.
+                    </div>
+
+                    <div class="readonly-box">
+                        <div class="readonly-label">Đánh giá</div>
+                        <div class="rating-stars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <span class="star @(i <= (int)(Model.ExistingFeedback.Rate ?? 0) ? "active" : "")">★</span>
+                            }
+                            <span class="ms-2 text-muted">(@(Model.ExistingFeedback.Rate ?? 0)/5)</span>
+                        </div>
+                    </div>
+
+                    <div class="readonly-box">
+                        <div class="readonly-label">Nội dung</div>
+                        <div style="white-space: pre-line;">
+                            @(string.IsNullOrWhiteSpace(Model.ExistingFeedback.Content)
+                                ? "Không có nội dung."
+                                : Model.ExistingFeedback.Content)
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ExistingFeedback.Image))
+                    {
+                        <div class="readonly-box">
+                            <div class="readonly-label">Ảnh minh họa</div>
+                            <img src="@Model.ExistingFeedback.Image" alt="Ảnh feedback" class="feedback-image" />
+                        </div>
+                    }
+
+                    <div class="readonly-box">
+                        <div class="readonly-label">Ngày gửi</div>
+                        <div>@(Model.ExistingFeedback.CreateDate?.ToString("dd/MM/yyyy HH:mm") ?? "")</div>
+                    </div>
+
+                    <a asp-page="/Users/BookTours/MyBookings"
+                       asp-route-type="finished"
+                       class="btn btn-secondary">
+                        Quay lại
+                    </a>
+                }
+                else
+                {
+                    <form method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Feedback.BookId" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Đánh giá</label>
+
+                            <div id="ratingStars" class="rating-stars">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <input type="radio" asp-for="Feedback.Rate" value="@i" id="star-@i" hidden />
+                                    <span class="star" data-value="@i">★</span>
+                                }
+                            </div>
+
+                            <span asp-validation-for="Feedback.Rate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nội dung</label>
+                            <textarea asp-for="Feedback.Content" class="form-control" rows="5"></textarea>
+                            <span asp-validation-for="Feedback.Content" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ảnh minh họa</label>
+                            <input asp-for="UploadImage" type="file" class="form-control" accept="image/*" />
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">Gửi phản hồi</button>
+
+                            <a asp-page="/Users/BookTours/MyBookings"
+                               asp-route-type="finished"
+                               class="btn btn-secondary">
+                                Quay lại
+                            </a>
+                        </div>
+                    </form>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const stars = document.querySelectorAll(".star[data-value]");
+        const radios = document.querySelectorAll("input[name='Feedback.Rate']");
+
+        stars.forEach(star => {
+            star.addEventListener("click", function () {
+                const value = this.dataset.value;
+
+                radios.forEach(r => {
+                    r.checked = (r.value === value);
+                });
+
+                stars.forEach(s => {
+                    s.classList.remove("active");
+                    if (parseInt(s.dataset.value) <= parseInt(value)) {
+                        s.classList.add("active");
+                    }
+                });
+            });
+        });
+    </script>
+}

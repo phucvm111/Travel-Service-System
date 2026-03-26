@@ -1,0 +1,41 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Agents.Accommodations.DeleteModel
+
+<div class="container mt-4">
+    <div class="card shadow border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Xóa khách sạn</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="text-danger">Bạn có chắc chắn muốn xóa khách sạn này không?</h5>
+
+            @if (Model.Accommodation?.Service != null)
+            {
+                <table class="table table-bordered mt-3">
+                    <tr>
+                        <th>Tên khách sạn</th>
+                        <td>@Model.Accommodation.Service.ServiceName</td>
+                    </tr>
+                    <tr>
+                        <th>Địa chỉ</th>
+                        <td>@Model.Accommodation.Service.Address</td>
+                    </tr>
+                    <tr>
+                        <th>Số điện thoại</th>
+                        <td>@Model.Accommodation.Service.PhoneNumber</td>
+                    </tr>
+                    <tr>
+                        <th>Hạng sao</th>
+                        <td>@Model.Accommodation.StarRating</td>
+                    </tr>
+                </table>
+            }
+
+            <form method="post">
+                <input type="hidden" asp-for="Accommodation!.ServiceId" />
+                <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                <a asp-page="./Index" class="btn btn-secondary">Hủy</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+﻿@page
+@model TravelSystem.Pages.Agents.Accommodations.IndexModel
+
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Quản lý khách sạn</h2>
+        <a asp-page="./Create" class="btn btn-success">Thêm khách sạn</a>
+    </div>
+
+    <form method="get" class="row g-2 mb-3">
+        <div class="col-md-4">
+            <input asp-for="SearchName" class="form-control" placeholder="Tìm theo tên khách sạn..." />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <a asp-page="./Index" class="btn btn-secondary">Xóa lọc</a>
+        </div>
+    </form>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>STT</th>
+                <th>Tên khách sạn</th>
+                <th>Địa chỉ</th>
+                <th>SĐT</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Hạng sao</th>
+                <th>Trạng thái</th>
+                <th style="width:260px;">Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int stt = (Model.PageNumber - 1) * Model.PageSize;
+            }
+            @if (Model.Accommodations.Any())
+            {
+                foreach (var item in Model.Accommodations)
+                {
+                    stt++;
+                    <tr>
+                        <td>@stt</td>
+                        <td>@item.Service?.ServiceName</td>
+                        <td>@item.Service?.Address</td>
+                        <td>@item.Service?.PhoneNumber</td>
+                        <td>@(item.CheckInTime?.ToString(@"HH\:mm"))</td>
+                        <td>@(item.CheckOutTime?.ToString(@"HH\:mm"))</td>
+                        <td>@(item.StarRating.HasValue ? $"{item.StarRating} sao" : "Chưa cập nhật")</td>
+                        <td>
+                            @if (item.Service?.Status == 1)
+                            {
+                                <span class="badge bg-success">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Ngừng hoạt động</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a asp-page="./Details" asp-route-id="@item.ServiceId" class="btn btn-info btn-sm text-white">Chi tiết</a>
+                                <a asp-page="./Edit" asp-route-id="@item.ServiceId" class="btn btn-warning btn-sm">Sửa</a>
+                                <a asp-page="./Delete" asp-route-id="@item.ServiceId" class="btn btn-danger btn-sm">Xóa</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" class="text-center">Không có khách sạn nào.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        <a class="page-link"
+                           asp-page="./Index"
+                           asp-route-pageNumber="@i"
+                           asp-route-searchName="@Model.SearchName">
+                            @i
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>
