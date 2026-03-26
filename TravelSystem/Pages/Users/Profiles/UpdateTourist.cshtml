@@ -3,8 +3,97 @@
 @{
     ViewData["Title"] = "Xác minh tài khoản";
 }
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    .upload-box {
+        border: 2px dashed #b8d9f5;
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.2s;
+        position: relative;
+        min-height: 160px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .upload-box:hover {
+            border-color: #28a745;
+        }
+
+        .upload-box input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+    .upload-preview {
+        max-height: 130px;
+        max-width: 100%;
+        border-radius: 6px;
+        margin-top: 8px;
+        display: none;
+        cursor: pointer;
+    }
+
+    .upload-icon {
+        font-size: 26px;
+        color: #b8d9f5;
+    }
+
+    .upload-label {
+        color: #888;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .temp-badge {
+        display: inline-block;
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffc107;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 2px 7px;
+        margin-top: 4px;
+    }
+
+    .img-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.85);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .img-modal-overlay.show {
+            display: flex;
+        }
+
+        .img-modal-overlay img {
+            max-width: 90vw;
+            max-height: 88vh;
+            border-radius: 6px;
+        }
+
+        .img-modal-overlay .close-btn {
+            position: absolute;
+            top: 18px;
+            right: 24px;
+            font-size: 32px;
+            color: white;
+            cursor: pointer;
+        }
+</style>
 
 <div class="container mt-5">
     <div class="card shadow p-4" style="max-width: 800px; margin: auto; border-radius: 15px;">
@@ -12,45 +101,135 @@
 
         <form method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="Tourist.TouristId" />
-            
-            @if (Model.Errors.ContainsKey("Images") || Model.Errors.ContainsKey("System"))
+
+            @* Hidden fields giữ đường dẫn ảnh tạm qua các lần submit *@
+            <input type="hidden" name="TempFrontImagePath" value="@Model.TempFrontImagePath" />
+            <input type="hidden" name="TempBackImagePath" value="@Model.TempBackImagePath" />
+
+            @if (Model.Errors.ContainsKey("System"))
             {
-                <div class="alert alert-danger">
-                    @Model.Errors.GetValueOrDefault("Images")
-                    @Model.Errors.GetValueOrDefault("System")
-                </div>
+                <div class="alert alert-danger">@Model.Errors["System"]</div>
             }
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Chủ tài khoản ngân hàng</label>
                     <input asp-for="Tourist.AccountHolderName" class="form-control" style="text-transform: uppercase;" />
-                    @if (Model.Errors.ContainsKey("Name")) { <span class="text-danger small">@Model.Errors["Name"]</span> }
+                    @if (Model.Errors.ContainsKey("Name"))
+                    {
+                        <span class="text-danger small">@Model.Errors["Name"]</span>
+                    }
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Ngân hàng</label>
-                    <input asp-for="Tourist.BankName" class="form-control" required />
+                    <input asp-for="Tourist.BankName" class="form-control" />
                 </div>
                 <div class="col-md-12 mb-3">
                     <label class="form-label fw-bold">Số tài khoản</label>
                     <input asp-for="Tourist.BankNumber" class="form-control" />
-                    @if (Model.Errors.ContainsKey("BankNumber")) { <span class="text-danger small">@Model.Errors["BankNumber"]</span> }
+                    @if (Model.Errors.ContainsKey("BankNumber"))
+                    {
+                        <span class="text-danger small">@Model.Errors["BankNumber"]</span>
+                    }
                 </div>
                 <div class="col-md-12 mb-3">
-                    <label class="form-label fw-bold">Số CCCD (9-12 số)</label>
+                    <label class="form-label fw-bold">Số CCCD (12 số)</label>
                     <input asp-for="Tourist.IdCard" class="form-control" />
-                    @if (Model.Errors.ContainsKey("IdCard")) { <span class="text-danger small">@Model.Errors["IdCard"]</span> }
+                    @if (Model.Errors.ContainsKey("IdCard"))
+                    {
+                        <span class="text-danger small">@Model.Errors["IdCard"]</span>
+                    }
                 </div>
 
-                <div class="col-md-6 mb-3 text-center">
-                    <label class="form-label">Mặt trước CCCD</label>
-                    <img id="p1" src="@(Model.Tourist.IdCardFrontImage ?? "/images/default-id.png")" class="img-thumbnail d-block mb-2" style="height:150px; width:100%; object-fit:cover" />
-                    <input type="file" name="FrontImageFile" class="form-control" onchange="document.getElementById('p1').src = window.URL.createObjectURL(this.files[0])" />
+                @* ── Ảnh mặt trước CCCD ── *@
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Mặt trước CCCD</label>
+                    <div class="upload-box">
+                        <input type="file" name="FrontImageFile" accept="image/*"
+                               onchange="previewImg(this,'prevFront','lblFront','icoFront')" />
+
+                        @* Ưu tiên: ảnh tạm mới upload > ảnh DB > placeholder *@
+                        @if (!string.IsNullOrEmpty(Model.TempFrontImagePath))
+                        {
+                            <i id="icoFront" class="fas fa-id-card upload-icon" style="display:none"></i>
+                            <span id="lblFront" class="upload-label" style="display:none">Nhấn để chọn ảnh</span>
+                            <img id="prevFront" class="upload-preview"
+                                 src="@Model.TempFrontImagePath"
+                                 style="display:block"
+                                 onclick="openImgModal(this.src)" />
+                        }
+                        else if (!string.IsNullOrEmpty(Model.Tourist.IdCardFrontImage))
+                        {
+                            <i id="icoFront" class="fas fa-id-card upload-icon" style="display:none"></i>
+                            <span id="lblFront" class="upload-label" style="display:none">Nhấn để chọn ảnh</span>
+                            <img id="prevFront" class="upload-preview"
+                                 src="@Model.Tourist.IdCardFrontImage"
+                                 style="display:block"
+                                 onclick="openImgModal(this.src)" />
+                        }
+                        else
+                        {
+                            <i id="icoFront" class="fas fa-id-card upload-icon"></i>
+                            <span id="lblFront" class="upload-label">Nhấn để chọn ảnh</span>
+                            <img id="prevFront" class="upload-preview" onclick="openImgModal(this.src)" />
+                        }
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.TempFrontImagePath) && !Model.Errors.ContainsKey("FrontImage"))
+                    {
+                        <span class="temp-badge">
+                            <i class="fas fa-check-circle me-1"></i>Ảnh đã chọn (giữ nguyên hoặc chọn lại)
+                        </span>
+                    }
+                    @if (Model.Errors.ContainsKey("FrontImage"))
+                    {
+                        <span class="text-danger small">@Model.Errors["FrontImage"]</span>
+                    }
                 </div>
-                <div class="col-md-6 mb-3 text-center">
-                    <label class="form-label">Mặt sau CCCD</label>
-                    <img id="p2" src="@(Model.Tourist.IdCardBackImage ?? "/images/default-id.png")" class="img-thumbnail d-block mb-2" style="height:150px; width:100%; object-fit:cover" />
-                    <input type="file" name="BackImageFile" class="form-control" onchange="document.getElementById('p2').src = window.URL.createObjectURL(this.files[0])" />
+
+                @* ── Ảnh mặt sau CCCD ── *@
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Mặt sau CCCD</label>
+                    <div class="upload-box">
+                        <input type="file" name="BackImageFile" accept="image/*"
+                               onchange="previewImg(this,'prevBack','lblBack','icoBack')" />
+
+                        @if (!string.IsNullOrEmpty(Model.TempBackImagePath))
+                        {
+                            <i id="icoBack" class="fas fa-id-card upload-icon" style="display:none"></i>
+                            <span id="lblBack" class="upload-label" style="display:none">Nhấn để chọn ảnh</span>
+                            <img id="prevBack" class="upload-preview"
+                                 src="@Model.TempBackImagePath"
+                                 style="display:block"
+                                 onclick="openImgModal(this.src)" />
+                        }
+                        else if (!string.IsNullOrEmpty(Model.Tourist.IdCardBackImage))
+                        {
+                            <i id="icoBack" class="fas fa-id-card upload-icon" style="display:none"></i>
+                            <span id="lblBack" class="upload-label" style="display:none">Nhấn để chọn ảnh</span>
+                            <img id="prevBack" class="upload-preview"
+                                 src="@Model.Tourist.IdCardBackImage"
+                                 style="display:block"
+                                 onclick="openImgModal(this.src)" />
+                        }
+                        else
+                        {
+                            <i id="icoBack" class="fas fa-id-card upload-icon"></i>
+                            <span id="lblBack" class="upload-label">Nhấn để chọn ảnh</span>
+                            <img id="prevBack" class="upload-preview" onclick="openImgModal(this.src)" />
+                        }
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.TempBackImagePath) && !Model.Errors.ContainsKey("BackImage"))
+                    {
+                        <span class="temp-badge">
+                            <i class="fas fa-check-circle me-1"></i>Ảnh đã chọn (giữ nguyên hoặc chọn lại)
+                        </span>
+                    }
+                    @if (Model.Errors.ContainsKey("BackImage"))
+                    {
+                        <span class="text-danger small">@Model.Errors["BackImage"]</span>
+                    }
                 </div>
             </div>
 
@@ -59,21 +238,49 @@
     </div>
 </div>
 
+@* Modal phóng to ảnh *@
+<div class="img-modal-overlay" id="imgModal" onclick="closeImgModal()">
+    <span class="close-btn">&times;</span>
+    <img id="imgModalSrc" src="" alt="preview" />
+</div>
+
 @section Scripts {
     <script>
-        // Hiển thị Pop-up nếu TempData có dữ liệu
+        function previewImg(input, previewId, labelId, iconId) {
+            if (!input.files || !input.files[0]) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const prev = document.getElementById(previewId);
+                prev.src = e.target.result;
+                prev.style.display = 'block';
+                document.getElementById(labelId).style.display = 'none';
+                document.getElementById(iconId).style.display  = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function openImgModal(src) {
+            document.getElementById('imgModalSrc').src = src;
+            document.getElementById('imgModal').classList.add('show');
+            event.stopPropagation();
+        }
+
+        function closeImgModal() {
+            document.getElementById('imgModal').classList.remove('show');
+        }
+
         @if (TempData["SuccessPopup"] != null)
         {
-            <text>
-            Swal.fire({
-                icon: 'success',
-                title: 'Thành công!',
-                text: '@TempData["SuccessPopup"]',
-                confirmButtonText: 'Về trang chủ'
-            }).then((result) => {
-                window.location.href = '/Index';
-            });
-            </text>
+                    <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công!',
+                        text: @Html.Raw(Json.Serialize(TempData["SuccessPopup"])),
+                        confirmButtonText: 'Về trang chủ'
+                    }).then(() => {
+                        window.location.href = '/Index';
+                    });
+                    </text>
         }
     </script>
 }

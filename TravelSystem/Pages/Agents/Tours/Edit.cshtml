@@ -13,31 +13,85 @@
         max-width: 1200px;
         margin: 40px auto;
         background: white;
-        padding: 30px;
+        padding: 40px;
         border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
-    .preview-box {
-        width: 100%;
-        height: 260px;
-        border: 1px dashed #ccc;
+    .flex-top {
         display: flex;
+        gap: 30px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+    .image-column {
+        flex: 0 0 420px;
+        display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        background: #fafafa;
-        border-radius: 8px;
     }
 
-    #preview {
-        width: 100%;
-        height: 100%;
+    .image-preview {
+        width: 400px;
+        height: 260px;
         object-fit: cover;
+        border-radius: 8px;
+        border: 1px dashed #ccc;
+        background: #fafafa;
     }
 
-    .service-box {
-        height: 150px;
+    .form-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .row-2col {
+        display: flex;
+        gap: 16px;
+    }
+
+        .row-2col > .col {
+            flex: 1;
+        }
+
+    .service-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 8px;
+    }
+
+    .service-col {
+        flex: 1;
+    }
+
+    .service-select {
+        height: 110px;
+    }
+
+    .btn-clear {
+        margin-top: 6px;
+        font-size: 13px;
+        padding: 5px 14px;
+        background: #FFC107;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        color: #000;
+        font-weight: 500;
+    }
+
+        .btn-clear:hover {
+            background: #e0a800;
+        }
+
+    .field-error {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 4px;
+        display: block;
     }
 
     .required {
@@ -64,77 +118,140 @@
         <input type="hidden" asp-for="Tour.TourId" />
         <input type="hidden" asp-for="ExistingImage" id="existingImageInput" />
 
-        <div class="row">
-            <div class="col-md-4">
+        <div class="flex-top">
+            @* Ảnh *@
+            <div class="image-column">
                 <label class="fw-bold">Hình ảnh Tour <span class="required">*</span></label>
-                <div class="preview-box mb-2">
-                    <img id="preview" src="/@Model.ExistingImage" style="@(string.IsNullOrEmpty(Model.ExistingImage) ? "display:none" : "")" />
-                </div>
-                <input type="file" asp-for="ImageFile" class="form-control" onchange="uploadTempImage(event)" />
+                <img id="preview" class="image-preview mb-2"
+                     src="@(string.IsNullOrEmpty(Model.ExistingImage) ? "" : "/" + Model.ExistingImage)"
+                     style="@(string.IsNullOrEmpty(Model.ExistingImage) ? "display:none" : "")"
+                     alt="Ảnh xem trước" />
+                <input type="file" asp-for="ImageFile" class="form-control mt-2" accept="image/*"
+                       onchange="onImageChange(event)" />
             </div>
 
-            <div class="col-md-8">
-                <div class="mb-3">
+            @* Form cơ bản *@
+            <div class="form-column">
+                <div class="form-group">
                     <label class="fw-bold">Tên tour <span class="required">*</span></label>
-                    <input asp-for="Tour.TourName" class="form-control" />
+                    <input asp-for="Tour.TourName" class="form-control" placeholder="Nhập tên tour" />
                     <span asp-validation-for="Tour.TourName" class="text-danger"></span>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+                <div class="row-2col">
+                    <div class="col">
                         <label class="fw-bold">Điểm bắt đầu <span class="required">*</span></label>
-                        <select asp-for="Tour.StartPlace" class="form-control" id="startProvince" data-current="@Model.Tour?.StartPlace">
-                            <option value="">Chọn tỉnh</option>
+                        <select asp-for="Tour.StartPlace" class="form-control" id="startProvince"
+                                data-current="@Model.Tour?.StartPlace">
+                            <option value="">Chọn tỉnh/thành</option>
                         </select>
+                        <span asp-validation-for="Tour.StartPlace" class="text-danger"></span>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col">
                         <label class="fw-bold">Điểm đến (Lọc dịch vụ) <span class="required">*</span></label>
-                        <select asp-for="Tour.EndPlace" class="form-control" id="endPlaceSelect" onchange="filterServices()">
+                        <select asp-for="Tour.EndPlace" class="form-control" id="endPlaceSelect"
+                                onchange="filterServices()">
                             <option value="">Chọn điểm đến</option>
                             @foreach (var p in Model.EndPlaces)
                             {
                                 <option value="@p" selected="@(Model.Tour.EndPlace == p ? "selected" : null)">@p</option>
                             }
                         </select>
+                        <span asp-validation-for="Tour.EndPlace" class="text-danger"></span>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="fw-bold">Số ngày <span class="required">*</span></label>
+                    <input type="number" asp-for="Tour.NumberOfDay" class="form-control"
+                           min="1" max="365" placeholder="VD: 3" />
+                    <span asp-validation-for="Tour.NumberOfDay" class="text-danger"></span>
                 </div>
             </div>
         </div>
 
-        <h4 class="section-title">Dịch vụ tại @Model.Tour.EndPlace</h4>
-        <div class="row">
-            <div class="col-md-4">
+        @* Dịch vụ — value = ServiceId (PK chung) *@
+        <h4 class="section-title">Dịch vụ tại <span id="endPlaceLabel">@Model.Tour?.EndPlace</span></h4>
+        <div class="service-row">
+            <div class="service-col">
                 <label>Nhà hàng</label>
-                <select name="SelectedServices" multiple class="form-control service-box" id="restaurantSelect">
-                    @foreach (var r in Model.Restaurants)
+                <input type="hidden" name="SelectedRestaurants" value="" />
+                <select name="SelectedRestaurants" multiple class="form-control service-select" id="restaurantSelect">
+                    @foreach (var s in Model.Restaurants)
                     {
-                        <option value="@r.ServiceId" data-address="@r.Service.Address" selected="@(Model.SelectedServices.Contains(r.ServiceId) ? "selected" : null)">@r.Service.ServiceName</option>
+                        var rSel = Model.SelectedRestaurants.Contains(s.ServiceId);
+                        <option value="@s.ServiceId" data-address="@s.Address"
+                                selected="@rSel">@s.Name</option>
                     }
                 </select>
+                <button type="button" class="btn-clear"
+                        onclick="clearSelect('restaurantSelect')">
+                    Xóa lựa chọn
+                </button>
             </div>
-            <div class="col-md-4">
-                <label>Khách sạn</label>
-                <select name="SelectedServices" multiple class="form-control service-box" id="hotelSelect">
-                    @foreach (var h in Model.Hotels)
+
+            <div class="service-col">
+                <label>Khách sạn / Lưu trú</label>
+                <input type="hidden" name="SelectedHotels" value="" />
+                <select name="SelectedHotels" multiple class="form-control service-select" id="hotelSelect">
+                    @foreach (var s in Model.Hotels)
                     {
-                        <option value="@h.ServiceId" data-address="@h.Service.Address" selected="@(Model.SelectedServices.Contains(h.ServiceId) ? "selected" : null)">@h.Service.ServiceName</option>
+                        var hSel = Model.SelectedHotels.Contains(s.ServiceId);
+                        <option value="@s.ServiceId" data-address="@s.Address"
+                                selected="@hSel">@s.Name</option>
                     }
                 </select>
+                <button type="button" class="btn-clear"
+                        onclick="clearSelect('hotelSelect')">
+                    Xóa lựa chọn
+                </button>
             </div>
-            <div class="col-md-4">
+
+            <div class="service-col">
                 <label>Giải trí</label>
-                <select name="SelectedServices" multiple class="form-control service-box" id="entertainmentSelect">
-                    @foreach (var e in Model.Entertainments)
+                <input type="hidden" name="SelectedEntertainments" value="" />
+                <select name="SelectedEntertainments" multiple class="form-control service-select" id="entertainmentSelect">
+                    @foreach (var s in Model.Entertainments)
                     {
-                        <option value="@e.ServiceId" data-address="@e.Service.Address" selected="@(Model.SelectedServices.Contains(e.ServiceId) ? "selected" : null)">@e.Service.ServiceName</option>
+                        var eSel = Model.SelectedEntertainments.Contains(s.ServiceId);
+                        <option value="@s.ServiceId" data-address="@s.Address"
+                                selected="@eSel">@s.Name</option>
                     }
                 </select>
+                <button type="button" class="btn-clear"
+                        onclick="clearSelect('entertainmentSelect')">
+                    Xóa lựa chọn
+                </button>
             </div>
         </div>
 
-        <div class="mt-4">
+        @* Textarea chi tiết *@
+        <div class="form-group mt-3">
+            <label class="fw-bold">Giới thiệu tour <span class="required">*</span></label>
+            <textarea asp-for="Tour.TourIntroduce" class="form-control" rows="4"
+                      placeholder="Giới thiệu về tour"></textarea>
+            <span asp-validation-for="Tour.TourIntroduce" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mt-2">
             <label class="fw-bold">Lịch trình chi tiết <span class="required">*</span></label>
-            <textarea asp-for="Tour.TourSchedule" class="form-control" rows="5"></textarea>
+            <textarea asp-for="Tour.TourSchedule" class="form-control" rows="5"
+                      placeholder="Lịch trình chi tiết"></textarea>
+            <span asp-validation-for="Tour.TourSchedule" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mt-2">
+            <label class="fw-bold">Bao gồm <span class="required">*</span></label>
+            <textarea asp-for="Tour.TourInclude" class="form-control" rows="3"
+                      placeholder="Những gì đã bao gồm trong tour"></textarea>
+            <span asp-validation-for="Tour.TourInclude" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mt-2">
+            <label class="fw-bold">Không bao gồm <span class="required">*</span></label>
+            <textarea asp-for="Tour.TourNonInclude" class="form-control" rows="3"
+                      placeholder="Những gì không bao gồm"></textarea>
+            <span asp-validation-for="Tour.TourNonInclude" class="text-danger"></span>
         </div>
 
         <div class="text-center mt-4">
@@ -145,34 +262,67 @@
 
 @section Scripts {
     <script>
-        function uploadTempImage(event) {
-            var reader = new FileReader();
-            reader.onload = function(){
-                var output = document.getElementById('preview');
-                output.src = reader.result;
-                output.style.display = 'block';
+        // ── Preview ảnh ───────────────────────────────────────────────────────
+        function onImageChange(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.getElementById("preview");
+                img.src = e.target.result;
+                img.style.display = "block";
+                document.getElementById("existingImageInput").value = "";
             };
-            reader.readAsDataURL(event.target.files[0]);
+            reader.readAsDataURL(file);
         }
 
+        // ── Load tỉnh/thành ───────────────────────────────────────────────────
+        const startProvinceEl = document.getElementById("startProvince");
+        if (startProvinceEl) {
+            fetch("https://provinces.open-api.vn/api/p/")
+                .then(r => r.json())
+                .then(data => {
+                    const current = startProvinceEl.getAttribute("data-current") || "";
+                    data.forEach(p => {
+                        const opt = document.createElement("option");
+                        opt.value = p.name;
+                        opt.text  = p.name;
+                        if (p.name.trim().toLowerCase() === current.trim().toLowerCase()) opt.selected = true;
+                        startProvinceEl.appendChild(opt);
+                    });
+                });
+        }
+
+        // ── Filter dịch vụ theo điểm đến ─────────────────────────────────────
         function filterServices() {
-            var place = document.getElementById("endPlaceSelect").value;
+            const ep = document.getElementById("endPlaceSelect");
+            if (!ep) return;
+
+            // Cập nhật label
+            const label = document.getElementById("endPlaceLabel");
+            if (label) label.textContent = ep.value || "...";
+
             ["restaurantSelect", "hotelSelect", "entertainmentSelect"].forEach(id => {
-                Array.from(document.getElementById(id).options).forEach(opt => {
-                    opt.style.display = (!place || opt.dataset.address === place) ? "" : "none";
+                const sel = document.getElementById(id);
+                if (!sel) return;
+                Array.from(sel.options).forEach(opt => {
+                    const addr = opt.getAttribute("data-address") || "";
+                    if (!ep.value || addr === ep.value) {
+                        opt.style.display = "";
+                    } else {
+                        opt.style.display = "none";
+                        opt.selected = false;
+                    }
                 });
             });
         }
 
-        fetch("https://provinces.open-api.vn/api/p/").then(r => r.json()).then(data => {
-            var s = document.getElementById("startProvince");
-            data.forEach(p => {
-                var o = new Option(p.name, p.name);
-                if(p.name === s.dataset.current) o.selected = true;
-                s.add(o);
-            });
-        });
+        function clearSelect(id) {
+            const sel = document.getElementById(id);
+            if (sel) Array.from(sel.options).forEach(o => o.selected = false);
+        }
 
+        // ── DOMContentLoaded ──────────────────────────────────────────────────
         document.addEventListener("DOMContentLoaded", filterServices);
     </script>
 }
