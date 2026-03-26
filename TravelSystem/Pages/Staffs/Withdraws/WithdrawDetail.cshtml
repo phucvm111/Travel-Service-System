@@ -1,0 +1,144 @@
+﻿@page
+@model TravelSystem.Pages.Staffs.Withdraws.WithdrawRequestDetailModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Xử lý rút tiền";
+}
+
+<div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+        <main class="container mt-4 mb-5">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-page="./WithdrawManage" class="btn btn-secondary me-3">
+                    <i class="fa fa-arrow-left"></i> Quay lại
+                </a>
+                <h3 class="mb-0 fw-bold">Chi tiết yêu cầu rút tiền</h3>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-primary text-white fw-bold">Thông tin yêu cầu</div>
+                        <div class="card-body">
+                            <table class="table table-borderless">
+                                <tr><td width="150" class="text-muted">Email:</td><td class="fw-bold">@Model.RequestItem.CreateByNavigation?.Gmail</td></tr>
+                                <tr><td class="text-muted">Ngân hàng:</td><td>@Model.RequestItem.BankNameSnapshot</td></tr>
+                                <tr><td class="text-muted">Số tài khoản:</td><td class="text-primary fw-bold">@Model.RequestItem.BankAccountSnapshot</td></tr>
+                                <tr><td class="text-muted">Số tiền rút:</td><td class="text-danger fw-bold fs-5">@Model.RequestItem.Amount?.ToString("N0") đ</td></tr>
+                                <tr><td class="text-muted">Ngày tạo:</td><td>@Model.RequestItem.RequestDate?.ToString("dd/MM/yyyy HH:mm")</td></tr>
+                                <tr>
+                                    <td class="text-muted">Trạng thái:</td>
+                                    <td>
+                                        <span class="badge @(Model.RequestItem.Status == "PENDING" ? "bg-warning text-dark" : Model.RequestItem.Status == "APPROVED" ? "bg-success" : "bg-danger")">
+                                            @Model.RequestItem.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-dark text-white fw-bold">Chứng từ xác thực (CCCD)</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="d-block mb-2 text-center">Mặt trước</small>
+                                    <img src="/@Model.UserIdentity?.IdCardFrontImage" class="img-thumbnail" style="cursor:zoom-in" data-bs-toggle="modal" data-bs-target="#imgModal" onclick="zoomImg(this.src)">
+                                </div>
+                                <div class="col-6">
+                                    <small class="d-block mb-2 text-center">Mặt sau</small>
+                                    <img src="/@Model.UserIdentity?.IdCardBackImage" class="img-thumbnail" style="cursor:zoom-in" data-bs-toggle="modal" data-bs-target="#imgModal" onclick="zoomImg(this.src)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.RequestItem.Status == "PENDING")
+            {
+                <div class="alert alert-info d-flex align-items-center">
+                    <i class="fas fa-info-circle me-3 fa-2x"></i>
+                    <div>
+                        <strong>Lưu ý dành cho Staff:</strong> Hãy kiểm tra kỹ ảnh CCCD và tên chủ tài khoản ngân hàng trùng khớp trước khi bấm duyệt.
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-3">
+                    <button class="btn btn-success btn-lg px-5 shadow" onclick="confirmApprove()">
+                        <i class="fa fa-check me-2"></i> PHÊ DUYỆT RÚT TIỀN
+                    </button>
+                    <button class="btn btn-outline-danger btn-lg px-5" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                        <i class="fa fa-times me-2"></i> TỪ CHỐI
+                    </button>
+                </div>
+            }
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="imgModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-transparent border-0"><img id="zoomedImg" class="w-100 rounded shadow"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="post" class="modal-content shadow-lg border-0" style="border-radius:15px">
+            <input type="hidden" name="id" value="@Model.RequestItem.Id">
+            <input type="hidden" name="action" value="reject">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Lý do từ chối rút tiền</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <textarea class="form-control" name="reason" rows="4" placeholder="Nhập lý do chi tiết..." required></textarea>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="submit" class="btn btn-danger px-4">Xác nhận từ chối</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function zoomImg(src) { document.getElementById('zoomedImg').src = src; }
+
+                function confirmApprove() {
+            Swal.fire({
+                title: 'Xác nhận duyệt tiền?',
+                text: "Tiền sẽ được trừ ngay lập tức khỏi ví hệ thống và ví User!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Đồng ý Duyệt',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.createElement("form");
+                    form.method = "POST";
+
+                    // Lấy Antiforgery Token từ trang (Razor tự tạo ẩn trong các form khác)
+                    // Hoặc đơn giản là dùng @Html.AntiForgeryToken() nếu chưa có
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                    form.innerHTML = `
+                        <input type="hidden" name="id" value="@Model.RequestItem.Id">
+                        <input type="hidden" name="action" value="approve">
+                        <input type="hidden" name="__RequestVerificationToken" value="${token}">
+                    `;
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+    </script>
+}
