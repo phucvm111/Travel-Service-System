@@ -118,7 +118,22 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Dùng Html.Raw để giữ nguyên tiếng Việt không bị mã hóa Unicode
+        var successMsg = '@Html.Raw(TempData["SuccessMessage"])';
+
+        if (successMsg && successMsg !== '') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: successMsg,
+                confirmButtonColor: '#28a745',
+                confirmButtonText: 'Đồng ý'
+            });
+        }
+
+        // Logic cũ của Hùng
         const input = document.getElementById('amountInput');
         const btn = document.getElementById('btnSubmit');
         if(input && btn) {
