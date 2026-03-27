@@ -16,6 +16,4 @@ public partial class Staff
     public virtual ICollection<RequestCancel> RequestCancels { get; set; } = new List<RequestCancel>();
 
     public virtual User StaffNavigation { get; set; } = null!;
-
-    public virtual ICollection<Voucher> Vouchers { get; set; } = new List<Voucher>();
 }

@@ -37,7 +37,7 @@ namespace TravelSystem.Pages.Staffs.Vouchers
 
             Voucher = await _context.Vouchers
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.VoucherId == id && x.StaffId == staff.StaffId);
+                .FirstOrDefaultAsync(x => x.VoucherId == id && x.UserId == staff.StaffId);
 
             if (Voucher == null)
             {
@@ -64,7 +64,7 @@ namespace TravelSystem.Pages.Staffs.Vouchers
             }
 
             var voucherInDb = await _context.Vouchers
-                .FirstOrDefaultAsync(x => x.VoucherId == id && x.StaffId == staff.StaffId);
+                .FirstOrDefaultAsync(x => x.VoucherId == id && x.UserId == staff.StaffId);
 
             if (voucherInDb == null)
             {

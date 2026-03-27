@@ -159,7 +159,7 @@
             var path = Context.Request.Path.ToString().ToLower();
         }
 
-        @if (roleId == 3 && path.StartsWith("/agents"))
+      @if (roleId == 3 && (path.StartsWith("/agents") || path.StartsWith("/staffs/vouchers")))
         {
             <partial name="SideNavAgent" />
         }

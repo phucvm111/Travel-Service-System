@@ -24,27 +24,39 @@ namespace TravelSystem.Pages.Staffs.Vouchers
             if (userId == null)
                 return RedirectToPage("/Auths/Login");
 
-            Voucher.Status = 1;
+            var roleId = HttpContext.Session.GetInt32("RoleId");
+
+            if (roleId == 3)
+            {
+                Voucher.Status = 2;
+            }
+            else if (roleId == 4)
+            {
+                Voucher.Status = 1;
+            }
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             var userId = HttpContext.Session.GetInt32("UserID");
+            var roleId = HttpContext.Session.GetInt32("RoleId");
+
             if (userId == null)
                 return RedirectToPage("/Auths/Login");
 
-            var staff = await _context.Staff
-                .FirstOrDefaultAsync(x => x.StaffId == userId.Value);
-
-            if (staff == null)
-            {
-                TempData["ErrorMessage"] = "Không tìm thấy thông tin nhân viên.";
-                return RedirectToPage("/Error");
-            }
-
-            ModelState.Remove("Voucher.Staff");
+            ModelState.Remove("Voucher.User");
             ModelState.Remove("Voucher.Bookings");
+
+            if (roleId == 3)
+            {
+                Voucher.Status = 2;
+            }
+            else if (roleId == 4)
+            {
+                Voucher.Status = 1;
+            }
 
             ValidateVoucher();
 
@@ -69,7 +81,7 @@ namespace TravelSystem.Pages.Staffs.Vouchers
             Voucher.VoucherCode = voucherCodeUpper;
             Voucher.VoucherName = Voucher.VoucherName?.Trim();
             Voucher.Description = Voucher.Description?.Trim();
-            Voucher.StaffId = staff.StaffId;
+            Voucher.UserId = userId.Value;
 
             _context.Vouchers.Add(Voucher);
             await _context.SaveChangesAsync();
@@ -167,11 +179,6 @@ namespace TravelSystem.Pages.Staffs.Vouchers
             else if (Voucher.Quantity < 0 || Voucher.Quantity > 100)
             {
                 ModelState.AddModelError("Voucher.Quantity", "Số lượng không thể âm và lớn hơn 100.");
-            }
-
-            if (!Voucher.Status.HasValue)
-            {
-                Voucher.Status = 1;
             }
         }
     }

@@ -27,9 +27,9 @@ public partial class Voucher
 
     public int? Status { get; set; }
 
-    public int? StaffId { get; set; }
+    public int? UserId { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
-    public virtual Staff? Staff { get; set; }
+    public virtual User? User { get; set; }
 }

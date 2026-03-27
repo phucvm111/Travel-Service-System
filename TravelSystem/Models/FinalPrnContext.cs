@@ -57,15 +57,16 @@ public partial class FinalPrnContext : DbContext
 
     public virtual DbSet<Wallet> Wallets { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-     //   => optionsBuilder.UseSqlServer("Data Source=DESKTOP-AQ0BKFI\\SQLEXPRESS;Initial Catalog=FinalPRN; Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+//        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-6HNG787;Initial Catalog=FinalPRN8; Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Accommodation>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__Accommod__4550733F95CE94F3");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Accommod__4550733F43CA2083");
 
             entity.Property(e => e.ServiceId)
                 .ValueGeneratedNever()
@@ -82,11 +83,11 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookId).HasName("PK__Booking__8BE5A12DEDDAAAED");
+            entity.HasKey(e => e.BookId).HasName("PK__Booking__8BE5A12DD47D5374");
 
             entity.ToTable("Booking");
 
-            entity.HasIndex(e => e.BookCode, "UQ__Booking__3BB8DAE658A9F243").IsUnique();
+            entity.HasIndex(e => e.BookCode, "UQ__Booking__3BB8DAE6CF8C8F8E").IsUnique();
 
             entity.Property(e => e.BookId).HasColumnName("bookID");
             entity.Property(e => e.BookCode).HasColumnName("bookCode");
@@ -132,7 +133,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Entertainment>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__Entertai__4550733FC8ADA18B");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Entertai__4550733F27D2BCC5");
 
             entity.ToTable("Entertainment");
 
@@ -154,7 +155,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__2613FDC4C99E5FC6");
+            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__2613FDC4D49D9306");
 
             entity.ToTable("Feedback");
 
@@ -175,7 +176,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<FundRequest>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__FundRequ__3214EC27924AB025");
+            entity.HasKey(e => e.Id).HasName("PK__FundRequ__3214EC27DEE0BDA2");
 
             entity.ToTable("FundRequest");
 
@@ -220,7 +221,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__46612FD835397F25");
+            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentM__46612FD86DB86E06");
 
             entity.ToTable("PaymentMethod");
 
@@ -232,7 +233,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<RequestCancel>(entity =>
         {
-            entity.HasKey(e => e.RequestCancelId).HasName("PK__RequestC__ED69358C19E6E99E");
+            entity.HasKey(e => e.RequestCancelId).HasName("PK__RequestC__ED69358C086CC394");
 
             entity.ToTable("RequestCancel");
 
@@ -257,7 +258,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Restaurant>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__Restaura__4550733F80F924F4");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Restaura__4550733F4F54D490");
 
             entity.ToTable("Restaurant");
 
@@ -278,7 +279,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__CD98460A4A79764D");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__CD98460AD627E99C");
 
             entity.ToTable("Role");
 
@@ -290,7 +291,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__Service__4550733FF35A495F");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Service__4550733F2EC8F0DF");
 
             entity.ToTable("Service");
 
@@ -323,7 +324,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Staff>(entity =>
         {
-            entity.HasKey(e => e.StaffId).HasName("PK__Staff__6465E19E157EBE9B");
+            entity.HasKey(e => e.StaffId).HasName("PK__Staff__6465E19E8E52B11C");
 
             entity.Property(e => e.StaffId)
                 .ValueGeneratedNever()
@@ -342,7 +343,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Tour>(entity =>
         {
-            entity.HasKey(e => e.TourId).HasName("PK__Tour__519D1D0367813E06");
+            entity.HasKey(e => e.TourId).HasName("PK__Tour__519D1D03AD8C2E95");
 
             entity.ToTable("Tour");
 
@@ -374,7 +375,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<TourDeparture>(entity =>
         {
-            entity.HasKey(e => e.DepartureId).HasName("PK__TourDepa__2BFAAAF5F65235C8");
+            entity.HasKey(e => e.DepartureId).HasName("PK__TourDepa__2BFAAAF529354A4F");
 
             entity.ToTable("TourDeparture");
 
@@ -398,7 +399,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<TourServiceDetail>(entity =>
         {
-            entity.HasKey(e => e.DetailId).HasName("PK__Tour_Ser__830778397AFF279A");
+            entity.HasKey(e => e.DetailId).HasName("PK__Tour_Ser__830778396C36C2B5");
 
             entity.ToTable("Tour_Service_Detail");
 
@@ -420,7 +421,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Tourist>(entity =>
         {
-            entity.HasKey(e => e.TouristId).HasName("PK__Tourist__BBB2E8D79FC166B6");
+            entity.HasKey(e => e.TouristId).HasName("PK__Tourist__BBB2E8D7EEC0358B");
 
             entity.ToTable("Tourist");
 
@@ -454,7 +455,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<TransactionHistory>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__9B57CF520DB8C06C");
+            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__9B57CF52CFB7188C");
 
             entity.ToTable("TransactionHistory");
 
@@ -481,7 +482,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<TravelAgent>(entity =>
         {
-            entity.HasKey(e => e.TravelAgentId).HasName("PK__TravelAg__8F86E844D538F44C");
+            entity.HasKey(e => e.TravelAgentId).HasName("PK__TravelAg__8F86E844FB595FC4");
 
             entity.ToTable("TravelAgent");
 
@@ -525,7 +526,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__CB9A1CDF1F4C29C4");
+            entity.HasKey(e => e.UserId).HasName("PK__User__CB9A1CDF33ED10AF");
 
             entity.ToTable("User");
 
@@ -564,7 +565,7 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Vat>(entity =>
         {
-            entity.HasKey(e => e.VatId).HasName("PK__VAT__429329E08F061098");
+            entity.HasKey(e => e.VatId).HasName("PK__VAT__429329E09EF64171");
 
             entity.ToTable("VAT");
 
@@ -591,11 +592,11 @@ public partial class FinalPrnContext : DbContext
 
         modelBuilder.Entity<Voucher>(entity =>
         {
-            entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__F533898941E0789C");
+            entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__F5338989FB2914D7");
 
             entity.ToTable("Voucher");
 
-            entity.HasIndex(e => e.VoucherCode, "UQ__Voucher__09FEFFB02BA32DEB").IsUnique();
+            entity.HasIndex(e => e.VoucherCode, "UQ__Voucher__09FEFFB08D5DDC98").IsUnique();
 
             entity.Property(e => e.VoucherId).HasColumnName("voucherID");
             entity.Property(e => e.Description).HasColumnName("description");
@@ -604,11 +605,9 @@ public partial class FinalPrnContext : DbContext
             entity.Property(e => e.MinDiscountAmount).HasColumnName("minDiscountAmount");
             entity.Property(e => e.PercentDiscount).HasColumnName("percentDiscount");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
-            entity.Property(e => e.StaffId).HasColumnName("staffID");
             entity.Property(e => e.StartDate).HasColumnName("startDate");
-            entity.Property(e => e.Status)
-                .HasDefaultValue(1)
-                .HasColumnName("status");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.UserId).HasColumnName("userID");
             entity.Property(e => e.VoucherCode)
                 .HasMaxLength(100)
                 .HasColumnName("voucherCode");
@@ -616,14 +615,14 @@ public partial class FinalPrnContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("voucherName");
 
-            entity.HasOne(d => d.Staff).WithMany(p => p.Vouchers)
-                .HasForeignKey(d => d.StaffId)
-                .HasConstraintName("FK_Voucher_Staff");
+            entity.HasOne(d => d.User).WithMany(p => p.Vouchers)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Voucher_User");
         });
 
         modelBuilder.Entity<Wallet>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Wallet__CB9A1CDF17CBF287");
+            entity.HasKey(e => e.UserId).HasName("PK__Wallet__CB9A1CDFF694BFBB");
 
             entity.ToTable("Wallet");
 
