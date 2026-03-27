@@ -22,7 +22,6 @@ namespace TravelSystem.Pages.Agents.Tours
         [BindProperty] public IFormFile? ImageFile { get; set; }
         [BindProperty] public string? ExistingImage { get; set; }
 
-        // Dịch vụ đã chọn — tách theo loại giống Create
         [BindProperty] public List<int> SelectedHotels { get; set; } = new();
         [BindProperty] public List<int> SelectedRestaurants { get; set; } = new();
         [BindProperty] public List<int> SelectedEntertainments { get; set; } = new();
@@ -31,6 +30,9 @@ namespace TravelSystem.Pages.Agents.Tours
         public List<ServiceItem> Hotels { get; set; } = new();
         public List<ServiceItem> Restaurants { get; set; } = new();
         public List<ServiceItem> Entertainments { get; set; } = new();
+
+        // Lưu số ngày gốc để hiển thị readonly trên View
+        public int OriginalNumberOfDay { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -42,8 +44,8 @@ namespace TravelSystem.Pages.Agents.Tours
 
             Tour = tour;
             ExistingImage = tour.Image;
+            OriginalNumberOfDay = tour.NumberOfDay;
 
-            // Lấy danh sách ServiceID đã có trong Tour_Service_Detail, phân loại theo ServiceName
             var existingDetails = await _context.TourServiceDetails
                 .Where(td => td.TourId == id && td.ServiceId != null)
                 .ToListAsync();
@@ -83,7 +85,6 @@ namespace TravelSystem.Pages.Agents.Tours
                 Tour.Image = ExistingImage;
             }
 
-            // Validate sơ bộ
             if (string.IsNullOrWhiteSpace(Tour.TourName) ||
                 string.IsNullOrWhiteSpace(Tour.StartPlace) ||
                 string.IsNullOrWhiteSpace(Tour.EndPlace))
@@ -96,53 +97,38 @@ namespace TravelSystem.Pages.Agents.Tours
             var existingTour = await _context.Tours.FindAsync(Tour.TourId);
             if (existingTour == null) return NotFound();
 
-            // Chỉ cập nhật các trường cho phép, giữ nguyên TravelAgentId, Rate, Status
+            // Lưu lại để hiển thị readonly đúng khi có lỗi
+            OriginalNumberOfDay = existingTour.NumberOfDay;
+
             existingTour.TourName = Tour.TourName;
             existingTour.StartPlace = Tour.StartPlace;
             existingTour.EndPlace = Tour.EndPlace;
-            existingTour.NumberOfDay = Tour.NumberOfDay;
             existingTour.Image = Tour.Image;
             existingTour.TourIntroduce = Tour.TourIntroduce;
             existingTour.TourSchedule = Tour.TourSchedule;
             existingTour.TourInclude = Tour.TourInclude;
             existingTour.TourNonInclude = Tour.TourNonInclude;
+            // ✅ KHÔNG cập nhật NumberOfDay — giữ nguyên giá trị gốc trong DB
 
-            // Cập nhật chi tiết dịch vụ
             var oldDetails = _context.TourServiceDetails.Where(d => d.TourId == Tour.TourId);
             _context.TourServiceDetails.RemoveRange(oldDetails);
 
-            // Ghi dịch vụ mới theo loại
             foreach (var sId in SelectedHotels.Where(x => x > 0))
-            {
                 _context.TourServiceDetails.Add(new TourServiceDetail
-                {
-                    TourId = Tour.TourId,
-                    ServiceId = sId,
-                    ServiceName = "Accommodation"
-                });
-            }
+                { TourId = Tour.TourId, ServiceId = sId, ServiceName = "Accommodation" });
+
             foreach (var sId in SelectedRestaurants.Where(x => x > 0))
-            {
                 _context.TourServiceDetails.Add(new TourServiceDetail
-                {
-                    TourId = Tour.TourId,
-                    ServiceId = sId,
-                    ServiceName = "Restaurant"
-                });
-            }
+                { TourId = Tour.TourId, ServiceId = sId, ServiceName = "Restaurant" });
+
             foreach (var sId in SelectedEntertainments.Where(x => x > 0))
-            {
                 _context.TourServiceDetails.Add(new TourServiceDetail
-                {
-                    TourId = Tour.TourId,
-                    ServiceId = sId,
-                    ServiceName = "Entertainment"
-                });
-            }
+                { TourId = Tour.TourId, ServiceId = sId, ServiceName = "Entertainment" });
 
             await _context.SaveChangesAsync();
             await _hub.Clients.All.SendAsync("loadAll");
 
+            TempData["EditSuccess"] = "1";
             return RedirectToPage("./Index");
         }
 
@@ -151,15 +137,10 @@ namespace TravelSystem.Pages.Agents.Tours
             var agent = _context.TravelAgents.FirstOrDefault(a => a.UserId == userId);
             if (agent == null) return;
 
-            // Lấy ServiceId thuộc từng sub-type
-            var hotelSids = _context.Accommodations
-                .Select(a => a.ServiceId).ToHashSet();
-            var restaurantSids = _context.Restaurants
-                .Select(r => r.ServiceId).ToHashSet();
-            var entertainmentSids = _context.Entertainments
-                .Select(e => e.ServiceId).ToHashSet();
+            var hotelSids = _context.Accommodations.Select(a => a.ServiceId).ToHashSet();
+            var restaurantSids = _context.Restaurants.Select(r => r.ServiceId).ToHashSet();
+            var entertainmentSids = _context.Entertainments.Select(e => e.ServiceId).ToHashSet();
 
-            // Lấy tất cả Service của agent đang hoạt động
             var allServices = _context.Services
                 .Where(s => s.AgentId == agent.TravelAgentId && s.Status == 1)
                 .Select(s => new ServiceItem
@@ -180,11 +161,8 @@ namespace TravelSystem.Pages.Agents.Tours
                 .Distinct()
                 .ToList();
 
-            // Đảm bảo điểm đến hiện tại có trong danh sách select, kể cả khi dịch vụ của nó đã bị xóa
             if (!string.IsNullOrWhiteSpace(Tour?.EndPlace) && !EndPlaces.Contains(Tour.EndPlace))
-            {
                 EndPlaces.Add(Tour.EndPlace);
-            }
         }
     }
 }
