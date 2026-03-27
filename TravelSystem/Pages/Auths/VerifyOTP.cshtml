@@ -1,0 +1,203 @@
+﻿@page
+@model TravelSystem.Pages.Auths.VerifyOTPModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác nhận OTP - TravelSystem</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2021&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .otp-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            background: #e8f5e9;
+            color: #198754;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 20px;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            margin: 0 5px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.2s;
+            background: white;
+        }
+
+            .otp-input:focus {
+                border-color: #198754;
+                box-shadow: 0 0 8px rgba(25, 135, 84, 0.2);
+                outline: none;
+                transform: scale(1.05);
+            }
+
+        .btn-verify {
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            margin-top: 25px;
+        }
+
+        #timer {
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: #fff3f3;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .resend-section {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="otp-card">
+        <div class="icon-circle">
+            <i class="bi bi-patch-check"></i>
+        </div>
+
+        <h3 class="fw-bold">Xác thực OTP</h3>
+        <p class="text-muted mb-4">Nhập mã 6 số đã được gửi đến email của bạn.</p>
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success py-2 small mb-3">
+                <i class="bi bi-check-circle-fill"></i> @Model.SuccessMessage
+            </div>
+        }
+
+        <form method="post" id="otpForm">
+            <div class="d-flex justify-content-center mb-3">
+                @for (int i = 0; i < 6; i++)
+                {
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" required />
+                }
+            </div>
+
+            <input type="hidden" asp-for="OTP" id="fullOtp" />
+
+            @if (!string.IsNullOrEmpty(Model.Error))
+            {
+                <div class="alert alert-danger py-2 small mb-3">
+                    <i class="bi bi-exclamation-triangle-fill"></i> @Model.Error
+                </div>
+            }
+
+            <button type="submit" class="btn btn-success w-100 btn-verify">
+                XÁC NHẬN <i class="bi bi-check2-circle ms-2"></i>
+            </button>
+        </form>
+
+        <div class="resend-section">
+            <div id="timerContainer" class="mb-2">
+                <span id="timer" class="text-danger">
+                    <i class="bi bi-hourglass-split"></i> Hết hạn sau: 120s
+                </span>
+            </div>
+
+            <form method="post" asp-page-handler="Resend">
+                <button id="resendBtn" type="submit" class="btn btn-link text-decoration-none fw-bold p-0" disabled>
+                    Gửi lại mã mới
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll(".otp-input");
+        const fullOtpInput = document.getElementById("fullOtp");
+
+        // Xử lý tự động chuyển ô và chỉ cho nhập số
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", (e) => {
+                input.value = input.value.replace(/[^0-9]/g, '');
+                if (input.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+                updateOTP();
+            });
+
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && !input.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener("paste", (e) => {
+                let data = e.clipboardData.getData("text").trim();
+                if (data.length === 6 && /^\d+$/.test(data)) {
+                    data.split("").forEach((char, i) => { if(inputs[i]) inputs[i].value = char; });
+                    updateOTP();
+                }
+                e.preventDefault();
+            });
+        });
+
+        function updateOTP() {
+            let otp = "";
+            inputs.forEach(i => otp += i.value);
+            fullOtpInput.value = otp;
+        }
+
+        // Xử lý Đếm ngược
+        let time = 120;
+        const timerDisplay = document.getElementById("timer");
+        const resendBtn = document.getElementById("resendBtn");
+
+        const countdown = setInterval(() => {
+            time--;
+            if (timerDisplay) timerDisplay.innerHTML = `<i class="bi bi-hourglass-split"></i> Hết hạn sau: ${time}s`;
+
+            if (time <= 0) {
+                clearInterval(countdown);
+                if (timerDisplay) timerDisplay.parentElement.style.display = "none";
+                resendBtn.disabled = false;
+                resendBtn.classList.add("text-success");
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>
