@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using NuGet.DependencyResolver;
 using TravelSystem.Models;
 using TravelSystem.Services;
 
@@ -42,7 +43,6 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
                 .Include(r => r.Book).ThenInclude(b => b.TourDeparture).ThenInclude(d => d.Tour)
                 .Include(r => r.Book.User) // Đảm bảo lấy được thông tin khách
                 .FirstOrDefaultAsync(r => r.RequestCancelId == requestId);
-
             if (request == null) return NotFound();
 
             decimal refundAmount = CalculateRefundAmount(request);

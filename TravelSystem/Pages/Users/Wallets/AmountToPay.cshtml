@@ -75,9 +75,10 @@
                                 <td>@item.Description</td>
                                 <td class="text-center">
                                     @{
+                                        // Thêm trường hợp "RECEIVE" vào logic màu xanh
                                         var badgeClass = item.TransactionType switch
                                         {
-                                            "RECHARGE" => "bg-success",
+                                            "RECHARGE" or "RECEIVE" => "bg-success", // Cả nạp tiền và nhận tiền đều màu xanh
                                             "PURCHASE" => "bg-danger",
                                             "REFUND" => "bg-warning text-dark",
                                             "WITHDRAW" => "bg-info text-white",
@@ -86,6 +87,7 @@
                                         var typeLabel = item.TransactionType switch
                                         {
                                             "RECHARGE" => "Nạp tiền",
+                                            "RECEIVE" => "Hoàn tiền", // Đổi label RECEIVE thành Hoàn tiền cho thân thiện
                                             "PURCHASE" => "Thanh toán",
                                             "REFUND" => "Hoàn tiền",
                                             "WITHDRAW" => "Rút tiền",
@@ -94,14 +96,17 @@
                                     }
                                     <span class="badge @badgeClass" style="width: 85px;">@typeLabel</span>
                                 </td>
+
+                                @* --- PHẦN HIỂN THỊ BIẾN ĐỘNG TIỀN (+/-) --- *@
                                 <td class="text-end fw-bold pe-3">
-                                    @if (item.TransactionType == "RECHARGE" || item.TransactionType == "REFUND")
+                                    @* Sửa điều kiện: RECHARGE hoặc RECEIVE (Hoàn tiền) đều là + tiền *@
+                                    @if (item.TransactionType == "RECHARGE" || item.TransactionType == "RECEIVE" || item.TransactionType == "REFUND")
                                     {
-                                        <span class="text-success">+ @item.Amount?.ToString("N0")</span>
+                                        <span class="text-success">+ @item.Amount?.ToString("N0") VNĐ</span>
                                     }
                                     else
                                     {
-                                        <span class="text-danger">- @item.Amount?.ToString("N0")</span>
+                                        <span class="text-danger">- @item.Amount?.ToString("N0") VNĐ</span>
                                     }
                                 </td>
                             </tr>
