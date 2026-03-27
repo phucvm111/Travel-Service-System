@@ -34,8 +34,8 @@ namespace TravelSystem.Pages.Staffs.Vouchers
 
             Voucher = await _context.Vouchers
                 .AsNoTracking()
-                .Include(x => x.Staff)
-                .FirstOrDefaultAsync(x => x.VoucherId == id && x.StaffId == staff.StaffId);
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.VoucherId == id && x.UserId == staff.StaffId);
 
             if (Voucher == null)
             {
