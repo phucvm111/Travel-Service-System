@@ -70,17 +70,17 @@ namespace TravelSystem.Pages.Payment
                     });
 
                     // CẬP NHẬT VÍ VÀ GHI LOG CHO HỆ THỐNG (Mặc định Admin ID là 6)
-                    var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 6);
+                    var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
                     if (systemWallet != null)
                     {
                         systemWallet.Balance += totalPrice;
 
                         _context.TransactionHistories.Add(new TransactionHistory
                         {
-                            UserId = 6,
+                            UserId = 1,
                             Amount = totalPrice,
                             TransactionType = "RECEIVE",
-                            Description = $"Nhận thanh toán PayOS từ khách {BookDetail.Gmail} cho tour {Tour.TourName}",
+                            Description = $"Nhận thanh toán tài khoản từ khách {BookDetail.Gmail} cho tour {Tour.TourName}",
                             TransactionDate = DateTime.Now
                         });
                     }

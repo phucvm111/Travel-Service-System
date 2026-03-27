@@ -31,6 +31,8 @@
                                 <label class="form-label fw-bold">Loại giao dịch</label>
                                 <select name="Status" class="form-select" onchange="this.form.submit()">
                                     <option value="0">Tất cả loại</option>
+                                    @* Thêm dòng DEPOSIT này vào *@
+                                    <option value="DEPOSIT" selected="@(Model.Status == "DEPOSIT")">User nạp tiền vào hệ thống</option>
                                     <option value="RECEIVE" selected="@(Model.Status == "RECEIVE")">Khách thanh toán Tour</option>
                                     <option value="REFUND" selected="@(Model.Status == "REFUND")">Hoàn tiền cho khách</option>
                                     <option value="PURCHASE" selected="@(Model.Status == "PURCHASE")">Đại lý rút tiền</option>
@@ -70,19 +72,26 @@
                                                     {
                                                         <span class="badge bg-success">Nhận tiền</span>
                                                     }
+                                                    else if (tx.TransactionType == "DEPOSIT")
+                                                    {
+                                                        @* Thêm Badge cho Nạp tiền *@
+                                                        <span class="badge bg-primary">User nạp tiền</span>
+                                                    }
                                                     else if (tx.TransactionType == "REFUND")
                                                     {
-
                                                         <span class="badge bg-warning text-dark">Hoàn tiền khách</span>
+                                                    }
+                                                    else if (tx.TransactionType == "PURCHASE" || tx.TransactionType == "PAYMENT")
+                                                    {
+                                                        <span class="badge bg-danger">Hệ thống chi trả</span>
                                                     }
                                                     else
                                                     {
-
                                                         <span class="badge bg-info text-dark">@tx.TransactionType</span>
                                                     }
                                                 </td>
-                                                <td class="text-end fw-bold @(tx.TransactionType == "RECEIVE" ? "text-success" : "text-danger")">
-                                                    @(tx.TransactionType == "RECEIVE" ? "+" : "-") @tx.Amount?.ToString("N0") đ
+                                                <td class="text-end fw-bold @(tx.TransactionType == "RECEIVE" || tx.TransactionType == "DEPOSIT" ? "text-success" : "text-danger")">
+                                                    @(tx.TransactionType == "RECEIVE" || tx.TransactionType == "DEPOSIT" ? "+" : "-") @tx.Amount?.ToString("N0") đ
                                                 </td>
                                             </tr>
                                         }

@@ -40,6 +40,7 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
         {
             var request = await _context.RequestCancels
                 .Include(r => r.Book).ThenInclude(b => b.TourDeparture).ThenInclude(d => d.Tour)
+                .Include(r => r.Book.User) // Đảm bảo lấy được thông tin khách
                 .FirstOrDefaultAsync(r => r.RequestCancelId == requestId);
 
             if (request == null) return NotFound();
@@ -49,53 +50,62 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 1. Kiểm tra số dư ví hệ thống (Admin ID: 1)
+                // 1. Lấy ví hệ thống (Admin ID: 1) và ví khách
                 var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
+                var userWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == request.Book.UserId);
+
                 if (systemWallet == null || systemWallet.Balance < refundAmount)
                 {
                     TempData["Error"] = "Ví hệ thống không đủ số dư để hoàn tiền!";
                     return RedirectToPage(new { id = requestId });
                 }
 
-                // 2. Cập nhật trạng thái
+                // 2. Cập nhật số dư 2 ví
+                systemWallet.Balance -= refundAmount;
+                userWallet.Balance += refundAmount;
+
+                // 3. Ghi lịch sử giao dịch cho HỆ THỐNG (BỔ SUNG TẠI ĐÂY)
+                _context.TransactionHistories.Add(new TransactionHistory
+                {
+                    UserId = 1, // ID của hệ thống
+                    Amount = refundAmount,
+                    TransactionType = "REFUND",
+                    Description = $"Hoàn tiền đơn #{request.Book.BookCode} cho khách {request.Book.Gmail} | [Ví tổng: {systemWallet.Balance:N0}đ]",
+                    TransactionDate = DateTime.Now
+                });
+
+                // 4. Ghi lịch sử giao dịch cho KHÁCH HÀNG
+                _context.TransactionHistories.Add(new TransactionHistory
+                {
+                    UserId = request.Book.UserId,
+                    Amount = refundAmount,
+                    TransactionType = "RECEIVE", // Khách nhận tiền hoàn
+                    Description = $"Nhận tiền hoàn tour {request.Book.TourDeparture.Tour.TourName} | [Số dư: {userWallet.Balance:N0}đ]",
+                    TransactionDate = DateTime.Now
+                });
+
+                // 5. Cập nhật trạng thái yêu cầu và đơn hàng
                 request.Status = "FINISHED";
                 request.Book.Status = 6; // Đã hoàn tiền
 
-                // 3. Thực hiện chuyển tiền vào ví khách
-                var userWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == request.Book.UserId);
-                if (userWallet != null)
-                {
-                    systemWallet.Balance -= refundAmount;
-                    userWallet.Balance += refundAmount;
-
-                    // 4. Ghi lịch sử giao dịch REFUND cho khách
-                    _context.TransactionHistories.Add(new TransactionHistory
-                    {
-                        UserId = request.Book.UserId,
-                        Amount = refundAmount,
-                        TransactionType = "REFUND",
-                        Description = $"Hoàn tiền tour: {request.Book.TourDeparture.Tour.TourName}",
-                        TransactionDate = DateTime.Now
-                    });
-                }
-
-                // 5. Trả lại chỗ trống cho Tour
+                // 6. Trả lại chỗ trống cho Tour
                 int seats = (request.Book.NumberAdult ?? 0) + (request.Book.NumberChildren ?? 0);
                 request.Book.TourDeparture.AvailableSeat += seats;
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                // 6. Gửi Email thông báo thành công
+                // 7. Gửi Email thông báo
                 string content = $"<h3>Chào {request.Book.FirstName},</h3><p>Yêu cầu hủy tour <b>{request.Book.TourDeparture.Tour.TourName}</b> đã được duyệt.</p><p>Số tiền <b>{refundAmount:N0} VNĐ</b> đã được hoàn trả vào ví của bạn.</p>";
                 await _emailService.SendAsync(request.Book.Gmail, "Xác nhận huỷ chuyến đi thành công", content);
 
                 return RedirectToPage(new { id = requestId, statusAction = "approved" });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                return RedirectToPage(new { id = requestId, statusAction = "failed" });
+                TempData["Error"] = "Có lỗi xảy ra: " + ex.Message;
+                return RedirectToPage(new { id = requestId });
             }
         }
 

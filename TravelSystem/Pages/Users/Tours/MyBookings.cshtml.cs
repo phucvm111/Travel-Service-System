@@ -30,38 +30,34 @@ namespace TravelSystem.Pages.Users.Tours
         public async Task<IActionResult> OnGetAsync()
         {
             int? userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null)
-            {
-                return RedirectToPage("/Auths/Login");
-            }
+            if (userId == null) return RedirectToPage("/Auths/Login");
 
             var query = _context.Bookings
-                .Include(b => b.TourDeparture)
-                    .ThenInclude(td => td.Tour)
+                .Include(b => b.TourDeparture).ThenInclude(td => td.Tour)
                 .Include(b => b.Feedbacks)
-                .Include(b => b.RequestCancels)
-                .Where(b => b.UserId == userId);
+                .Where(b => b.UserId == userId)
+                .AsQueryable();
 
             if (Filter == "finished")
             {
-                query = query.Where(b => b.Status == 4);
+                // Hiển thị tour đã xong (4) hoặc đã hoàn tiền xong (6)
+                query = query.Where(b => b.Status == 4 || b.Status == 6 || b.Status == 2 || b.Status == 3);
             }
             else
             {
-                query = query.Where(b => b.Status != 4);
+                // HIỂN THỊ TRONG CHUYẾN ĐI:
+                // Status 1: Đã thanh toán
+                // Status 5: Đã yêu cầu hoàn tiền (đang chờ duyệt)
+                // Status 7: Chờ thanh toán (để khách biết còn đơn chưa trả tiền)
+                query = query.Where(b => b.Status == 1 || b.Status == 5);
             }
 
+            // ... (Phần phân trang giữ nguyên)
             int totalItems = await query.CountAsync();
             TotalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
-
-            if (CurrentPage < 1) CurrentPage = 1;
-            if (TotalPages > 0 && CurrentPage > TotalPages) CurrentPage = TotalPages;
-
-            BookingList = await query
-                .OrderByDescending(b => b.BookDate)
-                .Skip((CurrentPage - 1) * PageSize)
-                .Take(PageSize)
-                .ToListAsync();
+            BookingList = await query.OrderByDescending(b => b.BookDate)
+                                     .Skip((CurrentPage - 1) * PageSize)
+                                     .Take(PageSize).ToListAsync();
 
             return Page();
         }
@@ -145,37 +141,37 @@ namespace TravelSystem.Pages.Users.Tours
         public async Task<IActionResult> OnPostCancelAsync(int bookId, string? reason)
         {
             int? userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null)
-            {
-                return RedirectToPage("/Auths/Login");
-            }
+            if (userId == null) return RedirectToPage("/Auths/Login");
 
             var booking = await _context.Bookings
                 .FirstOrDefaultAsync(b => b.BookId == bookId && b.UserId == userId);
 
-            if (booking == null)
+            if (booking == null) return RedirectToPage(new { filter = Filter });
+
+            // Chỉ cho phép gửi yêu cầu hoàn tiền khi trạng thái là 1 (Đã thanh toán)
+            if (booking.Status == 1)
             {
-                TempData["Error"] = "Không tìm thấy đơn hàng.";
-                return RedirectToPage(new { filter = Filter });
+                booking.Status = 5; // Chuyển sang: Đã yêu cầu hoàn tiền
+
+                var requestCancel = new RequestCancel
+                {
+                    BookId = bookId,
+                    Reason = string.IsNullOrWhiteSpace(reason) ? "Người dùng yêu cầu hủy và hoàn tiền." : reason.Trim(),
+                    RequestDate = DateOnly.FromDateTime(DateTime.Now),
+                    Status = "PENDING"
+                };
+
+                _context.RequestCancels.Add(requestCancel);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Gửi yêu cầu hoàn tiền thành công!";
+            }
+            else if (booking.Status == 7) // Đang chờ thanh toán mà muốn hủy
+            {
+                booking.Status = 2; // Hủy thẳng luôn vì chưa mất tiền
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Đã hủy đơn đặt thành công.";
             }
 
-            if (booking.Status != 1 && booking.Status != 7)
-            {
-                TempData["Error"] = "Đơn hàng này không thể hủy.";
-                return RedirectToPage(new { filter = Filter });
-            }
-
-            var requestCancel = new RequestCancel
-            {
-                BookId = bookId,
-                Reason = string.IsNullOrWhiteSpace(reason) ? "Khách hàng muốn hủy chuyến đi." : reason.Trim(),
-                RequestDate = DateOnly.FromDateTime(DateTime.Now), // Fix: Convert DateTime to DateOnly
-            };
-
-            _context.RequestCancels.Add(requestCancel);
-            await _context.SaveChangesAsync();
-
-            TempData["Success"] = "Gửi yêu cầu hủy thành công.";
             return RedirectToPage(new { filter = Filter });
         }
     }
