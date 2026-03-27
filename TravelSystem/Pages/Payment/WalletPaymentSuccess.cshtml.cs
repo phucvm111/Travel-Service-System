@@ -26,48 +26,56 @@ namespace TravelSystem.Pages.Wallet
             {
                 try
                 {
-                    // 1. Tìm bản ghi FundRequest đang ở trạng thái pending
+                    // 1. Tìm bản ghi FundRequest
                     var fundRequest = await _context.FundRequests
                         .FirstOrDefaultAsync(f => f.ReferenceCode == referenceCode && f.Status == "pending");
 
-                    if (fundRequest == null)
-                    {
-                        // Có thể giao dịch đã được xử lý hoặc không tồn tại
-                        return RedirectToPage("/Wallet/AmountToPay");
-                    }
+                    if (fundRequest == null) return RedirectToPage("/Wallet/AmountToPay");
 
                     // 2. Cập nhật trạng thái FundRequest
                     fundRequest.Status = "approved";
                     fundRequest.ApprovedDate = DateTime.Now;
-                    fundRequest.ApproveBy = 1; // Admin ID
+                    fundRequest.ApproveBy = 1;
 
-                    // 3. Cộng tiền vào ví (Khách và Hệ thống)
+                    // 3. Lấy ví (Hùng lưu ý ví hệ thống ID là 1 hay 6 nhé, trong SQL bạn gửi Admin là 1)
                     var touristWallet = await _context.Wallets.FindAsync(userId);
-                    var systemWallet = await _context.Wallets.FindAsync(6); // Ví hệ thống ID 6
+                    var systemWallet = await _context.Wallets.FindAsync(1); // Trong DB mới Admin ID là 1
 
+                    if (touristWallet == null || systemWallet == null) throw new Exception("Ví không tồn tại");
+
+                    // Cộng tiền vào cả 2 ví
                     touristWallet.Balance += amount;
                     systemWallet.Balance += amount;
 
-                    // 4. Thêm Transaction History
-                    var history = new TransactionHistory
+                    // 4. Ghi Log lịch sử giao dịch cho KHÁCH
+                    _context.TransactionHistories.Add(new TransactionHistory
                     {
                         UserId = userId,
                         Amount = amount,
                         TransactionType = "RECHARGE",
-                        Description = $"Nạp tiền thành công qua PayOS (Ref: {referenceCode})",
+                        Description = $"Nạp tiền qua PayOS (Ref: {referenceCode}) | [Số dư: {touristWallet.Balance:N0}đ]",
                         TransactionDate = DateTime.Now
-                    };
-                    _context.TransactionHistories.Add(history);
+                    });
+
+                    // 5. Ghi Log lịch sử giao dịch cho HỆ THỐNG (BỔ SUNG TẠI ĐÂY)
+                    _context.TransactionHistories.Add(new TransactionHistory
+                    {
+                        UserId = 1, // ID của Admin/Hệ thống
+                        Amount = amount,
+                        TransactionType = "DEPOSIT", // Hoặc "INCOME" tùy bạn quy định
+                        Description = $"Khách {userId} nạp tiền qua PayOS | [Ví tổng: {systemWallet.Balance:N0}đ]",
+                        TransactionDate = DateTime.Now
+                    });
 
                     await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
 
-                    Customer = await _context.Users.FindAsync(userId); // Lấy thông tin user để hiện tên/email
-                    Amount = amount; // Gán số tiền nạp để hiện lên giao diện
+                    Customer = await _context.Users.FindAsync(userId);
+                    Amount = amount;
 
-                    return Page(); // Hiển thị trang nạp thành công
+                    return Page();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
                     return RedirectToPage("/Payment/WalletPaymentFalse");

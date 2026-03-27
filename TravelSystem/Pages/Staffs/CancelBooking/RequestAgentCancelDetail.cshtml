@@ -1,0 +1,93 @@
+﻿@page "{id:int}"
+@* Sửa Manage thành RequestAgentCancelDetail *@
+@model TravelSystem.Pages.Staffs.CancelBooking.RequestAgentCancelDetailModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Chi tiết đơn hủy";
+    var r = Model.RequestItem;
+}
+
+<div id="layoutSidenav">
+
+    <div id="layoutSidenav_content">
+        <main class="container-fluid px-4">
+            <div class="d-flex align-items-center mt-4 mb-4">
+                @* Hùng lưu ý: asp-page này trỏ về trang danh sách của bạn *@
+                <a asp-page="./ManageRequestAgentCancel" class="btn btn-outline-secondary me-3">
+                    <i class="fas fa-arrow-left"></i> Quay lại
+                </a>
+                <h2 class="fw-bold mb-0 text-dark">Thông tin chi tiết yêu cầu hủy</h2>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-white py-3 fw-bold text-primary">
+                            <i class="fas fa-file-invoice me-2"></i>Chi tiết đơn đặt tour
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row mb-3">
+                                <div class="col-sm-4 text-muted small text-uppercase">Mã đơn hàng:</div>
+                                <div class="col-sm-8 fw-bold">#@r.Book?.BookCode</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 text-muted small text-uppercase">Tên tour du lịch:</div>
+                                <div class="col-sm-8 fw-bold text-dark">@r.Book?.TourDeparture?.Tour?.TourName</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 text-muted small text-uppercase">Ngày đặt:</div>
+                                <div class="col-sm-8">@r.Book?.BookDate?.ToString("dd/MM/yyyy")</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 text-muted small text-uppercase">Số lượng khách:</div>
+                                <div class="col-sm-8">@r.Book?.NumberAdult người lớn, @r.Book?.NumberChildren trẻ em</div>
+                            </div>
+                            <hr />
+                            <div class="row mb-3 align-items-center">
+                                <div class="col-sm-4 text-muted small text-uppercase">Giá trị đơn hàng:</div>
+                                <div class="col-sm-8 h4 mb-0 text-danger fw-bold">@r.Book?.TotalPrice?.ToString("N0") đ</div>
+                            </div>
+                            <div class="row mb-0">
+                                <div class="col-sm-4 text-muted small text-uppercase">Lý do hủy (từ Đại lý):</div>
+                                <div class="col-sm-8 bg-light p-3 rounded italic">"@r.Reason"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card shadow-sm border-0 mb-4 text-center">
+                        <div class="card-body py-4">
+                            <p class="text-muted small text-uppercase mb-2">Trạng thái yêu cầu</p>
+                            @switch (r.Status?.ToUpper())
+                            {
+                                case "PENDING":
+                                    <h5 class="badge bg-warning text-dark px-4 py-2 rounded-pill">ĐANG CHỜ XỬ LÝ</h5>
+                                    break;
+                                case "FINISHED":
+                                    <h5 class="badge bg-success px-4 py-2 rounded-pill">ĐÃ HOÀN TIỀN</h5>
+                                    break;
+                                default:
+                                    <h5 class="badge bg-secondary px-4 py-2 rounded-pill">@r.Status</h5>
+                                    break;
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-white py-3 fw-bold text-success">
+                            <i class="fas fa-briefcase me-2"></i>Đại lý thực hiện hủy
+                        </div>
+                        <div class="card-body p-4">
+                            <h6 class="fw-bold mb-1">@r.Book?.TourDeparture?.Tour?.TravelAgent?.TravelAgentName</h6>
+                            <p class="small text-muted mb-3">@r.Book?.TourDeparture?.Tour?.TravelAgent?.TravelAgentEmail</p>
+                            <div class="d-flex align-items-center small text-muted">
+                                <i class="fas fa-phone-alt me-2"></i> @r.Book?.TourDeparture?.Tour?.TravelAgent?.HotLine
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
