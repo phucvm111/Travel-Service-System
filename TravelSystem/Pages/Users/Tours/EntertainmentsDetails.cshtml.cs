@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using TravelSystem.Models;
 
-namespace TravelSystem.Pages.Agents.Entertainments
+namespace TravelSystem.Pages.Users.Tours
 {
-    public class DetailsModel : PageModel
+    public class EntertainmentsDetailsModel : PageModel
     {
         private readonly FinalPrnContext _context;
 
-        public DetailsModel(FinalPrnContext context)
+        public EntertainmentsDetailsModel(FinalPrnContext context)
         {
             _context = context;
         }
@@ -19,32 +19,17 @@ namespace TravelSystem.Pages.Agents.Entertainments
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null)
-                return RedirectToPage("/Auths/Login");
-
-            var agent = await _context.TravelAgents
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UserId == userId.Value);
-
-            if (agent == null)
-            {
-                TempData["ErrorMessage"] = "Không tìm thấy thông tin đại lý.";
-                return RedirectToPage("/Error");
-            }
-
             Entertainment = await _context.Entertainments
                 .AsNoTracking()
                 .Include(x => x.Service)
                 .FirstOrDefaultAsync(x => x.ServiceId == id
                                        && x.Service != null
-                                       && x.Service.AgentId == agent.TravelAgentId
                                        && x.Service.ServiceType == 3);
 
             if (Entertainment == null || Entertainment.Service == null)
             {
                 TempData["ErrorMessage"] = "Không tìm thấy dịch vụ giải trí.";
-                return RedirectToPage("./Index");
+                return RedirectToPage("/Users/Tours/Search");
             }
 
             Service = Entertainment.Service;

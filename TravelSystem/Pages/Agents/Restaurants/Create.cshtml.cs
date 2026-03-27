@@ -107,7 +107,7 @@ namespace TravelSystem.Pages.Agents.Restaurants
             try
             {
                 Service.AgentId = agent.TravelAgentId;
-                Service.ServiceType = 3; // nhớ kiểm tra 3 có đúng là Restaurant không
+                Service.ServiceType = 2; // Restaurant = 2
                 Service.Image = imagePath;
                 Service.Status = 1;
                 Service.CreatedAt = DateTime.Now;
@@ -123,7 +123,7 @@ namespace TravelSystem.Pages.Agents.Restaurants
 
                 await transaction.CommitAsync();
 
-                TempData["SuccessMessage"] = $"ĐÃ THÊM NHÀ HÀNG THÀNH CÔNG ";
+                TempData["SuccessMessage"] = "Đã thêm nhà hàng thành công.";
                 return RedirectToPage("./Index");
             }
             catch (Exception ex)

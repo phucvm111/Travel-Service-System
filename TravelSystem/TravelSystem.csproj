@@ -28,7 +28,7 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Pages\Agents\TourDepartures\" />
+		<Folder Include="Pages\Users\Vouchers\" />
 		<Folder Include="wwwroot\images\" />
 	</ItemGroup>
 </Project>

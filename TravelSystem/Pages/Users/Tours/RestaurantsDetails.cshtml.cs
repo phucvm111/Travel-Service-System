@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using TravelSystem.Models;
 
-namespace TravelSystem.Pages.Agents.Restaurants
+namespace TravelSystem.Pages.Users.Tours
 {
-    public class DetailsModel : PageModel
+    public class RestaurantsDetailsModel : PageModel
     {
         private readonly FinalPrnContext _context;
 
-        public DetailsModel(FinalPrnContext context)
+        public RestaurantsDetailsModel(FinalPrnContext context)
         {
             _context = context;
         }
@@ -19,32 +19,17 @@ namespace TravelSystem.Pages.Agents.Restaurants
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var userId = HttpContext.Session.GetInt32("UserID");
-            if (userId == null)
-                return RedirectToPage("/Auths/Login");
-
-            var agent = await _context.TravelAgents
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UserId == userId.Value);
-
-            if (agent == null)
-            {
-                TempData["ErrorMessage"] = "Không tìm thấy thông tin đại lý.";
-                return RedirectToPage("/Error");
-            }
-
             Restaurant = await _context.Restaurants
                 .AsNoTracking()
                 .Include(x => x.Service)
                 .FirstOrDefaultAsync(x => x.ServiceId == id
                                        && x.Service != null
-                                       && x.Service.AgentId == agent.TravelAgentId
                                        && x.Service.ServiceType == 2);
 
             if (Restaurant == null || Restaurant.Service == null)
             {
                 TempData["ErrorMessage"] = "Không tìm thấy nhà hàng.";
-                return RedirectToPage("./Index");
+                return RedirectToPage("/Users/Tours/Search");
             }
 
             Service = Restaurant.Service;

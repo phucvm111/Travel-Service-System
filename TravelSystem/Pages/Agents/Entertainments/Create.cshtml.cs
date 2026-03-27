@@ -129,7 +129,7 @@ namespace TravelSystem.Pages.Agents.Entertainments
             try
             {
                 Service.AgentId = agent.TravelAgentId;
-                Service.ServiceType = 2;
+                Service.ServiceType = 3;
                 Service.Image = imagePath;
                 Service.Status = 1;
                 Service.CreatedAt = DateTime.Now;

@@ -358,11 +358,19 @@
                     <h4 class="section-header">Dịch Vụ Đi Kèm</h4>
                     <div class="row">
                         <div class="col-md-4">
-                            <h6 class="fw-bold text-success"><i class="fa-solid fa-utensils me-2"></i>Nhà hàng</h6>
+                            <h6 class="fw-bold text-primary">
+                                <i class="fa-solid fa-utensils me-2"></i>Nhà hàng
+                            </h6>
                             <ul class="ps-3">
                                 @foreach (var s in Model.RestaurantList)
                                 {
-                                    <li><a href="/Users/Services/Details?id=@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                    <li>
+                                        <a asp-page="/Users/Tours/RestaurantsDetails"
+                                           asp-route-id="@s.ServiceId"
+                                           class="service-link">
+                                            @s.ServiceName
+                                        </a>
+                                    </li>
                                 }
                             </ul>
                         </div>
@@ -371,16 +379,30 @@
                             <ul class="ps-3">
                                 @foreach (var s in Model.EntertainmentList)
                                 {
-                                    <li><a href="/Users/Services/Details?id=@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                    <li>
+                                        <a asp-page="/Users/Tours/EntertainmentsDetails"
+                                           asp-route-id="@s.ServiceId"
+                                           class="service-link">
+                                            @s.ServiceName
+                                        </a>
+                                    </li>
                                 }
                             </ul>
                         </div>
                         <div class="col-md-4">
-                            <h6 class="fw-bold text-warning"><i class="fa-solid fa-hotel me-2"></i>Khách sạn</h6>
+                            <h6 class="fw-bold text-primary">
+                                <i class="fa-solid fa-hotel me-2"></i>Khách sạn
+                            </h6>
                             <ul class="ps-3">
                                 @foreach (var s in Model.AccommodationList)
                                 {
-                                    <li><a href="/Users/Services/Details?id=@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                    <li>
+                                        <a asp-page="/Users/Tours/AccommodationsDetails"
+                                           asp-route-id="@s.ServiceId"
+                                           class="service-link">
+                                            @s.ServiceName
+                                        </a>
+                                    </li>
                                 }
                             </ul>
                         </div>
