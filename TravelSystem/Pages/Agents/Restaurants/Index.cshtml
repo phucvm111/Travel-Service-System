@@ -45,7 +45,6 @@
                 <th>Loại nhà hàng</th>
                 <th>Giờ mở cửa</th>
                 <th>Giờ đóng cửa</th>
-                <th>Đánh giá</th>
                 <th>Trạng thái</th>
                 <th style="width:260px;">Hành động</th>
             </tr>
@@ -55,7 +54,7 @@
                 int stt = (Model.PageNumber - 1) * Model.PageSize;
             }
 
-            @if (Model.Restaurants.Any())
+            @if (Model.Restaurants != null && Model.Restaurants.Any())
             {
                 foreach (var item in Model.Restaurants)
                 {
@@ -78,9 +77,8 @@
                             }
                         </td>
                         <td>@item.RestaurantType</td>
-                        <td>@(item.OpenTime?.ToString(@"HH\:mm"))</td>
-                        <td>@(item.CloseTime?.ToString(@"HH\:mm"))</td>
-                        <td>N/A</td>
+                        <td>@(item.OpenTime.HasValue? item.OpenTime.Value.ToString(@"HH\:mm") : "")</td>
+                        <td>@(item.CloseTime.HasValue? item.CloseTime.Value.ToString(@"HH\:mm") : "")</td>
                         <td>
                             @if (item.Service?.Status == 1)
                             {
@@ -96,7 +94,9 @@
                                 <a asp-page="./Details" asp-route-id="@item.ServiceId" class="btn btn-info btn-sm text-white">
                                     Chi tiết
                                 </a>
-                                <a asp-page="./Edit" asp-route-id="@item.ServiceId" class="btn btn-warning btn-sm">Sửa</a>
+                                <a asp-page="./Edit" asp-route-id="@item.ServiceId" class="btn btn-warning btn-sm">
+                                    Sửa
+                                </a>
                                 <a asp-page="./Delete" asp-route-id="@item.ServiceId" class="btn btn-danger btn-sm">
                                     Đổi trạng thái
                                 </a>
@@ -108,7 +108,7 @@
             else
             {
                 <tr>
-                    <td colspan="9" class="text-center">Không có nhà hàng nào.</td>
+                    <td colspan="8" class="text-center">Không có nhà hàng nào.</td>
                 </tr>
             }
         </tbody>

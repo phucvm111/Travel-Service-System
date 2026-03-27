@@ -65,7 +65,7 @@ namespace TravelSystem.Pages.Agents.Entertainments
                 .FirstOrDefaultAsync(x => x.ServiceId == id
                                        && x.Service != null
                                        && x.Service.AgentId == agent.TravelAgentId
-                                       && x.Service.ServiceType == 2);
+                                       && x.Service.ServiceType == 3);
 
             if (Entertainment == null || Entertainment.Service == null)
             {
@@ -138,7 +138,7 @@ namespace TravelSystem.Pages.Agents.Entertainments
                 .FirstOrDefaultAsync(x => x.ServiceId == Entertainment.ServiceId
                                        && x.Service != null
                                        && x.Service.AgentId == agent.TravelAgentId
-                                       && x.Service.ServiceType == 2);
+                                       && x.Service.ServiceType == 3);
 
             if (entertainmentInDb == null || entertainmentInDb.Service == null)
             {

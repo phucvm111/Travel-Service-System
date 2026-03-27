@@ -6,7 +6,7 @@
         <h2>Chi tiết nhà hàng</h2>
         <div class="d-flex gap-2">
             <a asp-page="./Edit" asp-route-id="@Model.Restaurant?.ServiceId" class="btn btn-warning">Cập nhật</a>
-            <a asp-page="./Index" class="btn btn-secondary">Trở lại</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Trở lại</a>
         </div>
     </div>
 
@@ -58,15 +58,10 @@
                         <div class="row mb-2">
                             <div class="col-md-4 fw-bold">Giờ hoạt động:</div>
                             <div class="col-md-8">
-                                @(Model.Restaurant.OpenTime?.ToString(@"HH\:mm"))
+                                @(Model.Restaurant.OpenTime.HasValue? Model.Restaurant.OpenTime.Value.ToString(@"HH\:mm") : "")
                                 -
-                                @(Model.Restaurant.CloseTime?.ToString(@"HH\:mm"))
+                                @(Model.Restaurant.CloseTime.HasValue? Model.Restaurant.CloseTime.Value.ToString(@"HH\:mm") : "")
                             </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-md-4 fw-bold">Average Rating:</div>
-                            <div class="col-md-8">N/A</div>
                         </div>
 
                         <div class="row mb-2">

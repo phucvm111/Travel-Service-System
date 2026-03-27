@@ -291,7 +291,7 @@
                             <ul class="ps-3">
                                 @foreach (var s in Model.RestaurantList)
                                 {
-                                    <li><a asp-page="/Agents/Restaurants/Detail" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                    <li><a asp-page="/Agents/Restaurants/Details" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
                                 }
                             </ul>
                         </div>
@@ -300,7 +300,7 @@
                             <ul class="ps-3">
                                 @foreach (var s in Model.EntertainmentList)
                                 {
-                                    <li><a asp-page="/Agents/Entertainments/Detail" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                    <li><a asp-page="/Agents/Entertainments/Details" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
                                 }
                             </ul>
                         </div>
@@ -309,7 +309,7 @@
                             <ul class="ps-3">
                                 @foreach (var s in Model.AccommodationList)
                                 {
-                                    <li><a asp-page="/Accommodations/Details" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
+                                    <li><a asp-page="/Agents/Accommodations/Details" asp-route-id="@s.ServiceId" class="service-link">@s.ServiceName</a></li>
                                 }
                             </ul>
                         </div>

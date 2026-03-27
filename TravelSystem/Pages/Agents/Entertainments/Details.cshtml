@@ -6,7 +6,7 @@
         <h2>Chi tiết dịch vụ giải trí</h2>
         <div class="d-flex gap-2">
             <a asp-page="./Edit" asp-route-id="@Model.Entertainment?.ServiceId" class="btn btn-warning">Cập nhật</a>
-            <a asp-page="./Index" class="btn btn-secondary">Trở lại</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Trở lại</a>
         </div>
     </div>
 

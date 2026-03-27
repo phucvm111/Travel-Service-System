@@ -49,7 +49,7 @@ namespace TravelSystem.Pages.Agents.Entertainments
                 .Include(x => x.Service)
                 .Where(x => x.Service != null
                             && x.Service.AgentId == agent.TravelAgentId
-                            && x.Service.ServiceType == 2);
+                            && x.Service.ServiceType == 3);
 
             if (!string.IsNullOrWhiteSpace(SearchName))
             {
