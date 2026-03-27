@@ -105,6 +105,26 @@
         margin: 20px 0;
         font-weight: bold;
     }
+
+    /* ✅ Style cho trường readonly số ngày */
+    .readonly-field {
+        background-color: #f0f0f0;
+        cursor: not-allowed;
+        color: #6c757d;
+        border: 1px solid #ced4da;
+    }
+
+    .readonly-badge {
+        display: inline-block;
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffc107;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 2px 8px;
+        margin-left: 8px;
+        vertical-align: middle;
+    }
 </style>
 
 <div class="create-box">
@@ -162,15 +182,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="fw-bold">Số ngày <span class="required">*</span></label>
-                    <input type="number" asp-for="Tour.NumberOfDay" class="form-control"
-                           min="1" max="365" placeholder="VD: 3" />
-                    <span asp-validation-for="Tour.NumberOfDay" class="text-danger"></span>
+                    <label class="fw-bold">
+                        Số ngày
+                    </label>
+                    <input type="text"
+                           class="form-control readonly-field"
+                           value="@Model.OriginalNumberOfDay ngày"
+                           readonly
+                           tabindex="-1" />
                 </div>
             </div>
         </div>
 
-        @* Dịch vụ — value = ServiceId (PK chung) *@
+        @* Dịch vụ *@
         <h4 class="section-title">Dịch vụ tại <span id="endPlaceLabel">@Model.Tour?.EndPlace</span></h4>
         <div class="service-row">
             <div class="service-col">
@@ -184,10 +208,7 @@
                                 selected="@rSel">@s.Name</option>
                     }
                 </select>
-                <button type="button" class="btn-clear"
-                        onclick="clearSelect('restaurantSelect')">
-                    Xóa lựa chọn
-                </button>
+                <button type="button" class="btn-clear" onclick="clearSelect('restaurantSelect')">Xóa lựa chọn</button>
             </div>
 
             <div class="service-col">
@@ -201,10 +222,7 @@
                                 selected="@hSel">@s.Name</option>
                     }
                 </select>
-                <button type="button" class="btn-clear"
-                        onclick="clearSelect('hotelSelect')">
-                    Xóa lựa chọn
-                </button>
+                <button type="button" class="btn-clear" onclick="clearSelect('hotelSelect')">Xóa lựa chọn</button>
             </div>
 
             <div class="service-col">
@@ -218,10 +236,7 @@
                                 selected="@eSel">@s.Name</option>
                     }
                 </select>
-                <button type="button" class="btn-clear"
-                        onclick="clearSelect('entertainmentSelect')">
-                    Xóa lựa chọn
-                </button>
+                <button type="button" class="btn-clear" onclick="clearSelect('entertainmentSelect')">Xóa lựa chọn</button>
             </div>
         </div>
 
@@ -262,7 +277,6 @@
 
 @section Scripts {
     <script>
-        // ── Preview ảnh ───────────────────────────────────────────────────────
         function onImageChange(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -276,7 +290,6 @@
             reader.readAsDataURL(file);
         }
 
-        // ── Load tỉnh/thành ───────────────────────────────────────────────────
         const startProvinceEl = document.getElementById("startProvince");
         if (startProvinceEl) {
             fetch("https://provinces.open-api.vn/api/p/")
@@ -293,12 +306,9 @@
                 });
         }
 
-        // ── Filter dịch vụ theo điểm đến ─────────────────────────────────────
         function filterServices() {
             const ep = document.getElementById("endPlaceSelect");
             if (!ep) return;
-
-            // Cập nhật label
             const label = document.getElementById("endPlaceLabel");
             if (label) label.textContent = ep.value || "...";
 
@@ -322,7 +332,6 @@
             if (sel) Array.from(sel.options).forEach(o => o.selected = false);
         }
 
-        // ── DOMContentLoaded ──────────────────────────────────────────────────
         document.addEventListener("DOMContentLoaded", filterServices);
     </script>
 }
