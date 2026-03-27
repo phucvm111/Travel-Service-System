@@ -1,0 +1,186 @@
+﻿@page
+@model TravelSystem.Pages.Staffs.MainDashboardModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Dashboard - Staff";
+}
+
+<style>
+    .card-stat {
+        transition: all 0.3s;
+        border: none;
+        border-left: 5px solid;
+    }
+
+        .card-stat:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+    .tour-name-cell {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<div id="layoutSidenav">
+
+    <div id="layoutSidenav_content">
+        <main class="container-fluid px-4 bg-light min-vh-100">
+            <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+                <h2 class="fw-bold text-dark">Báo Cáo Doanh Thu Staff</h2>
+                <div class="text-muted small">Cập nhật: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</div>
+            </div>
+
+
+
+            @if (!string.IsNullOrEmpty(Model.DateError))
+            {
+                <div class="alert alert-warning border-0 shadow-sm">@Model.DateError</div>
+            }
+
+            <div class="row">
+                <div class="col-xl-6 col-md-6 mb-4">
+                    <div class="card card-stat border-primary bg-white h-100 shadow-sm py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Số dư hệ thống</div>
+                                    <div class="h3 mb-0 fw-bold">@Model.SystemWallet?.Balance?.ToString("N0") <small class="fs-6">đ</small></div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-university fa-2x text-gray-200"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6 col-md-6 mb-4">
+                    <div class="card card-stat border-success bg-white h-100 shadow-sm py-2">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Tổng hoa hồng (20%)</div>
+                                    <div class="h3 mb-0 fw-bold text-success">@Model.TotalCommission.ToString("N0") <small class="fs-6">đ</small></div>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-coins fa-2x text-gray-200"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Thêm phần này vào dưới khối hiển thị 2 cái card stat *@
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm p-3 bg-white" style="border-radius: 12px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="fw-bold mb-1 text-dark">Quyết toán hoa hồng</h5>
+                                <p class="text-muted small mb-0">Hệ thống sẽ giữ 20% và trả 80% giá trị tour cho Đại lý.</p>
+                            </div>
+                            <form method="post" asp-page-handler="PayAll">
+                                <button type="submit" class="btn btn-success btn-lg px-4 fw-bold shadow-sm"
+                                        onclick="return confirm('Xác nhận thanh toán tất cả các Tour đã hoàn thành?')">
+                                    <i class="fas fa-money-check-alt me-2"></i> THANH TOÁN CHO ĐẠI LÝ
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Phần thông báo SweetAlert (nhớ thêm script này nếu chưa có) *@
+            @section Scripts {
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    var successMsg = '@Html.Raw(TempData["SuccessMessage"])';
+                    var errorMsg = '@Html.Raw(TempData["ErrorMessage"])';
+                    if (successMsg) Swal.fire('Thành công!', successMsg, 'success');
+                    if (errorMsg) Swal.fire('Lỗi!', errorMsg, 'error');
+                </script>
+            }
+
+            <div class="card shadow-sm border-0 mb-4 p-3">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">Từ ngày</label>
+                        <input type="date" asp-for="FromDate" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">Đến ngày</label>
+                        <input type="date" asp-for="ToDate" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-filter me-1"></i> Lọc</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a asp-page="./MainDashboard" class="btn btn-outline-secondary w-100">Reset</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between">
+                    <h6 class="m-0 fw-bold text-primary">Danh sách Booking đã hoàn thành</h6>
+                    <span class="badge bg-light text-dark border">@Model.FinishedBookings?.Count bản ghi</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-3">BookCode</th>
+                                <th>Tên Tour</th>
+                                <th>Đại lý</th>
+                                <th class="text-end">Giá trị</th>
+                                <th class="text-end text-success">Hoa hồng (20%)</th>
+                                <th class="text-center">Ngày đặt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.FinishedBookings != null && Model.FinishedBookings.Any())
+                            {
+                                foreach (var b in Model.FinishedBookings)
+                                {
+                                    <tr>
+                                        <td class="ps-3 fw-bold">#@b.BookCode</td>
+                                        <td class="tour-name-cell" title="@b.TourDeparture?.Tour?.TourName">
+                                            @b.TourDeparture?.Tour?.TourName
+                                        </td>
+                                        <td>@b.TourDeparture?.Tour?.TravelAgent?.TravelAgentName</td>
+                                        <td class="text-end">@b.TotalPrice?.ToString("N0") đ</td>
+                                        <td class="text-end fw-bold text-success">
+                                            @(((decimal)(b.TotalPrice ?? 0) * 0.2m).ToString("N0")) đ
+                                        </td>
+                                        <td class="text-center small text-muted">@b.BookDate?.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="6" class="text-center py-5 text-muted">Không tìm thấy giao dịch nào.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (Model.TotalPages > 1)
+                {
+                    <div class="card-footer bg-white border-top">
+                        <ul class="pagination pagination-sm justify-content-center mb-0">
+                            @for (int i = 1; i <= Model.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-page="./MainDashboard" asp-route-p="@i"
+                                       asp-route-FromDate="@Model.FromDate.ToString("yyyy-MM-dd")"
+                                       asp-route-ToDate="@Model.ToDate.ToString("yyyy-MM-dd")">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </main>
+    </div>
+</div>
