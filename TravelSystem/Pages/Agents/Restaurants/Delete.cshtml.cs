@@ -39,7 +39,7 @@ namespace TravelSystem.Pages.Agents.Restaurants
                 .FirstOrDefaultAsync(x => x.ServiceId == id
                                        && x.Service != null
                                        && x.Service.AgentId == agent.TravelAgentId
-                                       && x.Service.ServiceType == 3);
+                                       && x.Service.ServiceType == 2);
 
             if (Restaurant == null || Restaurant.Service == null)
             {
@@ -71,7 +71,7 @@ namespace TravelSystem.Pages.Agents.Restaurants
                 .FirstOrDefaultAsync(x => x.ServiceId == id
                                        && x.Service != null
                                        && x.Service.AgentId == agent.TravelAgentId
-                                       && x.Service.ServiceType == 3);
+                                       && x.Service.ServiceType == 2);
 
             if (restaurantInDb == null || restaurantInDb.Service == null)
             {
@@ -84,7 +84,7 @@ namespace TravelSystem.Pages.Agents.Restaurants
 
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "ĐÃ THAY ĐỔI TRẠNG THÁI THÀNH CÔNG";
+            TempData["SuccessMessage"] = "Đã thay đổi trạng thái thành công.";
             return RedirectToPage("./Index");
         }
     }

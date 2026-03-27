@@ -1,0 +1,140 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Users.Tours.EntertainmentsDetailsModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chi tiết dịch vụ giải trí</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color:#f8f9fa;">
+    <div class="container py-4">
+        <div class="mb-3">
+            <h2>Chi tiết dịch vụ giải trí</h2>
+        </div>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        @if (Model.Entertainment != null && Model.Service != null)
+        {
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            @if (!string.IsNullOrEmpty(Model.Service.Image))
+                            {
+                                <img src="@Model.Service.Image"
+                                     alt="@Model.Service.ServiceName"
+                                     class="img-fluid rounded border"
+                                     style="max-height:300px; width:100%; object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div class="border rounded d-flex align-items-center justify-content-center text-muted"
+                                     style="height:300px;">
+                                    Không có ảnh
+                                </div>
+                            }
+                    </div>
+
+                    <div class="col-md-8">
+                        <h3 class="mb-3">@Model.Service.ServiceName</h3>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Tên dịch vụ:</div>
+                            <div class="col-md-8">@Model.Service.ServiceName</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Địa chỉ / Thành phố:</div>
+                            <div class="col-md-8">@Model.Service.Address</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Số điện thoại:</div>
+                            <div class="col-md-8">@Model.Service.PhoneNumber</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Ngày hoạt động:</div>
+                            <div class="col-md-8">
+                                @(string.IsNullOrWhiteSpace(Model.Entertainment.DayOfWeekOpen)
+                                                                ? "Chưa cập nhật"
+                                                                : Model.Entertainment.DayOfWeekOpen)
+                                                                                                </div>
+                                                                                            </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Giờ hoạt động:</div>
+                            <div class="col-md-8">
+                                @(Model.Entertainment.OpenTime.HasValue? Model.Entertainment.OpenTime.Value.ToString(@"HH\:mm") : "Chưa cập nhật")
+                                -
+                                @(Model.Entertainment.CloseTime.HasValue? Model.Entertainment.CloseTime.Value.ToString(@"HH\:mm") : "Chưa cập nhật")
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-4 fw-bold">Giá vé:</div>
+                            <div class="col-md-8">
+                                @(Model.Entertainment.TicketPrice.HasValue
+                                                                ? Model.Entertainment.TicketPrice.Value.ToString("N0") + " VNĐ"
+                                                                : "Chưa cập nhật")
+                            </div>
+                        </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-4 fw-bold">Trạng thái:</div>
+                                <div class="col-md-8">
+                                @if (Model.Service.Status == 1)
+                                    {
+                                        <span class="badge bg-success">Đang hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Ngừng hoạt động</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div>
+                        <h5>Mô tả chi tiết</h5>
+                        @if (!string.IsNullOrWhiteSpace(Model.Service.Description))
+                        {
+                            <p class="mb-0">@Model.Service.Description</p>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">Chưa có mô tả.</p>
+                        }
+                    </div>
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-secondary" onclick="goBack()">Quay lại</button>
+                    </div>
+
+                    <script>
+                        function goBack() {
+                            if (window.history.length > 1) {
+                                window.history.back();
+                            } else {
+                                window.location.href = '/Users/Tours/Search';
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>

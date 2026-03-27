@@ -46,7 +46,7 @@ namespace TravelSystem.Pages.Agents.Restaurants
                 .FirstOrDefaultAsync(x => x.ServiceId == id
                                        && x.Service != null
                                        && x.Service.AgentId == agent.TravelAgentId
-                                       && x.Service.ServiceType == 3);
+                                       && x.Service.ServiceType == 2);
 
             if (Restaurant == null || Restaurant.Service == null)
             {
@@ -113,7 +113,7 @@ namespace TravelSystem.Pages.Agents.Restaurants
                 .FirstOrDefaultAsync(x => x.ServiceId == Restaurant.ServiceId
                                        && x.Service != null
                                        && x.Service.AgentId == agent.TravelAgentId
-                                       && x.Service.ServiceType == 3);
+                                       && x.Service.ServiceType == 2);
 
             if (restaurantInDb == null || restaurantInDb.Service == null)
             {

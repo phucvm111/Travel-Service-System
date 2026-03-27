@@ -44,6 +44,10 @@
         position: sticky;
         top: 110px;
     }
+
+    .voucher-item-label .btn {
+        white-space: nowrap;
+    }
 </style>
 
 <div class="container mt-4">
@@ -202,7 +206,7 @@
 </div>
 
 <div class="modal fade" id="voucherModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Ưu đãi dành cho bạn</h5>
@@ -213,20 +217,63 @@
                 <div class="list-group scrollable-voucher-list">
                     @foreach (var v in Model.Vouchers)
                     {
-                        <label class="list-group-item voucher-item-label">
-                            <input type="radio" name="vRadio" value="@v.VoucherId"
-                                   data-code="@v.VoucherCode"
-                                   data-percent="@v.PercentDiscount"
-                                   data-max="@v.MaxDiscountAmount"
-                                   class="form-check-input me-2">
-                            <strong>@v.VoucherCode</strong> – @v.VoucherName
-                            <div class="small text-muted">Giảm @v.PercentDiscount% - HSD: @v.EndDate?.ToString("dd/MM/yyyy")</div>
-                        </label>
+                        <div class="list-group-item voucher-item-label">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <label class="mb-0 flex-grow-1">
+                                    <input type="radio" name="vRadio" value="@v.VoucherId"
+                                           data-code="@v.VoucherCode"
+                                           data-name="@v.VoucherName"
+                                           data-percent="@v.PercentDiscount"
+                                           data-max="@v.MaxDiscountAmount"
+                                           data-enddate="@v.EndDate?.ToString("dd/MM/yyyy")"
+                                           data-quantity="@v.Quantity"
+                                           class="form-check-input me-2">
+                                    <strong>@v.VoucherCode</strong> – @v.VoucherName
+                                    <div class="small text-muted">
+                                        Giảm @v.PercentDiscount% - HSD: @v.EndDate?.ToString("dd/MM/yyyy")
+                                    </div>
+                                </label>
+
+                                <button type="button"
+                                        class="btn btn-outline-primary btn-sm ms-2"
+                                        onclick="showVoucherDetail(this)"
+                                        data-code="@v.VoucherCode"
+                                        data-name="@v.VoucherName"
+                                        data-percent="@v.PercentDiscount"
+                                        data-max="@v.MaxDiscountAmount"
+                                        data-enddate="@v.EndDate?.ToString("dd/MM/yyyy")"
+                                        data-quantity="@v.Quantity">
+                                    Chi tiết
+                                </button>
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger w-100" onclick="applyVoucher()">SỬ DỤNG NGAY</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="voucherDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Chi tiết voucher</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Mã voucher:</strong> <span id="detailCode"></span></p>
+                <p><strong>Tên voucher:</strong> <span id="detailName"></span></p>
+                <p><strong>Phần trăm giảm:</strong> <span id="detailPercent"></span>%</p>
+                <p><strong>Giảm tối đa:</strong> <span id="detailMax"></span> đ</p>
+                <p><strong>Hạn sử dụng:</strong> <span id="detailEndDate"></span></p>
+                <p><strong>Số lượng còn:</strong> <span id="detailQuantity"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -257,7 +304,6 @@
             const childTotal = children * CHILD_PRICE;
             const subTotal = adultTotal + childTotal;
 
-            // Tính giảm giá
             let discount = (subTotal * selPercent) / 100;
             if (selMax > 0 && discount > selMax) discount = selMax;
 
@@ -265,7 +311,6 @@
             const vat = afterDiscount * (VAT_RATE / 100);
             const final = afterDiscount + vat;
 
-            // Hiển thị
             const fmt = new Intl.NumberFormat('vi-VN');
             document.getElementById('adultTotalDisplay').innerText = fmt.format(adultTotal) + ' đ';
             document.getElementById('childTotalDisplay').innerText = fmt.format(childTotal) + ' đ';
@@ -281,8 +326,8 @@
             const rb = document.querySelector('input[name="vRadio"]:checked');
             if (!rb) return;
 
-            selPercent = parseFloat(rb.dataset.percent);
-            selMax = parseFloat(rb.dataset.max);
+            selPercent = parseFloat(rb.dataset.percent || 0);
+            selMax = parseFloat(rb.dataset.max || 0);
 
             document.getElementById('selectedVoucherId').value = rb.value;
             document.getElementById('vCode').innerText = rb.dataset.code;
@@ -296,15 +341,36 @@
         }
 
         function removeVoucher() {
-            selPercent = 0; selMax = 0;
+            selPercent = 0;
+            selMax = 0;
             document.getElementById('selectedVoucherId').value = "";
             document.getElementById('voucher-applied').classList.add('d-none');
             document.getElementById('voucher-section').classList.remove('d-none');
             updateTotalPrice();
         }
 
-        // Search voucher
-        document.getElementById('vSearch').oninput = function() {
+        function showVoucherDetail(button) {
+            const code = button.dataset.code;
+            const name = button.dataset.name;
+            const percent = button.dataset.percent;
+            const max = button.dataset.max;
+            const endDate = button.dataset.enddate;
+            const quantity = button.dataset.quantity;
+
+            const fmt = new Intl.NumberFormat('vi-VN');
+
+            document.getElementById('detailCode').innerText = code || '';
+            document.getElementById('detailName').innerText = name || '';
+            document.getElementById('detailPercent').innerText = percent || '0';
+            document.getElementById('detailMax').innerText = fmt.format(parseFloat(max || 0));
+            document.getElementById('detailEndDate').innerText = endDate || '';
+            document.getElementById('detailQuantity').innerText = quantity || '0';
+
+            const modal = new bootstrap.Modal(document.getElementById('voucherDetailModal'));
+            modal.show();
+        }
+
+        document.getElementById('vSearch').oninput = function () {
             let k = this.value.toLowerCase();
             document.querySelectorAll('.voucher-item-label').forEach(el => {
                 el.style.display = el.innerText.toLowerCase().includes(k) ? "" : "none";

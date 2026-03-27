@@ -1,0 +1,134 @@
+﻿@page "{id:int}"
+@model TravelSystem.Pages.Users.Tours.AccommodationsDetailsModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chi tiết khách sạn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color:#f8f9fa;">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Chi tiết khách sạn</h2>
+            <a href="javascript:void(0)" onclick="goBack()" class="btn btn-secondary">Quay lại</a>
+        </div>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        @if (Model.Accommodation?.Service != null)
+        {
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            @if (!string.IsNullOrWhiteSpace(Model.Accommodation.Service.Image))
+                            {
+                                <img src="@Model.Accommodation.Service.Image"
+                                     class="img-fluid rounded border"
+                                     alt="@Model.Accommodation.Service.ServiceName"
+                                     style="max-height:300px; width:100%; object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div class="border rounded d-flex align-items-center justify-content-center text-muted"
+                                     style="height:300px;">
+                                    Không có ảnh
+                                </div>
+                            }
+                    </div>
+
+                    <div class="col-md-8">
+                        <table class="table table-bordered align-middle">
+                            <tr>
+                                <th style="width:220px;">Tên khách sạn</th>
+                                <td>@Model.Accommodation.Service.ServiceName</td>
+                            </tr>
+                            <tr>
+                                <th>Địa chỉ</th>
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(Model.Accommodation.Service.Address)
+                                                                        ? "Chưa cập nhật"
+                                                                        : Model.Accommodation.Service.Address)
+                                                                                                          </td>
+                                                                                                      </tr>
+                                                                                                      <tr>
+                                                                                                          <th>Số điện thoại</th>
+                                                                                                          <td>
+                                    @(string.IsNullOrWhiteSpace(Model.Accommodation.Service.PhoneNumber)
+                                                                        ? "Chưa cập nhật"
+                                                                        : Model.Accommodation.Service.PhoneNumber)
+                                                                                                              </td>
+                                                                                                          </tr>
+                                                                                                          <tr>
+                                                                                                              <th>Check-in</th>
+                                                                                                              <td>
+                                    @(Model.Accommodation.CheckInTime.HasValue
+                                                                        ? Model.Accommodation.CheckInTime.Value.ToString(@"HH\:mm")
+                                                                        : "Chưa cập nhật")
+                                                                                      </td>
+                                                                                  </tr>
+                                                                                  <tr>
+                                                                                      <th>Check-out</th>
+                                                                                      <td>
+                                    @(Model.Accommodation.CheckOutTime.HasValue
+                                                                        ? Model.Accommodation.CheckOutTime.Value.ToString(@"HH\:mm")
+                                                                        : "Chưa cập nhật")
+                                                                                      </td>
+                                                                                  </tr>
+                                                                                  <tr>
+                                                                                      <th>Hạng sao</th>
+                                                                                      <td>
+                                    @(Model.Accommodation.StarRating.HasValue
+                                                                        ? Model.Accommodation.StarRating.Value.ToString()
+                                                                        : "Chưa cập nhật")
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Trạng thái</th>
+                                <td>
+                                    @if (Model.Accommodation.Service.Status == 1)
+                                        {
+                                            <span class="badge bg-success">Hoạt động</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Ngừng hoạt động</span>
+                                        }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Mô tả</th>
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(Model.Accommodation.Service.Description)
+                                                                        ? "Chưa có mô tả."
+                                                                        : Model.Accommodation.Service.Description)
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+                }
+    </div>
+
+    <script>
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = '/Users/Tours/Search';
+            }
+        }
+    </script>
+</body>
+</html>
