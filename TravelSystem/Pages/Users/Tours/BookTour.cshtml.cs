@@ -27,6 +27,8 @@ namespace TravelSystem.Pages.Users.Tours
         public Vat ActiveVat { get; set; }
         public User CurrentUser { get; set; } // Thêm để lấy thông tin ví
 
+        public List<int?> UsedVoucherIds { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int departureId)
         {
             int? userId = HttpContext.Session.GetInt32("UserID");
@@ -143,16 +145,34 @@ namespace TravelSystem.Pages.Users.Tours
         // Hàm helper để load data tránh lặp code
         private async Task LoadDataAsync(int departureId, int userId)
         {
+            // 1. Lấy thông tin Tour và Đại lý sở hữu tour đó
             Departure = await _context.TourDepartures
                 .Include(d => d.Tour)
+                    .ThenInclude(t => t.TravelAgent)
                 .FirstOrDefaultAsync(d => d.DepartureId == departureId);
 
             if (Departure != null) Tour = Departure.Tour;
-
             CurrentUser = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
+            // 2. Lấy danh sách VoucherId mà User đã dùng trong các đơn hàng THÀNH CÔNG (Status 1, 4)
+            // Tránh việc đơn bị hủy rồi mà vẫn không cho dùng lại voucher.
+            UsedVoucherIds = await _context.Bookings
+                .Where(b => b.UserId == userId && b.VoucherId != null && (b.Status == 1 || b.Status == 4))
+                .Select(b => b.VoucherId)
+                .Distinct()
+                .ToListAsync();
+
+            // 3. Lấy danh sách Voucher thỏa mãn
             Vouchers = await _context.Vouchers
-                .Where(v => v.Status == 1 && v.Quantity > 0 && v.EndDate >= DateOnly.FromDateTime(DateTime.Now))
+                .Where(v => v.Quantity > 0
+                       && v.EndDate >= DateOnly.FromDateTime(DateTime.Now)
+                       && v.StartDate <= DateOnly.FromDateTime(DateTime.Now))
+                .Where(v =>
+                    // Loại 1: Của Staff (Status 1) và khách chưa dùng
+                    (v.Status == 1 && !UsedVoucherIds.Contains(v.VoucherId)) ||
+                    // Loại 2: Của chính Agent sở hữu tour này (Status 2)
+                    (v.Status == 2 && v.UserId == Tour.TravelAgent.UserId)
+                )
                 .ToListAsync();
 
             ActiveVat = await _context.Vats.FirstOrDefaultAsync(v => v.Status == 1);
