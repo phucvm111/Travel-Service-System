@@ -10,7 +10,7 @@ namespace TravelSystem.Pages.Staffs
         private readonly FinalPrnContext _context;
         public MainDashboardModel(FinalPrnContext context) => _context = context;
 
-        public TravelSystem.Models.Wallet SystemWallet { get; set; }
+        public User SystemAccount { get; set; }
         public int NumberOfFinishedTourToPay { get; set; }
         public decimal TotalCommission { get; set; }
         public List<Booking> FinishedBookings { get; set; }
@@ -31,7 +31,7 @@ namespace TravelSystem.Pages.Staffs
             int pageSize = 10;
 
             // 1. Lấy ví hệ thống (Sửa ID 1 thành 6 nếu DB của bạn ví hệ thống là 6)
-            SystemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
+            SystemAccount = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
 
             // 2. Thiết lập ngày mặc định
             if (FromDate == DateTime.MinValue || ToDate == DateTime.MinValue)
@@ -99,14 +99,14 @@ namespace TravelSystem.Pages.Staffs
             try
             {
                 // Lấy ví hệ thống (ID 1)
-                var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
+                var systemWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
                 if (systemWallet == null) throw new Exception("Không tìm thấy ví hệ thống.");
 
                 foreach (var booking in pendingBookings)
                 {
                     // Lấy đại lý chủ tour
                     int agentId = booking.TourDeparture.Tour.TravelAgentId;
-                    var agentWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == agentId);
+                    var agentWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == agentId);
                     if (agentWallet == null) continue;
 
                     decimal total = (decimal)(booking.TotalPrice ?? 0);

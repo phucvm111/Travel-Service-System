@@ -133,7 +133,7 @@
                             <input class="form-check-input ms-1" type="radio" name="paymentMethodId" id="walletPay" value="1" checked>
                             <label class="form-check-label ms-4 fw-bold" for="walletPay">
                                 Thanh toán bằng Ví GoViet
-                                <span class="badge bg-success ms-2">Số dư: @Model.CurrentUser.Wallet?.Balance?.ToString("N0") đ</span>
+                                <span class="badge bg-success ms-2">Số dư: @Model.CurrentUser.Balance?.ToString("N0") đ</span>
                             </label>
                         </div>
                         <div class="form-check p-2 border rounded">
@@ -214,40 +214,33 @@
             </div>
             <div class="modal-body">
                 <input type="text" id="vSearch" class="form-control mb-3" placeholder="Tìm mã giảm giá...">
-                <div class="list-group scrollable-voucher-list">
+                <div class="list-group scrollable-voucher-list" id="voucherContainer">
                     @foreach (var v in Model.Vouchers)
                     {
-                        <div class="list-group-item voucher-item-label">
+                        <div class="list-group-item voucher-item-label"
+                             data-code="@v.VoucherCode"
+                             data-status="@v.Status"
+                             style="@(v.Status == 2 ? "display:none;" : "")">
+                            @* Mặc định ẩn voucher Agent *@
+
                             <div class="d-flex justify-content-between align-items-start">
                                 <label class="mb-0 flex-grow-1">
                                     <input type="radio" name="vRadio" value="@v.VoucherId"
                                            data-code="@v.VoucherCode"
-                                           data-name="@v.VoucherName"
                                            data-percent="@v.PercentDiscount"
                                            data-max="@v.MaxDiscountAmount"
-                                           data-enddate="@v.EndDate?.ToString("dd/MM/yyyy")"
-                                           data-quantity="@v.Quantity"
                                            class="form-check-input me-2">
                                     <strong>@v.VoucherCode</strong> – @v.VoucherName
                                     <div class="small text-muted">
-                                        Giảm @v.PercentDiscount% - HSD: @v.EndDate?.ToString("dd/MM/yyyy")
+                                        Giảm @v.PercentDiscount% -
+                                        @(v.Status == 2 ? "Quà tặng từ Đại lý" : "Ưu đãi hệ thống")
                                     </div>
                                 </label>
-
-                                <button type="button"
-                                        class="btn btn-outline-primary btn-sm ms-2"
-                                        onclick="showVoucherDetail(this)"
-                                        data-code="@v.VoucherCode"
-                                        data-name="@v.VoucherName"
-                                        data-percent="@v.PercentDiscount"
-                                        data-max="@v.MaxDiscountAmount"
-                                        data-enddate="@v.EndDate?.ToString("dd/MM/yyyy")"
-                                        data-quantity="@v.Quantity">
-                                    Chi tiết
-                                </button>
+                                @* Nút chi tiết giữ nguyên *@
                             </div>
                         </div>
                     }
+                    <div id="noVoucherMsg" class="p-3 text-center d-none text-muted">Không tìm thấy mã giảm giá phù hợp</div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -370,11 +363,37 @@
             modal.show();
         }
 
-        document.getElementById('vSearch').oninput = function () {
-            let k = this.value.toLowerCase();
+        // Xử lý tìm kiếm Voucher đặc biệt
+                document.getElementById('vSearch').oninput = function () {
+            let keyword = this.value.trim().toLowerCase(); // Xóa khoảng trắng 2 đầu
+            let hasResult = false;
+
             document.querySelectorAll('.voucher-item-label').forEach(el => {
-                el.style.display = el.innerText.toLowerCase().includes(k) ? "" : "none";
+                let code = el.getAttribute('data-code').toLowerCase();
+                let status = el.getAttribute('data-status');
+
+                if (status === "1") {
+                    // VOUCHER STAFF: Lọc mờ (chứa ký tự là hiện)
+                    if (code.includes(keyword) || keyword === "") {
+                        el.style.display = "";
+                        hasResult = true;
+                    } else {
+                        el.style.display = "none";
+                    }
+                }
+                else if (status === "2") {
+                    // VOUCHER AGENT: Phải gõ KHỚP 100% mới hiện
+                    if (keyword !== "" && code === keyword) {
+                        el.style.display = "";
+                        hasResult = true;
+                    } else {
+                        el.style.display = "none";
+                    }
+                }
             });
+
+            const noMsg = document.getElementById('noVoucherMsg');
+            if (noMsg) noMsg.classList.toggle('d-none', hasResult);
         };
 
         window.onload = updateTotalPrice;

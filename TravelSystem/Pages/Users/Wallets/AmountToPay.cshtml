@@ -9,7 +9,7 @@
     @* --- Khối Số Dư --- *@
     <div class="balance-box text-center shadow-sm p-4 mb-4 bg-white border rounded">
         <h5 class="text-muted mb-2">Số dư khả dụng</h5>
-        <h2 class="text-primary fw-bold">@Model.UserWallet.Balance?.ToString("N0") <small>VNĐ</small></h2>
+        <h2 class="text-primary fw-bold">@Model.CurrentUser.Balance?.ToString("N0") <small>VNĐ</small></h2>
 
         <div class="mt-3 d-flex justify-content-center gap-2">
             @* NÚT RÚT TIỀN: Chuyển sang trang Withdraw *@

@@ -37,12 +37,12 @@ namespace TravelSystem.Pages.Users.Wallets
             int? userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null) return RedirectToPage("/Auths/Login");
 
-            var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(w => w.UserId == userId);
             TouristInfo = await _context.Tourists.FirstOrDefaultAsync(t => t.TouristId == userId);
 
-            if (wallet == null || TouristInfo == null) return NotFound();
+            if (user == null || TouristInfo == null) return NotFound();
 
-            UserBalance = wallet.Balance ?? 0;
+            UserBalance = user.Balance ?? 0;
 
             // Load sẵn dữ liệu cũ
             BankName = TouristInfo.BankName;
@@ -56,14 +56,14 @@ namespace TravelSystem.Pages.Users.Wallets
         public async Task<IActionResult> OnPostAsync()
         {
             int? userId = HttpContext.Session.GetInt32("UserID");
-            var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(w => w.UserId == userId);
             var tourist = await _context.Tourists.FirstOrDefaultAsync(t => t.TouristId == userId);
 
-            if (Amount < 10000 || Amount > (wallet?.Balance ?? 0))
+            if (Amount < 10000 || Amount > (user?.Balance ?? 0))
             {
                 Mess = "Số tiền không hợp lệ hoặc vượt quá số dư.";
                 TouristInfo = tourist;
-                UserBalance = wallet?.Balance ?? 0;
+                UserBalance = user?.Balance ?? 0;
                 return Page();
             }
 

@@ -79,20 +79,32 @@
                                             </td>
                                         </tr>
 
+                                        @* Tìm đến phần Modal trong vòng lặp *@
                                         <div class="modal fade" id="cancelModal-@b.BookId" tabindex="-1">
                                             <div class="modal-dialog">
                                                 <form method="post" asp-page-handler="Cancel">
                                                     <input type="hidden" name="bookId" value="@b.BookId" />
                                                     <div class="modal-content">
-                                                        <div class="modal-header bg-danger text-white"><h5>Xác nhận hủy chuyến</h5></div>
+                                                        <div class="modal-header bg-danger text-white">
+                                                            <h5 class="modal-title">Hủy chuyến & Tặng quà khách hàng</h5>
+                                                        </div>
                                                         <div class="modal-body">
-                                                            <p>Bạn đang yêu cầu hủy tour cho khách <strong>@b.FirstName @b.LastName</strong></p>
-                                                            <label class="form-label fw-bold">Lý do hủy tour:</label>
-                                                            <textarea name="reason" class="form-control" rows="3" required minlength="10" placeholder="Vui lòng nhập lý do hủy..."></textarea>
+                                                            <p>Hành động này sẽ <b>hoàn tiền 100%</b> cho khách <strong>@b.FirstName @b.LastName</strong></p>
+
+                                                            <div class="mb-3">
+                                                                <label class="form-label fw-bold">Lý do hủy tour:</label>
+                                                                <textarea name="reason" class="form-control" rows="2" required placeholder="Nhập lý do gửi khách hàng..."></textarea>
+                                                            </div>
+
+                                                            <div class="mb-0">
+                                                                <label class="form-label fw-bold text-success">Mã Voucher tặng kèm (Nếu có):</label>
+                                                                <input type="text" name="voucherCode" class="form-control" placeholder="Ví dụ: SORRY100" />
+                                                                <small class="text-muted">Mã này sẽ được gửi kèm trong Email thông báo hủy.</small>
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" class="btn btn-danger">Gửi yêu cầu hủy</button>
+                                                            <button type="submit" class="btn btn-danger px-4">Xác nhận hủy & Hoàn tiền</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -136,9 +148,31 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('cancel') === 'true') {
-            Swal.fire('Thành công', 'Yêu cầu hủy đã được gửi!', 'success');
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('cancel');
+            const messageFromUrl = urlParams.get('msg'); // Lấy nội dung lỗi từ URL
+
+            // 1. Trường hợp THÀNH CÔNG
+            if (status === 'true') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: '@Html.Raw(TempData["Success"])' || 'Đã xử lý hủy tour thành công!',
+                    confirmButtonColor: '#28a745'
+                });
+            }
+
+            // 2. Trường hợp LỖI VOUCHER (Đọc msg từ URL)
+            if (status === 'voucherfalse') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi Voucher',
+                    // Ưu tiên lấy msg từ URL, nếu không có thì mới dùng TempData
+                    text: messageFromUrl || 'Mã giảm giá không hợp lệ hoặc không thuộc quyền sở hữu của bạn!',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
     </script>
 }

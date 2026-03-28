@@ -18,8 +18,8 @@ namespace TravelSystem.Pages.Wallet
         }
 
         // Data hiển thị
-        public TravelSystem.Models.User CurrentUser { get; set; } // Thêm cái này để dùng ở giao diện
-        public TravelSystem.Models.Wallet UserWallet { get; set; }
+        public User CurrentUser { get; set; } // Thêm cái này để dùng ở giao diện
+        public decimal UserWallet { get; set; }
         public List<TransactionHistory> Transactions { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
@@ -33,8 +33,6 @@ namespace TravelSystem.Pages.Wallet
 
             // 2. Lấy thông tin User và Ví
             CurrentUser = await _context.Users.FindAsync(userId);
-            UserWallet = await _context.Wallets
-                .FirstOrDefaultAsync(w => w.UserId == userId) ?? new TravelSystem.Models.Wallet { Balance = 0 };
 
             // 3. Truy vấn lịch sử giao dịch với Filter
             SelectedType = type;
