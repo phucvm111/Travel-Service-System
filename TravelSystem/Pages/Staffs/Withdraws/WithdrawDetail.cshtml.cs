@@ -56,8 +56,8 @@ namespace TravelSystem.Pages.Staffs.Withdraws
                 try
                 {
                     // 1. Lấy ví (Hùng kiểm tra lại: ID 1 là Admin hay ID 6 như code cũ?)
-                    var userWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == fundReq.CreateBy);
-                    var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
+                    var userWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == fundReq.CreateBy);
+                    var systemWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
 
                     if (userWallet == null || systemWallet == null)
                     {

@@ -51,8 +51,8 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
             try
             {
                 // 1. Lấy ví hệ thống (Admin ID: 1) và ví khách
-                var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
-                var userWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == request.Book.UserId);
+                var systemWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
+                var userWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == request.Book.UserId);
 
                 if (systemWallet == null || systemWallet.Balance < refundAmount)
                 {

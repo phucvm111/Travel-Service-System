@@ -96,8 +96,8 @@ namespace TravelSystem.Pages.Agents.TourBooked
                     decimal refundAmount = (decimal)(booking.TotalPrice ?? 0);
 
                     // Lấy ví hệ thống (Admin ID: 1) và ví khách
-                    var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
-                    var userWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == booking.UserId);
+                    var systemWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
+                    var userWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == booking.UserId);
 
                     if (systemWallet == null || systemWallet.Balance < refundAmount)
                     {
