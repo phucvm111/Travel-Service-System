@@ -57,7 +57,7 @@ namespace TravelSystem.Pages.Users.Tours
                 using var transaction = await _context.Database.BeginTransactionAsync();
                 try
                 {
-                    var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
+                    var wallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == userId);
                     if (wallet == null || wallet.Balance < finalAmount)
                     {
                         ModelState.AddModelError("", "Số dư ví không đủ để thanh toán.");
@@ -66,7 +66,7 @@ namespace TravelSystem.Pages.Users.Tours
                     }
 
                     wallet.Balance -= finalAmount;
-                    var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
+                    var systemWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
                     if (systemWallet != null) systemWallet.Balance += finalAmount;
 
                     var booking = CreateBookingObject(userId.Value, departureId, voucherId, finalAmount, paymentMethodId, bookCode, 1);
@@ -149,7 +149,7 @@ namespace TravelSystem.Pages.Users.Tours
 
             if (Departure != null) Tour = Departure.Tour;
 
-            CurrentUser = await _context.Users.Include(u => u.Wallet).FirstOrDefaultAsync(u => u.UserId == userId);
+            CurrentUser = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
             Vouchers = await _context.Vouchers
                 .Where(v => v.Status == 1 && v.Quantity > 0 && v.EndDate >= DateOnly.FromDateTime(DateTime.Now))

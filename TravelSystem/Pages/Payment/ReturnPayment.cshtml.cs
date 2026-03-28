@@ -70,7 +70,7 @@ namespace TravelSystem.Pages.Payment
                     });
 
                     // CẬP NHẬT VÍ VÀ GHI LOG CHO HỆ THỐNG (Mặc định Admin ID là 6)
-                    var systemWallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == 1);
+                    var systemWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
                     if (systemWallet != null)
                     {
                         systemWallet.Balance += totalPrice;

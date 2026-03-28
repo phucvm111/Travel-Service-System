@@ -38,8 +38,8 @@ namespace TravelSystem.Pages.Wallet
                     fundRequest.ApproveBy = 1;
 
                     // 3. Lấy ví (Hùng lưu ý ví hệ thống ID là 1 hay 6 nhé, trong SQL bạn gửi Admin là 1)
-                    var touristWallet = await _context.Wallets.FindAsync(userId);
-                    var systemWallet = await _context.Wallets.FindAsync(1); // Trong DB mới Admin ID là 1
+                    var touristWallet = await _context.Users.FindAsync(userId);
+                    var systemWallet = await _context.Users.FindAsync(1); // Trong DB mới Admin ID là 1
 
                     if (touristWallet == null || systemWallet == null) throw new Exception("Ví không tồn tại");
 

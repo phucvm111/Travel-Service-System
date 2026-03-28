@@ -31,6 +31,8 @@ public partial class User
 
     public int RoleId { get; set; }
 
+    public decimal? Balance { get; set; }
+
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual ICollection<FundRequest> FundRequestApproveByNavigations { get; set; } = new List<FundRequest>();
@@ -50,6 +52,4 @@ public partial class User
     public virtual ICollection<Vat> Vats { get; set; } = new List<Vat>();
 
     public virtual ICollection<Voucher> Vouchers { get; set; } = new List<Voucher>();
-
-    public virtual Wallet? Wallet { get; set; }
 }
