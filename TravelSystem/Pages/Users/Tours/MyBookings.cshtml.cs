@@ -144,32 +144,74 @@ namespace TravelSystem.Pages.Users.Tours
             if (userId == null) return RedirectToPage("/Auths/Login");
 
             var booking = await _context.Bookings
+                .Include(b => b.TourDeparture)
                 .FirstOrDefaultAsync(b => b.BookId == bookId && b.UserId == userId);
 
             if (booking == null) return RedirectToPage(new { filter = Filter });
 
-            // Chỉ cho phép gửi yêu cầu hoàn tiền khi trạng thái là 1 (Đã thanh toán)
+            // 1. Nếu đơn hàng chưa thanh toán (Status 7), cho hủy thẳng
+            if (booking.Status == 7)
+            {
+                booking.Status = 2; // Bạn đã hủy
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Đã hủy đơn đặt thành công.";
+                return RedirectToPage(new { filter = Filter });
+            }
+
+            // 2. Kiểm tra điều kiện hủy cho đơn đã thanh toán (Status 1)
             if (booking.Status == 1)
             {
-                booking.Status = 5; // Chuyển sang: Đã yêu cầu hoàn tiền
+                DateTime now = DateTime.Now;
+                // Chuyển đổi DateOnly sang DateTime để tính toán
+                DateTime startDate = booking.TourDeparture.StartDate?.ToDateTime(TimeOnly.MinValue) ?? now;
+                DateTime bookDateTime = booking.BookDate?.ToDateTime(TimeOnly.MinValue) ?? now;
 
+                TimeSpan diffToStart = startDate - now;
+                double daysToStart = diffToStart.TotalDays;
+
+                int refundPercentage = 0;
+                string policyNote = "";
+
+                // CHÍNH SÁCH HỦY:
+                // - Hoàn 100%: Trong 24h kể từ khi đặt VÀ cách khởi hành >= 7 ngày
+                if ((now - bookDateTime).TotalHours <= 24 && daysToStart >= 7)
+                {
+                    refundPercentage = 100;
+                    policyNote = "Hoàn 100% (Hủy trong 24h đầu & trước khởi hành 7 ngày)";
+                }
+                // - Hoàn 80%: Trước ngày khởi hành >= 7 ngày
+                else if (daysToStart >= 7)
+                {
+                    refundPercentage = 80;
+                    policyNote = "Hoàn 80% (Hủy trước khởi hành 7 ngày trở lên)";
+                }
+                // - Hoàn 50%: Trước ngày khởi hành từ 3 đến 6 ngày
+                else if (daysToStart >= 3)
+                {
+                    refundPercentage = 50;
+                    policyNote = "Hoàn 50% (Hủy trước khởi hành 3-6 ngày)";
+                }
+                // - Không được hủy: Dưới 3 ngày
+                else
+                {
+                    TempData["Error"] = "Chuyến đi khởi hành trong vòng chưa đầy 3 ngày tới, bạn không thể hủy đơn theo chính sách của chúng tôi.";
+                    return RedirectToPage(new { filter = Filter });
+                }
+
+                // Tạo yêu cầu hủy
+                booking.Status = 5; // Chờ hoàn tiền
                 var requestCancel = new RequestCancel
                 {
                     BookId = bookId,
-                    Reason = string.IsNullOrWhiteSpace(reason) ? "Người dùng yêu cầu hủy và hoàn tiền." : reason.Trim(),
-                    RequestDate = DateOnly.FromDateTime(DateTime.Now),
+                    // Lưu lại tỷ lệ hoàn tiền vào Reason để Staff biết đường duyệt
+                    Reason = $"[{policyNote}] Lý do khách: {reason?.Trim()}",
+                    RequestDate = DateOnly.FromDateTime(now),
                     Status = "PENDING"
                 };
 
                 _context.RequestCancels.Add(requestCancel);
                 await _context.SaveChangesAsync();
-                TempData["Success"] = "Gửi yêu cầu hoàn tiền thành công!";
-            }
-            else if (booking.Status == 7) // Đang chờ thanh toán mà muốn hủy
-            {
-                booking.Status = 2; // Hủy thẳng luôn vì chưa mất tiền
-                await _context.SaveChangesAsync();
-                TempData["Success"] = "Đã hủy đơn đặt thành công.";
+                TempData["Success"] = $"Gửi yêu cầu thành công. Dựa trên chính sách, bạn dự kiến được hoàn {refundPercentage}% giá trị tour.";
             }
 
             return RedirectToPage(new { filter = Filter });
