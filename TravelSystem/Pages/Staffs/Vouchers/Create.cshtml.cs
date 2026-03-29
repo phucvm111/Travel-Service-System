@@ -28,7 +28,7 @@ namespace TravelSystem.Pages.Staffs.Vouchers
 
             if (roleId == 3)
             {
-                Voucher.Status = 2;
+                Voucher.Status = 1;
             }
             else if (roleId == 4)
             {
@@ -51,7 +51,7 @@ namespace TravelSystem.Pages.Staffs.Vouchers
 
             if (roleId == 3)
             {
-                Voucher.Status = 2;
+                Voucher.Status = 1;
             }
             else if (roleId == 4)
             {
