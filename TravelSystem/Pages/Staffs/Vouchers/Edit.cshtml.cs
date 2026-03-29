@@ -25,10 +25,10 @@ namespace TravelSystem.Pages.Staffs.Vouchers
             if (userId == null)
                 return RedirectToPage("/Auths/Login");
 
+            // ✅ CHỈ LẤY VOUCHER CỦA CHÍNH USER
             var voucher = await _context.Vouchers
                 .AsNoTracking()
-                .FirstOrDefaultAsync(v => v.VoucherId == id
-                                      && v.UserId == userId.Value);
+                .FirstOrDefaultAsync(v => v.VoucherId == id && v.UserId == userId.Value);
 
             if (voucher == null)
             {
@@ -54,25 +54,26 @@ namespace TravelSystem.Pages.Staffs.Vouchers
 
             if (!ModelState.IsValid)
             {
-                TempData["ErrorMessage"] = "Cập nhật thất bại. Vui lòng kiểm tra lại dữ liệu.";
+                TempData["ErrorMessage"] = "Cập nhật thất bại. Nhập không hợp lệ.";
                 return Page();
             }
 
+            // ✅ CHECK QUYỀN
             var existingVoucher = await _context.Vouchers
                 .FirstOrDefaultAsync(v => v.VoucherId == Voucher.VoucherId
-                                      && v.UserId == userId.Value);
+                                       && v.UserId == userId.Value);
 
             if (existingVoucher == null)
             {
-                TempData["ErrorMessage"] = "Không tìm thấy voucher.";
+                TempData["ErrorMessage"] = "Bạn không có quyền chỉnh sửa voucher này.";
                 return RedirectToPage("./Index");
             }
 
+            // ================= CHECK DUPLICATE =================
             var voucherCodeUpper = Voucher.VoucherCode!.Trim().ToUpper();
 
             var isDuplicateCode = await _context.Vouchers
                 .AnyAsync(v => v.VoucherId != Voucher.VoucherId
-                            && v.UserId == userId.Value
                             && v.VoucherCode != null
                             && v.VoucherCode.ToUpper() == voucherCodeUpper);
 
@@ -83,7 +84,7 @@ namespace TravelSystem.Pages.Staffs.Vouchers
                 return Page();
             }
 
-            // ===== UPDATE =====
+            // ================= UPDATE =================
             existingVoucher.VoucherCode = voucherCodeUpper;
             existingVoucher.VoucherName = Voucher.VoucherName?.Trim();
             existingVoucher.Description = Voucher.Description?.Trim();
@@ -94,16 +95,21 @@ namespace TravelSystem.Pages.Staffs.Vouchers
             existingVoucher.EndDate = Voucher.EndDate;
             existingVoucher.Quantity = Voucher.Quantity;
 
+            // ❌ KHÔNG CHO SỬA STATUS
+            // existingVoucher.Status = Voucher.Status;
+
+            // ❌ KHÔNG ĐỤNG USER
+            // existingVoucher.UserId = Voucher.UserId;
+
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Cập nhật voucher thành công.";
             return RedirectToPage("./Index");
         }
 
-        // ================= VALIDATE =================
+        // ================= VALIDATION =================
         private void ValidateVoucher()
         {
-            // ===== CODE =====
             if (string.IsNullOrWhiteSpace(Voucher.VoucherCode))
             {
                 ModelState.AddModelError("Voucher.VoucherCode", "Mã voucher không được để trống.");
@@ -114,7 +120,7 @@ namespace TravelSystem.Pages.Staffs.Vouchers
 
                 if (Voucher.VoucherCode.Length < 5 || Voucher.VoucherCode.Length > 25)
                 {
-                    ModelState.AddModelError("Voucher.VoucherCode", "Mã phải từ 5-25 ký tự.");
+                    ModelState.AddModelError("Voucher.VoucherCode", "Mã thẻ phải từ 5-25 ký tự.");
                 }
 
                 if (!Regex.IsMatch(Voucher.VoucherCode, @"^[A-Z0-9]+$"))
@@ -123,7 +129,6 @@ namespace TravelSystem.Pages.Staffs.Vouchers
                 }
             }
 
-            // ===== NAME =====
             if (string.IsNullOrWhiteSpace(Voucher.VoucherName))
             {
                 ModelState.AddModelError("Voucher.VoucherName", "Tên voucher không được để trống.");
@@ -134,78 +139,43 @@ namespace TravelSystem.Pages.Staffs.Vouchers
 
                 if (Voucher.VoucherName.Length < 5 || Voucher.VoucherName.Length > 50)
                 {
-                    ModelState.AddModelError("Voucher.VoucherName", "Tên phải từ 5-50 ký tự.");
+                    ModelState.AddModelError("Voucher.VoucherName", "Tên phải 5-50 ký tự.");
                 }
             }
 
-            // ===== PERCENT =====
-            if (!Voucher.PercentDiscount.HasValue)
+            if (!Voucher.PercentDiscount.HasValue || Voucher.PercentDiscount < 0 || Voucher.PercentDiscount > 100)
             {
-                ModelState.AddModelError("Voucher.PercentDiscount", "Phần trăm giảm giá không được để trống.");
-            }
-            else if (Voucher.PercentDiscount < 0 || Voucher.PercentDiscount > 100)
-            {
-                ModelState.AddModelError("Voucher.PercentDiscount", "Giảm giá phải từ 0 đến 100.");
+                ModelState.AddModelError("Voucher.PercentDiscount", "Giảm giá phải từ 0-100%.");
             }
 
-            // ===== MAX DISCOUNT (🔥 FIX CHÍNH Ở ĐÂY) =====
-            if (!Voucher.MaxDiscountAmount.HasValue)
+            if (!Voucher.MaxDiscountAmount.HasValue || Voucher.MaxDiscountAmount < 0 || Voucher.MaxDiscountAmount >= 10000000)
             {
-                ModelState.AddModelError("Voucher.MaxDiscountAmount", "Giảm tối đa không được để trống.");
-            }
-            else if (Voucher.MaxDiscountAmount < 0 || Voucher.MaxDiscountAmount > 10000000)
-            {
-                ModelState.AddModelError("Voucher.MaxDiscountAmount",
-                    "Giảm tối đa phải từ 0 đến 10.000.000.");
+                ModelState.AddModelError("Voucher.MaxDiscountAmount", "Giảm tối đa không hợp lệ.");
             }
 
-            // ===== MIN =====
-            if (!Voucher.MinDiscountAmount.HasValue)
+            if (!Voucher.MinDiscountAmount.HasValue || Voucher.MinDiscountAmount < 0)
             {
-                ModelState.AddModelError("Voucher.MinDiscountAmount", "Giá tối thiểu không được để trống.");
-            }
-            else if (Voucher.MinDiscountAmount < 0)
-            {
-                ModelState.AddModelError("Voucher.MinDiscountAmount", "Giá tối thiểu không thể âm.");
+                ModelState.AddModelError("Voucher.MinDiscountAmount", "Giá trị tối thiểu không hợp lệ.");
             }
 
-            // ===== LOGIC =====
-            //if (Voucher.MaxDiscountAmount.HasValue && Voucher.MinDiscountAmount.HasValue
-            //    && Voucher.MaxDiscountAmount < Voucher.MinDiscountAmount)
+            //if (Voucher.MaxDiscountAmount < Voucher.MinDiscountAmount)
             //{
-            //    ModelState.AddModelError("Voucher.MaxDiscountAmount",
-            //        "Giảm tối đa không được nhỏ hơn giá trị đơn tối thiểu.");
+            //    ModelState.AddModelError("Voucher.MaxDiscountAmount", "Max phải ≥ Min.");
             //}
 
-            // ===== DATE =====
             if (!Voucher.StartDate.HasValue)
             {
-                ModelState.AddModelError("Voucher.StartDate", "Ngày bắt đầu không được để trống.");
+                ModelState.AddModelError("Voucher.StartDate", "Không được để trống.");
             }
 
-            if (!Voucher.EndDate.HasValue)
-            {
-                ModelState.AddModelError("Voucher.EndDate", "Ngày kết thúc không được để trống.");
-            }
-            else if (Voucher.StartDate.HasValue && Voucher.EndDate <= Voucher.StartDate)
+            if (!Voucher.EndDate.HasValue || Voucher.EndDate <= Voucher.StartDate)
             {
                 ModelState.AddModelError("Voucher.EndDate", "Ngày kết thúc phải sau ngày bắt đầu.");
             }
 
-            // ===== QUANTITY =====
-            if (!Voucher.Quantity.HasValue)
+            if (!Voucher.Quantity.HasValue || Voucher.Quantity < 0 || Voucher.Quantity > 100)
             {
-                ModelState.AddModelError("Voucher.Quantity", "Số lượng không được để trống.");
-            }
-            else if (Voucher.Quantity < 0 || Voucher.Quantity > 100)
-            {
-                ModelState.AddModelError("Voucher.Quantity", "Số lượng phải từ 0 đến 100.");
-            }
-
-            // ===== STATUS =====
-            if (Voucher.Status != 0 && Voucher.Status != 1 && Voucher.Status != 2)
-            {
-                ModelState.AddModelError("Voucher.Status", "Trạng thái không hợp lệ.");
+                ModelState.AddModelError("Voucher.Quantity", "Số lượng 0-100.");
             }
         }
     }

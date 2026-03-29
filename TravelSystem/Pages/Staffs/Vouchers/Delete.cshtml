@@ -13,7 +13,8 @@
 
     @if (Model.Voucher != null)
     {
-        var newStatusText = Model.Voucher.Status == 1 ? "Ngừng hoạt động" : "Hoạt động";
+        var isActive = Model.Voucher.Status == 1 || Model.Voucher.Status == 2;
+        var newStatusText = isActive ? "Ngừng hoạt động" : "Hoạt động";
 
         <div class="card shadow-sm">
             <div class="card-body">
@@ -38,7 +39,7 @@
                 <div class="row mb-2">
                     <div class="col-md-3 fw-bold">Trạng thái hiện tại:</div>
                     <div class="col-md-9">
-                        @if (Model.Voucher.Status == 1)
+                        @if (Model.Voucher.Status == 1 || Model.Voucher.Status == 2)
                         {
                             <span class="badge bg-success">Hoạt động</span>
                         }

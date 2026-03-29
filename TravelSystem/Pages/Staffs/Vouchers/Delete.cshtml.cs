@@ -19,17 +19,16 @@ namespace TravelSystem.Pages.Staffs.Vouchers
         [BindProperty]
         public string? ChangeReason { get; set; }
 
-        
         public async Task<IActionResult> OnGetAsync(int id)
         {
             var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
                 return RedirectToPage("/Auths/Login");
 
+            // ✅ DÙNG CHUNG: chỉ cần check UserId
             Voucher = await _context.Vouchers
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.VoucherId == id
-                                      && x.UserId == userId.Value);
+                .FirstOrDefaultAsync(x => x.VoucherId == id && x.UserId == userId.Value);
 
             if (Voucher == null)
             {
@@ -47,8 +46,7 @@ namespace TravelSystem.Pages.Staffs.Vouchers
                 return RedirectToPage("/Auths/Login");
 
             var voucherInDb = await _context.Vouchers
-                .FirstOrDefaultAsync(x => x.VoucherId == id
-                                      && x.UserId == userId.Value);
+                .FirstOrDefaultAsync(x => x.VoucherId == id && x.UserId == userId.Value);
 
             if (voucherInDb == null)
             {
@@ -56,7 +54,35 @@ namespace TravelSystem.Pages.Staffs.Vouchers
                 return RedirectToPage("./Index");
             }
 
-            voucherInDb.Status = voucherInDb.Status == 1 ? 0 : 1;
+            // ✅ LOGIC CHUẨN CHO CẢ AGENT + STAFF
+            if (voucherInDb.Status == 1 || voucherInDb.Status == 2)
+            {
+                // Đang active → chuyển inactive
+                voucherInDb.Status = 0;
+            }
+            else if (voucherInDb.Status == 0)
+            {
+                // Inactive → quay lại trạng thái gốc
+                // 👉 dựa vào loại user tạo
+                var user = await _context.Users
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(u => u.UserId == userId.Value);
+
+                if (user != null)
+                {
+                    // giả sử:
+                    // Role = "Staff" hoặc "Agent"
+                    if (user.RoleId == 4)
+                        voucherInDb.Status = 1;
+                    else
+                        voucherInDb.Status = 2;
+                }
+                else
+                {
+                    // fallback (an toàn)
+                    voucherInDb.Status = 1;
+                }
+            }
 
             await _context.SaveChangesAsync();
 
