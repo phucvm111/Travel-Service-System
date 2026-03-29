@@ -47,8 +47,9 @@
             <h5 class="mb-0">Lịch sử giao dịch</h5>
             <form method="get" class="m-0">
                 <select name="type" class="form-select form-select-sm" onchange="this.form.submit()">
-                    <option value="">Tất cả giao dịch</option>
-                    <option value="DEPOSIT" selected="@(Model.SelectedType == "RECHARGE")">Nạp tiền</option>
+                    <option value="">-- Tất cả giao dịch --</option>
+                    <option value="DEPOSIT" selected="@(Model.SelectedType == "DEPOSIT")">Nạp tiền</option>
+                    <option value="RECEIVE" selected="@(Model.SelectedType == "RECEIVE")">Nhận tiền</option>
                     <option value="PURCHASE" selected="@(Model.SelectedType == "PURCHASE")">Thanh toán</option>
                     <option value="REFUND" selected="@(Model.SelectedType == "REFUND")">Hoàn tiền</option>
                     <option value="WITHDRAW" selected="@(Model.SelectedType == "WITHDRAW")">Rút tiền</option>
@@ -75,19 +76,17 @@
                                 <td>@item.Description</td>
                                 <td class="text-center">
                                     @{
-                                        // Thêm trường hợp "RECEIVE" vào logic màu xanh
                                         var badgeClass = item.TransactionType switch
                                         {
-                                            "RECHARGE" or "RECEIVE" => "bg-success", // Cả nạp tiền và nhận tiền đều màu xanh
-                                            "PURCHASE" => "bg-danger",
+                                            "DEPOSIT" or "RECEIVE" or "RECHARGE" => "bg-success",
+                                            "PURCHASE" or "WITHDRAW" => "bg-danger",
                                             "REFUND" => "bg-warning text-dark",
-                                            "WITHDRAW" => "bg-info text-white",
                                             _ => "bg-secondary"
                                         };
                                         var typeLabel = item.TransactionType switch
                                         {
-                                            "RECHARGE" => "Nạp tiền",
-                                            "RECEIVE" => "Hoàn tiền", // Đổi label RECEIVE thành Hoàn tiền cho thân thiện
+                                            "DEPOSIT" or "RECHARGE" => "Nạp tiền",
+                                            "RECEIVE" => "Nhận tiền",
                                             "PURCHASE" => "Thanh toán",
                                             "REFUND" => "Hoàn tiền",
                                             "WITHDRAW" => "Rút tiền",
@@ -99,8 +98,7 @@
 
                                 @* --- PHẦN HIỂN THỊ BIẾN ĐỘNG TIỀN (+/-) --- *@
                                 <td class="text-end fw-bold pe-3">
-                                    @* Sửa điều kiện: RECHARGE hoặc RECEIVE (Hoàn tiền) đều là + tiền *@
-                                    @if (item.TransactionType == "RECHARGE" || item.TransactionType == "RECEIVE" || item.TransactionType == "REFUND")
+                                    @if (item.TransactionType == "DEPOSIT" || item.TransactionType == "RECEIVE" || item.TransactionType == "REFUND" || item.TransactionType == "RECHARGE")
                                     {
                                         <span class="text-success">+ @item.Amount?.ToString("N0") VNĐ</span>
                                     }
@@ -119,6 +117,40 @@
                 </tbody>
             </table>
         </div>
+        @if (Model.TotalPages > 1)
+        {
+            <div class="card-footer bg-white border-top py-3">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm justify-content-center mb-0">
+
+                        @* Nút Quay lại *@
+                        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" asp-page="./AmountToPay" asp-route-p="@(Model.CurrentPage - 1)" asp-route-type="@Model.SelectedType">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        @* Danh sách các số trang *@
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-page="./AmountToPay" asp-route-p="@i" asp-route-type="@Model.SelectedType">@i</a>
+                            </li>
+                        }
+
+                        @* Nút Kế tiếp *@
+                        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link" asp-page="./AmountToPay" asp-route-p="@(Model.CurrentPage + 1)" asp-route-type="@Model.SelectedType">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="text-center text-muted small mt-2">
+                    Trang @Model.CurrentPage / @Model.TotalPages
+                </div>
+            </div>
+        }
     </div>
 </div>
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using NuGet.DependencyResolver;
 using TravelSystem.Models;
 using TravelSystem.Services;
 
@@ -28,6 +27,7 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
 
             RequestDetail = await _context.RequestCancels
                 .Include(r => r.Book).ThenInclude(b => b.TourDeparture).ThenInclude(d => d.Tour)
+                .Include(r => r.Staff).ThenInclude(s => s.StaffNavigation) // Lấy thông tin Staff và User xử lý
                 .FirstOrDefaultAsync(m => m.RequestCancelId == id);
 
             if (RequestDetail == null) return NotFound();
@@ -39,10 +39,14 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
         // --- XỬ LÝ DUYỆT & HOÀN TIỀN ---
         public async Task<IActionResult> OnPostApproveAsync(int requestId)
         {
+            int? currentStaffId = HttpContext.Session.GetInt32("UserID"); // Lấy ID người đang đăng nhập
+            if (currentStaffId == null) return RedirectToPage("/Auths/Login");
+
             var request = await _context.RequestCancels
                 .Include(r => r.Book).ThenInclude(b => b.TourDeparture).ThenInclude(d => d.Tour)
-                .Include(r => r.Book.User) // Đảm bảo lấy được thông tin khách
+                .Include(r => r.Book.User)
                 .FirstOrDefaultAsync(r => r.RequestCancelId == requestId);
+
             if (request == null) return NotFound();
 
             decimal refundAmount = CalculateRefundAmount(request);
@@ -50,7 +54,6 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 1. Lấy ví hệ thống (Admin ID: 1) và ví khách
                 var systemWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
                 var userWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == request.Book.UserId);
 
@@ -60,46 +63,46 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
                     return RedirectToPage(new { id = requestId });
                 }
 
-                // 2. Cập nhật số dư 2 ví
+                // 1. Cập nhật số dư
                 systemWallet.Balance -= refundAmount;
                 userWallet.Balance += refundAmount;
 
-                // 3. Ghi lịch sử giao dịch cho HỆ THỐNG (BỔ SUNG TẠI ĐÂY)
+                // 2. Ghi lịch sử giao dịch
                 _context.TransactionHistories.Add(new TransactionHistory
                 {
-                    UserId = 1, // ID của hệ thống
+                    UserId = 1,
                     Amount = refundAmount,
                     TransactionType = "REFUND",
-                    Description = $"Hoàn tiền đơn #{request.Book.BookCode} cho khách {request.Book.Gmail} | [Ví tổng: {systemWallet.Balance:N0}đ]",
+                    Description = $"Hoàn tiền đơn #{request.Book.BookCode} cho khách {request.Book.Gmail}",
                     TransactionDate = DateTime.Now
                 });
 
-                // 4. Ghi lịch sử giao dịch cho KHÁCH HÀNG
                 _context.TransactionHistories.Add(new TransactionHistory
                 {
                     UserId = request.Book.UserId,
                     Amount = refundAmount,
-                    TransactionType = "RECEIVE", // Khách nhận tiền hoàn
-                    Description = $"Nhận tiền hoàn tour {request.Book.TourDeparture.Tour.TourName} | [Số dư: {userWallet.Balance:N0}đ]",
+                    TransactionType = "RECEIVE",
+                    Description = $"Nhận tiền hoàn tour {request.Book.TourDeparture.Tour.TourName}",
                     TransactionDate = DateTime.Now
                 });
 
-                // 5. Cập nhật trạng thái yêu cầu và đơn hàng
+                // 3. Cập nhật trạng thái và GÁN STAFF ID XỬ LÝ
                 request.Status = "FINISHED";
-                request.Book.Status = 6; // Đã hoàn tiền
+                request.StaffId = currentStaffId; // Lưu người đã bấm duyệt
 
-                // 6. Trả lại chỗ trống cho Tour
+                request.Book.Status = 6;
+
                 int seats = (request.Book.NumberAdult ?? 0) + (request.Book.NumberChildren ?? 0);
                 request.Book.TourDeparture.AvailableSeat += seats;
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                // 7. Gửi Email thông báo
-                string content = $"<h3>Chào {request.Book.FirstName},</h3><p>Yêu cầu hủy tour <b>{request.Book.TourDeparture.Tour.TourName}</b> đã được duyệt.</p><p>Số tiền <b>{refundAmount:N0} VNĐ</b> đã được hoàn trả vào ví của bạn.</p>";
+                // Gửi Email
+                string content = $"<h3>Chào {request.Book.FirstName},</h3><p>Yêu cầu hủy tour <b>{request.Book.TourDeparture.Tour.TourName}</b> đã được duyệt bởi nhân viên.</p><p>Số tiền <b>{refundAmount:N0} VNĐ</b> đã được hoàn trả.</p>";
                 await _emailService.SendAsync(request.Book.Gmail, "Xác nhận huỷ chuyến đi thành công", content);
 
-                return RedirectToPage(new { id = requestId, statusAction = "approved" });
+                return RedirectToPage(new { id = requestId });
             }
             catch (Exception ex)
             {
@@ -112,27 +115,34 @@ namespace TravelSystem.Pages.Staffs.CancelBooking
         // --- XỬ LÝ TỪ CHỐI ---
         public async Task<IActionResult> OnPostRejectAsync(int requestId, string rejectReason)
         {
+            int? currentStaffId = HttpContext.Session.GetInt32("UserID");
+            if (currentStaffId == null) return RedirectToPage("/Auths/Login");
+
             var request = await _context.RequestCancels
                 .Include(r => r.Book).ThenInclude(b => b.TourDeparture).ThenInclude(d => d.Tour)
                 .FirstOrDefaultAsync(r => r.RequestCancelId == requestId);
 
             if (request == null) return NotFound();
 
+            // Cập nhật trạng thái và GÁN STAFF ID XỬ LÝ
             request.Status = "REJECTED";
-            request.Book.Status = 1; // Trả về trạng thái "Đã thanh toán" bình thường
+            request.StaffId = currentStaffId; // Lưu người đã bấm từ chối
+
+            request.Book.Status = 1;
             request.Book.Note = $"[Staff từ chối hủy]: {rejectReason} | " + request.Book.Note;
 
             await _context.SaveChangesAsync();
 
-            // Gửi Email thông báo từ chối
-            string content = $"<h3>Chào {request.Book.FirstName},</h3><p>Yêu cầu hủy tour <b>{request.Book.TourDeparture.Tour.TourName}</b> của bạn không được chấp nhận.</p><p>Lý do: {rejectReason}</p>";
+            // Gửi Email
+            string content = $"<h3>Chào {request.Book.FirstName},</h3><p>Yêu cầu hủy tour <b>{request.Book.TourDeparture.Tour.TourName}</b> bị từ chối.</p><p>Lý do: {rejectReason}</p>";
             await _emailService.SendAsync(request.Book.Gmail, "Yêu cầu huỷ chuyến đi bị từ chối", content);
 
-            return RedirectToPage(new { id = requestId, statusAction = "rejected" });
+            return RedirectToPage(new { id = requestId });
         }
 
         private decimal CalculateRefundAmount(RequestCancel r)
         {
+            if (r.Book == null || r.Book.TourDeparture == null) return 0;
             var reqDate = r.RequestDate?.ToDateTime(TimeOnly.MinValue) ?? DateTime.Now;
             var bookDate = r.Book.BookDate?.ToDateTime(TimeOnly.MinValue) ?? DateTime.Now;
             var startDate = r.Book.TourDeparture.StartDate?.ToDateTime(TimeOnly.MinValue) ?? DateTime.Now;

@@ -1,5 +1,5 @@
 ﻿@page
-@model TravelSystem.Pages.Staffs.MainDashboardModel
+@model TravelSystem.Pages.Admin.MainDashboardModel
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Dashboard - Staff";
@@ -30,7 +30,7 @@
     <div id="layoutSidenav_content">
         <main class="container-fluid px-4 bg-light min-vh-100">
             <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
-                <h2 class="fw-bold text-dark">Báo Cáo Doanh Thu Staff</h2>
+                <h2 class="fw-bold text-dark">Báo Cáo Doanh Thu</h2>
                 <div class="text-muted small">Cập nhật: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</div>
             </div>
 
@@ -61,10 +61,15 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Tổng hoa hồng (20%)</div>
-                                    <div class="h3 mb-0 fw-bold text-success">@Model.TotalCommission.ToString("N0") <small class="fs-6">đ</small></div>
+                                    @* Sửa lại tiêu đề cho rõ ràng *@
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Lợi nhuận hệ thống (20% hoa hồng)
+                                    </div>
+                                    <div class="h3 mb-0 fw-bold text-success">
+                                        @Model.TotalCommission.ToString("N0") <small class="fs-6">đ</small>
+                                    </div>
                                 </div>
-                                <div class="col-auto"><i class="fas fa-coins fa-2x text-gray-200"></i></div>
+                                <div class="col-auto"><i class="fas fa-chart-line fa-2x text-success" style="opacity: 0.3;"></i></div>
                             </div>
                         </div>
                     </div>

@@ -35,83 +35,90 @@
                         </div>
                     </form>
 
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle border">
-                            <thead class="table-light text-center">
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Email người rút</th>
-                                    <th>Số tiền</th>
-                                    <th>Ngân hàng (Snapshot)</th>
-                                    <th>Số tài khoản</th>
-                                    <th>Ngày yêu cầu</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.WithdrawList != null && Model.WithdrawList.Any())
-                                {
-                                    int count = (Model.CurrentPage - 1) * 10 + 1;
-                                    foreach (var item in Model.WithdrawList)
-                                    {
-                                        <tr>
-                                            <td class="text-center">@(count++)</td>
-                                            <td class="fw-bold">@item.CreateByNavigation?.Gmail</td>
-                                            <td class="text-danger fw-bold">@item.Amount?.ToString("N0") đ</td>
-                                            <td>@item.BankNameSnapshot</td>
-                                            <td>@item.BankAccountSnapshot</td>
-                                            <td class="text-center small">@item.RequestDate?.ToString("dd/MM/yyyy HH:mm")</td>
-                                            <td class="text-center">
-                                                @if (item.Status == "PENDING")
-                                                {
-                                                    <span class="badge bg-warning text-dark">Đang chờ</span>
-                                                }
-                                                else if (item.Status == "APPROVED")
-                                                {
+                    <table class="table table-hover align-middle border">
+                        <thead class="table-light text-center">
+                            <tr>
+                                <th>STT</th>
+                                <th>Email người rút</th>
+                                <th>Số tiền</th>
+                                <th>Tài khoản nhận</th>
+                                <th>Ngày yêu cầu</th>
+                                <th>Trạng thái</th>
+                                <th>Người xử lý</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.WithdrawList != null && Model.WithdrawList.Any())
+                            {
+                                @* KHAI BÁO BIẾN COUNT TẠI ĐÂY *@
+                                int count = (Model.CurrentPage - 1) * 10 + 1;
 
-                                                    <span class="badge bg-success">Đã duyệt</span>
+                                @foreach (var item in Model.WithdrawList)
+                                {
+                                    <tr>
+                                        <td class="text-center">@(count++)</td>
+                                        <td class="fw-bold">@item.CreateByNavigation?.Gmail</td>
+                                        <td class="text-danger fw-bold">@item.Amount?.ToString("N0") đ</td>
+                                        <td>
+                                            <small>@item.BankNameSnapshot</small><br />
+                                            <b>@item.BankAccountSnapshot</b>
+                                        </td>
+                                        <td class="text-center small">@item.RequestDate?.ToString("dd/MM/yyyy HH:mm")</td>
+
+                                        <td class="text-center">
+                                            @if (item.Status == "PENDING" || item.Status == "pending")
+                                            {
+                                                <span class="badge bg-warning text-dark">Đang chờ</span>
+                                            }
+                                            else if (item.Status == "APPROVED" || item.Status == "approved")
+                                            {
+                                                <span class="badge bg-success">Đã duyệt</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Đã từ chối</span>
+                                            }
+                                        </td>
+
+                                        @* HIỂN THỊ EMAIL NGƯỜI DUYỆT *@
+                                        <td class="text-center small text-muted">
+                                            @(item.ApproveByNavigation?.Gmail ?? "---")
+                                        </td>
+
+                                        <td class="text-center">
+                                            <div class="d-flex gap-1 justify-content-center">
+                                                @if (item.Status == "PENDING" || item.Status == "pending")
+                                                {
+                                                    <form method="post" asp-page-handler="Approve" asp-route-id="@item.Id"
+                                                          onsubmit="return confirm('Duyệt yêu cầu này?')">
+                                                        <button type="submit" class="btn btn-sm btn-success">Duyệt</button>
+                                                    </form>
+
+                                                    <form method="post" asp-page-handler="Reject" asp-route-id="@item.Id"
+                                                          onsubmit="return confirm('Từ chối yêu cầu này?')">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Từ chối</button>
+                                                    </form>
                                                 }
                                                 else
                                                 {
-
-                                                    <span class="badge bg-danger">Đã từ chối</span>
+                                                    <a asp-page="./WithdrawDetail" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">
+                                                        <i class="fa fa-eye"></i> Xem
+                                                    </a>
                                                 }
-                                            </td>
-                                            <td class="text-center">
-                                                @* Hùng nên tạo trang Detail để thực hiện Duyệt/Từ chối *@
-                                                <a asp-page="./WithdrawDetail" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white">
-                                                    <i class="fa fa-eye"></i> Xử lý
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td colspan="8" class="text-center py-4 text-muted">Không tìm thấy yêu cầu rút tiền nào.</td>
+                                            </div>
+                                        </td>
                                     </tr>
                                 }
-                            </tbody>
-                        </table>
-                    </div>
-
-                    @if (Model.TotalPages > 1)
-                    {
-                        <nav class="mt-4">
-                            <ul class="pagination justify-content-center">
-                                @for (int i = 1; i <= Model.TotalPages; i++)
-                                {
-                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                        <a class="page-link" asp-page="./WithdrawManagement" asp-route-p="@i"
-                                           asp-route-Keyword="@Model.Keyword" asp-route-Status="@Model.Status">@i</a>
-                                    </li>
-                                }
-                            </ul>
-                        </nav>
-                    }
-                </div>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center py-4 text-muted">Không tìm thấy yêu cầu nào.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
             </div>
         </main>
     </div>

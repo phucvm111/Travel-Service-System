@@ -32,6 +32,7 @@ namespace TravelSystem.Pages.Staffs.Withdraws
             // Chỉ lấy các yêu cầu rút tiền (Type = WITHDRAW)
             var query = _context.FundRequests
                 .Include(f => f.CreateByNavigation) // Để lấy Email người tạo
+                .Include(f => f.ApproveByNavigation)
                 .Where(f => f.Type == "WITHDRAW")
                 .AsQueryable();
 

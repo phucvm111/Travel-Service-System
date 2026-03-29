@@ -33,6 +33,7 @@ namespace TravelSystem.Pages.Staffs
                 .Include(r => r.Book)
                     .ThenInclude(b => b.TourDeparture)
                         .ThenInclude(d => d.Tour)
+                        .Include(r => r.Staff).ThenInclude(s => s.StaffNavigation)
                 .AsQueryable();
 
             // 1. Lọc theo Email khách hàng

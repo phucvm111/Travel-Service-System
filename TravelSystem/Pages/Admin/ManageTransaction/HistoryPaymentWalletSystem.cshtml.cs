@@ -25,39 +25,34 @@ namespace TravelSystem.Pages.Staffs.ManageTransaction
 
         public async Task<IActionResult> OnGetAsync(int p = 1)
         {
-            // Kiểm tra quyền Staff (RoleId = 4)
+            // Kiểm tra quyền Staff
             int? roleId = HttpContext.Session.GetInt32("RoleId");
-            if (roleId == null || roleId != 4) return RedirectToPage("/Auths/Login");
+            if (roleId == null || roleId != 1) return RedirectToPage("/Auths/Login");
 
             CurrentPage = p;
             int pageSize = 10;
-            int systemUserId = 1; // ID ví hệ thống
+            int systemUserId = 1; // ID ví Admin/Hệ thống
 
             var query = _context.TransactionHistories
                 .Where(t => t.UserId == systemUserId)
                 .AsQueryable();
 
-            // 1. Lọc theo loại giao dịch
+            // 1. Lọc theo loại giao dịch (TransactionType)
             if (!string.IsNullOrEmpty(Status) && Status != "0")
             {
                 query = query.Where(t => t.TransactionType == Status);
             }
 
             // 2. Lọc theo khoảng ngày
-            if (!string.IsNullOrEmpty(FromDate))
+            if (!string.IsNullOrEmpty(FromDate) && DateTime.TryParse(FromDate, out DateTime from))
             {
-                if (DateTime.TryParse(FromDate, out DateTime from))
-                    query = query.Where(t => t.TransactionDate >= from);
+                query = query.Where(t => t.TransactionDate >= from);
             }
 
-            if (!string.IsNullOrEmpty(ToDate))
+            if (!string.IsNullOrEmpty(ToDate) && DateTime.TryParse(ToDate, out DateTime to))
             {
-                if (DateTime.TryParse(ToDate, out DateTime to))
-                {
-                    // Thêm 23:59:59 để lấy hết dữ liệu của ngày kết thúc
-                    var toFullDay = to.AddDays(1).AddTicks(-1);
-                    query = query.Where(t => t.TransactionDate <= toFullDay);
-                }
+                var toFullDay = to.AddDays(1).AddTicks(-1);
+                query = query.Where(t => t.TransactionDate <= toFullDay);
             }
 
             int totalItems = await query.CountAsync();
