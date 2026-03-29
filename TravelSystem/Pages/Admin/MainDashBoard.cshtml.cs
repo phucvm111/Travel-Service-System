@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using TravelSystem.Models;
 
-namespace TravelSystem.Pages.Staffs
+namespace TravelSystem.Pages.Admin
 {
     public class MainDashboardModel : PageModel
     {
@@ -25,7 +25,7 @@ namespace TravelSystem.Pages.Staffs
         {
             // Kiểm tra quyền Staff
             int? roleId = HttpContext.Session.GetInt32("RoleId");
-            if (roleId != 4) return RedirectToPage("/Auths/Login");
+            if (roleId != 1) return RedirectToPage("/Auths/Login");
 
             CurrentPage = p;
             int pageSize = 10;
@@ -50,12 +50,19 @@ namespace TravelSystem.Pages.Staffs
             DateOnly start = DateOnly.FromDateTime(FromDate);
             DateOnly end = DateOnly.FromDateTime(ToDate);
 
+            var commissionQuery = await _context.Bookings
+        .Where(b => b.Status == 5)
+        .Select(b => b.TotalPrice)
+        .ToListAsync();
+
+            TotalCommission = commissionQuery.Sum(price => (decimal)(price ?? 0) * 0.2m);
+
             // 3. Truy vấn Booking với logic so sánh DateOnly
             var query = _context.Bookings
                     .Include(b => b.TourDeparture)
                         .ThenInclude(td => td.Tour)
                         .ThenInclude(t => t.TravelAgent)
-                    .Where(b => (b.Status == 4 || b.Status == 5) && // Thêm ngoặc ở đây
+                    .Where(b => b.Status == 4 && // Thêm ngoặc ở đây
                                 b.BookDate != null &&
                                 b.BookDate >= start &&
                                 b.BookDate <= end);
@@ -84,10 +91,11 @@ namespace TravelSystem.Pages.Staffs
         {
             // 1. Lấy danh sách booking hoàn thành (status = 4)
             var pendingBookings = await _context.Bookings
-                .Include(b => b.TourDeparture)
-                    .ThenInclude(td => td.Tour)
-                .Where(b => b.Status == 4)
-                .ToListAsync();
+        .Include(b => b.TourDeparture)
+            .ThenInclude(td => td.Tour)
+                .ThenInclude(t => t.TravelAgent) // Quan trọng nhất để lấy UserId của Agent
+        .Where(b => b.Status == 4)
+        .ToListAsync();
 
             if (!pendingBookings.Any())
             {
@@ -105,8 +113,8 @@ namespace TravelSystem.Pages.Staffs
                 foreach (var booking in pendingBookings)
                 {
                     // Lấy đại lý chủ tour
-                    int agentId = booking.TourDeparture.Tour.TravelAgentId;
-                    var agentWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == agentId);
+                    int agentUserId = booking.TourDeparture.Tour.TravelAgent.UserId;
+                    var agentWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == agentUserId);
                     if (agentWallet == null) continue;
 
                     decimal total = (decimal)(booking.TotalPrice ?? 0);
@@ -115,6 +123,17 @@ namespace TravelSystem.Pages.Staffs
                     // Cập nhật số dư
                     systemWallet.Balance -= payToAgent;
                     agentWallet.Balance += payToAgent;
+ 
+
+                    // Ghi Log Đại lý (Thu nhập)
+                    _context.TransactionHistories.Add(new TransactionHistory
+                    {
+                        UserId = agentUserId,
+                        Amount = payToAgent,
+                        TransactionType = "RECEIVE",
+                        Description = $"Nhận quyết toán Tour #{booking.BookCode} | [Số dư: {agentWallet.Balance:N0}đ]",
+                        TransactionDate = DateTime.Now
+                    });
 
                     // Ghi Log hệ thống (Chi trả)
                     _context.TransactionHistories.Add(new TransactionHistory
@@ -123,16 +142,6 @@ namespace TravelSystem.Pages.Staffs
                         Amount = payToAgent,
                         TransactionType = "PAYMENT",
                         Description = $"Thanh toán Tour #{booking.BookCode} cho Agent | [Ví tổng: {systemWallet.Balance:N0}đ]",
-                        TransactionDate = DateTime.Now
-                    });
-
-                    // Ghi Log Đại lý (Thu nhập)
-                    _context.TransactionHistories.Add(new TransactionHistory
-                    {
-                        UserId = agentId,
-                        Amount = payToAgent,
-                        TransactionType = "INCOME",
-                        Description = $"Nhận quyết toán Tour #{booking.BookCode} | [Số dư: {agentWallet.Balance:N0}đ]",
                         TransactionDate = DateTime.Now
                     });
 

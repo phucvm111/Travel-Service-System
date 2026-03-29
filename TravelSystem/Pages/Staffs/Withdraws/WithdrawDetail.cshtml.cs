@@ -28,6 +28,7 @@ namespace TravelSystem.Pages.Staffs.Withdraws
 
             RequestItem = await _context.FundRequests
                 .Include(f => f.CreateByNavigation)
+                .Include(f => f.ApproveByNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (RequestItem == null) return NotFound();

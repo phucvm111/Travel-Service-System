@@ -30,12 +30,12 @@
                             <div class="col-md-3">
                                 <label class="form-label fw-bold">Loại giao dịch</label>
                                 <select name="Status" class="form-select" onchange="this.form.submit()">
-                                    <option value="0">Tất cả loại</option>
-                                    @* Thêm dòng DEPOSIT này vào *@
-                                    <option value="DEPOSIT" selected="@(Model.Status == "DEPOSIT")">User nạp tiền vào hệ thống</option>
-                                    <option value="RECEIVE" selected="@(Model.Status == "RECEIVE")">Khách thanh toán Tour</option>
-                                    <option value="REFUND" selected="@(Model.Status == "REFUND")">Hoàn tiền cho khách</option>
-                                    <option value="PURCHASE" selected="@(Model.Status == "PURCHASE")">Đại lý rút tiền</option>
+                                    <option value="0">-- Tất cả loại giao dịch --</option>
+                                    <option value="DEPOSIT" selected="@(Model.Status == "DEPOSIT")">Nạp tiền vào hệ thống (PayOS/Bank)</option>
+                                    <option value="RECEIVE" selected="@(Model.Status == "RECEIVE")">Nhận tiền thanh toán Tour (Ví khách)</option>
+                                    <option value="REFUND" selected="@(Model.Status == "REFUND")">Hoàn tiền lại cho khách hàng</option>
+                                    <option value="PAYMENT" selected="@(Model.Status == "PAYMENT")">Quyết toán chi trả cho Đại lý</option>
+                                    <option value="PURCHASE" selected="@(Model.Status == "PURCHASE")">Rút tiền</option>
                                 </select>
                             </div>
                             <div class="col-md-3 d-flex gap-2">
@@ -68,29 +68,31 @@
                                                 <td class="text-center">@tx.TransactionDate?.ToString("dd/MM/yyyy HH:mm")</td>
                                                 <td>@tx.Description</td>
                                                 <td class="text-center">
-                                                    @if (tx.TransactionType == "RECEIVE")
+                                                    @switch (tx.TransactionType)
                                                     {
-                                                        <span class="badge bg-success">Nhận tiền</span>
-                                                    }
-                                                    else if (tx.TransactionType == "DEPOSIT")
-                                                    {
-                                                        @* Thêm Badge cho Nạp tiền *@
-                                                        <span class="badge bg-primary">User nạp tiền</span>
-                                                    }
-                                                    else if (tx.TransactionType == "REFUND")
-                                                    {
-                                                        <span class="badge bg-warning text-dark">Hoàn tiền khách</span>
-                                                    }
-                                                    else if (tx.TransactionType == "PURCHASE" || tx.TransactionType == "PAYMENT")
-                                                    {
-                                                        <span class="badge bg-danger">Hệ thống chi trả</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class="badge bg-info text-dark">@tx.TransactionType</span>
+                                                        case "DEPOSIT":
+                                                            <span class="badge bg-primary"><i class="fas fa-plus-circle me-1"></i> Nạp tiền</span>
+                                                            break;
+                                                        case "RECEIVE":
+                                                            <span class="badge bg-success"><i class="fas fa-arrow-down me-1"></i> Khách trả tiền</span>
+                                                            break;
+                                                        case "REFUND":
+                                                            <span class="badge bg-warning text-dark"><i class="fas fa-undo me-1"></i> Hoàn tiền khách</span>
+                                                            break;
+                                                        case "PAYMENT":
+                                                            <span class="badge bg-danger"><i class="fas fa-money-check-alt me-1"></i> Trả tiền Đại lý</span>
+                                                            break;
+                                                        case "PURCHASE":
+                                                            <span class="badge bg-danger"><i class="fas fa-money-check-alt me-1"></i> Rút tiền</span>
+                                                            break;
+                                                        default:
+                                                            <span class="badge bg-secondary">@tx.TransactionType</span>
+                                                            break;
                                                     }
                                                 </td>
                                                 <td class="text-end fw-bold @(tx.TransactionType == "RECEIVE" || tx.TransactionType == "DEPOSIT" ? "text-success" : "text-danger")">
+                                                    @* RECEIVE và DEPOSIT là tiền vào ví Hệ thống (+) *@
+                                                    @* REFUND và PAYMENT là tiền ra khỏi ví Hệ thống (-) *@
                                                     @(tx.TransactionType == "RECEIVE" || tx.TransactionType == "DEPOSIT" ? "+" : "-") @tx.Amount?.ToString("N0") đ
                                                 </td>
                                             </tr>

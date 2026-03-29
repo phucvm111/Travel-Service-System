@@ -21,19 +21,53 @@
                         <div class="card-header bg-primary text-white fw-bold">Thông tin yêu cầu</div>
                         <div class="card-body">
                             <table class="table table-borderless">
-                                <tr><td width="150" class="text-muted">Email:</td><td class="fw-bold">@Model.RequestItem.CreateByNavigation?.Gmail</td></tr>
+                                <tr><td width="150" class="text-muted">Email khách:</td><td class="fw-bold">@Model.RequestItem.CreateByNavigation?.Gmail</td></tr>
                                 <tr><td class="text-muted">Ngân hàng:</td><td>@Model.RequestItem.BankNameSnapshot</td></tr>
                                 <tr><td class="text-muted">Số tài khoản:</td><td class="text-primary fw-bold">@Model.RequestItem.BankAccountSnapshot</td></tr>
                                 <tr><td class="text-muted">Số tiền rút:</td><td class="text-danger fw-bold fs-5">@Model.RequestItem.Amount?.ToString("N0") đ</td></tr>
                                 <tr><td class="text-muted">Ngày tạo:</td><td>@Model.RequestItem.RequestDate?.ToString("dd/MM/yyyy HH:mm")</td></tr>
+
+                                @* HIỂN THỊ TRẠNG THÁI TIẾNG VIỆT *@
                                 <tr>
                                     <td class="text-muted">Trạng thái:</td>
                                     <td>
-                                        <span class="badge @(Model.RequestItem.Status == "PENDING" ? "bg-warning text-dark" : Model.RequestItem.Status == "APPROVED" ? "bg-success" : "bg-danger")">
-                                            @Model.RequestItem.Status
-                                        </span>
+                                        @if (Model.RequestItem.Status == "PENDING")
+                                        {
+                                            <span class="badge bg-warning text-dark">Đang chờ xử lý</span>
+                                        }
+                                        else if (Model.RequestItem.Status == "APPROVED")
+                                        {
+                                            <span class="badge bg-success">Đã duyệt (Thành công)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">Đã từ chối</span>
+                                        }
                                     </td>
                                 </tr>
+
+                                @* THÊM DÒNG NGƯỜI XỬ LÝ *@
+                                @if (Model.RequestItem.Status != "PENDING")
+                                {
+                                    <tr>
+                                        <td class="text-muted">Người xử lý:</td>
+                                        <td class="fw-bold text-info">
+                                            @(Model.RequestItem.ApproveByNavigation?.Gmail ?? "Hệ thống")
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Ngày xử lý:</td>
+                                        <td>@Model.RequestItem.ApprovedDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                                    </tr>
+                                }
+
+                                @if (Model.RequestItem.Status == "REJECTED")
+                                {
+                                    <tr>
+                                        <td class="text-muted">Lý do từ chối:</td>
+                                        <td class="text-danger italic">@Model.RequestItem.ReferenceCode</td>
+                                    </tr>
+                                }
                             </table>
                         </div>
                     </div>

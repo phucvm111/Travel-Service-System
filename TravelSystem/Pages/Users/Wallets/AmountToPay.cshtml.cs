@@ -27,28 +27,29 @@ namespace TravelSystem.Pages.Wallet
 
         public async Task<IActionResult> OnGetAsync(string type, int p = 1)
         {
-            // 1. Lấy UserID từ Session
             int? userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null) return RedirectToPage("/Auths/Login");
 
-            // 2. Lấy thông tin User và Ví
             CurrentUser = await _context.Users.FindAsync(userId);
-
-            // 3. Truy vấn lịch sử giao dịch với Filter
             SelectedType = type;
-            var query = _context.TransactionHistories
-                .Where(t => t.UserId == userId);
 
+            var query = _context.TransactionHistories
+                .Where(t => t.UserId == userId)
+                .AsQueryable();
+
+            // Lọc theo loại giao dịch nếu có
             if (!string.IsNullOrEmpty(type))
             {
                 query = query.Where(t => t.TransactionType == type);
             }
 
-            // 4. Phân trang
-            int pageSize = 5;
+            // --- CẤU HÌNH PHÂN TRANG ---
+            int pageSize = 5; // Hiển thị 5 bản ghi mỗi trang theo yêu cầu của bạn
             int totalItems = await query.CountAsync();
             TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-            CurrentPage = p < 1 ? 1 : p;
+
+            // Đảm bảo trang hiện tại không nhỏ hơn 1 và không lớn hơn tổng số trang
+            CurrentPage = p < 1 ? 1 : (p > TotalPages && TotalPages > 0 ? TotalPages : p);
 
             Transactions = await query
                 .OrderByDescending(t => t.TransactionDate)

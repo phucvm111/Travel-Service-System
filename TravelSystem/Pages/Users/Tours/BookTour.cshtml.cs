@@ -67,6 +67,21 @@ namespace TravelSystem.Pages.Users.Tours
                         return Page();
                     }
 
+                    if (voucherId.HasValue)
+                    {
+                        var voucher = await _context.Vouchers.FindAsync(voucherId.Value);
+                        if (voucher != null && voucher.Quantity > 0)
+                        {
+                            voucher.Quantity -= 1; // Trừ 1 suất sử dụng
+                        }
+                        else if (voucher != null && voucher.Quantity <= 0)
+                        {
+                            ModelState.AddModelError("", "Mã giảm giá này đã hết lượt sử dụng.");
+                            await LoadDataAsync(departureId, userId.Value);
+                            return Page();
+                        }
+                    }
+
                     wallet.Balance -= finalAmount;
                     var systemWallet = await _context.Users.FirstOrDefaultAsync(w => w.UserId == 1);
                     if (systemWallet != null) systemWallet.Balance += finalAmount;
@@ -80,6 +95,15 @@ namespace TravelSystem.Pages.Users.Tours
                         Amount = finalAmount,
                         TransactionType = "PURCHASE",
                         Description = $"Thanh toán tour {departure.Tour.TourName}",
+                        TransactionDate = DateTime.Now
+                    });
+
+                    _context.TransactionHistories.Add(new TransactionHistory
+                    {
+                        UserId = 1, // ID Ví tổng của hệ thống
+                        Amount = finalAmount,
+                        TransactionType = "RECEIVE", // Loại nhận tiền
+                        Description = $"Hệ thống nhận thanh toán đơn #{bookCode} | [Ví tổng: {systemWallet.Balance:N0}đ]",
                         TransactionDate = DateTime.Now
                     });
 
