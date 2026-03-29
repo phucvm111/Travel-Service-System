@@ -25,6 +25,12 @@
         text-decoration: none;
         font-size: 14px;
         z-index: 10;
+        transition: 0.2s;
+    }
+
+    .btn-back:hover {
+        background: #f8f9fa;
+        color: #198754;
     }
 
     .tour-title-main {
@@ -36,19 +42,20 @@
         padding: 0 120px;
     }
 
-    /* 2. Cột Trái & Nội Dung */
+    /* 2. Nội Dung Chính */
     .tour-img-main {
         width: 100%;
         height: 450px;
         object-fit: cover;
-        border-radius: 4px;
+        border-radius: 8px;
         margin-bottom: 25px;
     }
 
     .section-header {
-        border-bottom: 1px solid #eee;
+        border-bottom: 2px solid #198754;
+        display: inline-block;
         margin: 30px 0 15px;
-        padding-bottom: 10px;
+        padding-bottom: 5px;
         font-weight: 700;
         color: #333;
     }
@@ -59,41 +66,14 @@
         color: #444;
     }
 
-    /* 3. Lịch Khởi Hành (Slick Slider) */
+    /* 3. Lịch Khởi Hành (Slider) */
     .departure-slider-container {
         padding: 0 40px;
         position: relative;
         margin: 20px 0;
-        overflow: hidden;
-    }
-
-    .departure-slider {
-        width: 100%;
-    }
-
-    .departure-slider .slick-list {
-        overflow: hidden;
-    }
-
-    .departure-slider .slick-track {
-        display: flex !important;
-        flex-wrap: nowrap !important;
-        align-items: stretch;
-    }
-
-    .departure-slider .slick-slide {
-        height: inherit !important;
-        display: flex !important;
-    }
-
-    .departure-slider .slick-slide > div {
-        width: 100%;
-        display: flex;
     }
 
     .departure-item {
-        width: 100%;
-        min-height: 100px;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         padding: 15px 10px;
@@ -102,219 +82,94 @@
         text-align: center;
         background: #fff;
         transition: all 0.3s ease;
-        display: flex !important;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        box-sizing: border-box;
     }
 
     .departure-item:hover {
         border-color: #198754;
-        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.1);
+        background: #f9f9f9;
     }
 
     .departure-item.active {
         border: 2px solid #198754;
         background-color: #f0fff4;
-        transform: translateY(-2px);
     }
 
-    .dep-date {
-        font-weight: 600;
-        color: #333;
-        font-size: 0.95rem;
-    }
-
-    .dep-icon {
-        color: #198754;
-        margin-bottom: 5px;
-        font-size: 1.1rem;
-    }
+    .dep-date { font-weight: 600; color: #333; display: block; }
+    .dep-icon { color: #198754; font-size: 1.1rem; }
 
     .slick-prev, .slick-next {
-        width: 35px;
-        height: 35px;
-        background: #198754 !important;
-        border-radius: 50%;
-        z-index: 2;
-        transition: 0.3s;
+        width: 30px; height: 30px; background: #198754 !important; border-radius: 50%; z-index: 2;
     }
 
-    .slick-prev:hover, .slick-next:hover {
-        background: #146c43 !important;
-    }
-
-    .slick-prev:before, .slick-next:before {
-        font-size: 20px;
-        opacity: 1;
-        color: white;
-        font-family: 'Font Awesome 6 Free';
-        font-weight: 900;
-    }
-
-    .slick-prev:before {
-        content: '\f053';
-    }
-
-    .slick-next:before {
-        content: '\f054';
-    }
-
-    .slick-prev {
-        left: -5px;
-    }
-
-    .slick-next {
-        right: -5px;
-    }
-
-    /* 4. Link Dịch Vụ */
-    .service-link {
-        color: #0d6efd !important;
-        text-decoration: underline !important;
-        font-weight: 500;
-    }
-
-    .service-link:hover {
-        color: #0a58ca !important;
-    }
-
-    /* 5. Sticky Sidebar */
-    .sticky-sidebar {
+    /* 4. Sticky Sidebar (FIXED) */
+    .sticky-wrapper {
         position: -webkit-sticky;
         position: sticky;
         top: 20px;
-        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
     .booking-card {
         border-radius: 12px;
         border: 1px solid #eee;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.07);
         background: #fff;
-        padding: 25px;
+        padding: 20px;
+    }
+
+    .agent-card {
+        background-color: #fcfcfc;
+        border-left: 4px solid #198754;
     }
 
     .info-row {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         font-size: 0.95rem;
     }
 
-    .info-row label {
-        font-weight: 600;
-        color: #666;
-    }
-
-    .price-red {
-        color: #d9534f !important;
-        font-weight: 800 !important;
-        font-size: 1.1rem;
-    }
+    .info-row label { font-weight: 600; color: #666; }
+    .price-red { color: #d9534f !important; font-weight: 800; font-size: 1.1rem; }
 
     .btn-book-now {
         background-color: #198754;
         color: white;
         width: 100%;
-        padding: 14px;
+        padding: 12px;
         border: none;
         border-radius: 6px;
         font-weight: 700;
-        margin-top: 15px;
+        margin-top: 10px;
         transition: 0.3s;
         text-transform: uppercase;
-        letter-spacing: 1px;
     }
 
     .btn-book-now:hover:not(:disabled) {
         background-color: #146c43;
-        box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
     }
 
-    /* 6. Feedback */
-    .feedback-container {
-        margin-top: 40px;
-    }
-
+    /* 5. Feedback */
     .feedback-card {
         background: #fff;
         border: 1px solid #f0f0f0;
         border-radius: 12px;
         padding: 20px;
-        margin-bottom: 20px;
-        transition: 0.3s;
-    }
-
-    .feedback-card:hover {
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        border-color: #e0e0e0;
-    }
-
-    .fb-user-info {
-        display: flex;
-        align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: 15px;
     }
 
     .fb-avatar {
-        width: 45px;
-        height: 45px;
-        background: #e8f5e9;
-        color: #198754;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        margin-right: 12px;
-        font-size: 1.2rem;
-    }
-
-    .fb-details h6 {
-        margin: 0;
-        font-weight: 700;
-        color: #212529;
-    }
-
-    .fb-date {
-        font-size: 0.8rem;
-        color: #999;
-    }
-
-    .fb-rating {
-        color: #ffc107;
-        font-size: 0.9rem;
-    }
-
-    .fb-content {
-        color: #444;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin-top: 10px;
-    }
-
-    .fb-image {
-        border-radius: 8px;
-        margin-top: 12px;
-        cursor: zoom-in;
-        transition: 0.2s;
-    }
-
-    .fb-image:hover {
-        opacity: 0.9;
+        width: 40px; height: 40px; background: #e8f5e9; color: #198754;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-weight: 700; margin-right: 12px;
     }
 
     @@media (max-width: 768px) {
-        .tour-title-main {
-            font-size: 1.6rem;
-            padding: 0 70px;
-        }
-
-        .tour-img-main {
-            height: 280px;
-        }
+        .tour-title-main { font-size: 1.6rem; padding: 0 60px; }
+        .tour-img-main { height: 280px; }
     }
 </style>
 
@@ -344,7 +199,7 @@
                             @foreach (var dep in Model.Departures)
                             {
                                 <div class="departure-item"
-                                     onclick="updateBookingCard(this, '@dep.DepartureId', '@dep.StartDate', '@dep.EndDate', '@dep.Capacity',  '@dep.AvailableSeat', '@dep.AdultPrice', '@dep.ChildPrice', '@(Model.Feedbacks.Any() ? Math.Round(Model.Feedbacks.Average(f => f.Rate ?? 0), 1) : 0)')">
+                                     onclick="updateBookingCard(this, '@dep.DepartureId', '@dep.StartDate', '@dep.EndDate', '@dep.Capacity', '@dep.AvailableSeat', '@dep.AdultPrice', '@dep.ChildPrice', '@(Model.Feedbacks.Any() ? Math.Round(Model.Feedbacks.Average(f => f.Rate ?? 0), 1) : 0)')">
                                     <span class="dep-icon"><i class="fa-regular fa-calendar-check"></i></span>
                                     <span class="dep-date">@dep.StartDate</span>
                                     <small class="text-muted">đến @dep.EndDate</small>
@@ -358,51 +213,26 @@
                     <h4 class="section-header">Dịch Vụ Đi Kèm</h4>
                     <div class="row">
                         <div class="col-md-4">
-                            <h6 class="fw-bold text-primary">
-                                <i class="fa-solid fa-utensils me-2"></i>Nhà hàng
-                            </h6>
+                            <h6 class="fw-bold text-success"><i class="fa-solid fa-utensils me-2"></i>Nhà hàng</h6>
                             <ul class="ps-3">
-                                @foreach (var s in Model.RestaurantList)
-                                {
-                                    <li>
-                                        <a asp-page="/Users/Tours/RestaurantsDetails"
-                                           asp-route-id="@s.ServiceId"
-                                           class="service-link">
-                                            @s.ServiceName
-                                        </a>
-                                    </li>
+                                @foreach (var s in Model.RestaurantList) {
+                                    <li><a asp-page="/Users/Tours/RestaurantsDetails" asp-route-id="@s.ServiceId" class="text-decoration-none text-primary">@s.ServiceName</a></li>
                                 }
                             </ul>
                         </div>
                         <div class="col-md-4">
-                            <h6 class="fw-bold text-primary"><i class="fa-solid fa-masks-theater me-2"></i>Giải trí</h6>
+                            <h6 class="fw-bold text-success"><i class="fa-solid fa-masks-theater me-2"></i>Giải trí</h6>
                             <ul class="ps-3">
-                                @foreach (var s in Model.EntertainmentList)
-                                {
-                                    <li>
-                                        <a asp-page="/Users/Tours/EntertainmentsDetails"
-                                           asp-route-id="@s.ServiceId"
-                                           class="service-link">
-                                            @s.ServiceName
-                                        </a>
-                                    </li>
+                                @foreach (var s in Model.EntertainmentList) {
+                                    <li><a asp-page="/Users/Tours/EntertainmentsDetails" asp-route-id="@s.ServiceId" class="text-decoration-none text-primary">@s.ServiceName</a></li>
                                 }
                             </ul>
                         </div>
                         <div class="col-md-4">
-                            <h6 class="fw-bold text-primary">
-                                <i class="fa-solid fa-hotel me-2"></i>Khách sạn
-                            </h6>
+                            <h6 class="fw-bold text-success"><i class="fa-solid fa-hotel me-2"></i>Khách sạn</h6>
                             <ul class="ps-3">
-                                @foreach (var s in Model.AccommodationList)
-                                {
-                                    <li>
-                                        <a asp-page="/Users/Tours/AccommodationsDetails"
-                                           asp-route-id="@s.ServiceId"
-                                           class="service-link">
-                                            @s.ServiceName
-                                        </a>
-                                    </li>
+                                @foreach (var s in Model.AccommodationList) {
+                                    <li><a asp-page="/Users/Tours/AccommodationsDetails" asp-route-id="@s.ServiceId" class="text-decoration-none text-primary">@s.ServiceName</a></li>
                                 }
                             </ul>
                         </div>
@@ -410,18 +240,21 @@
                 </div>
 
                 <div class="content-area">
-                    <h4 class="section-header">Lịch Trình</h4>
-                    <p style="white-space: pre-line">@Model.Tour.TourSchedule</p>
-                </div>
-
-                <div class="content-area">
-                    <h4 class="section-header">Bao Gồm</h4>
-                    <p style="white-space: pre-line">@Model.Tour.TourInclude</p>
-                </div>
-
-                <div class="content-area">
-                    <h4 class="section-header">Không Bao Gồm</h4>
-                    <p style="white-space: pre-line">@Model.Tour.TourNonInclude</p>
+                    <h4 class="section-header">Lịch Trình & Chính Sách</h4>
+                    <div class="accordion" id="tourPolicy">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sch">Lịch trình chi tiết</button></h2>
+                            <div id="sch" class="accordion-collapse collapse show"><div class="accordion-body" style="white-space: pre-line">@Model.Tour.TourSchedule</div></div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#inc">Bao gồm / Không bao gồm</button></h2>
+                            <div id="inc" class="accordion-collapse collapse"><div class="accordion-body">
+                                <strong>Bao gồm:</strong><p style="white-space: pre-line">@Model.Tour.TourInclude</p>
+                                <hr />
+                                <strong>Không bao gồm:</strong><p style="white-space: pre-line">@Model.Tour.TourNonInclude</p>
+                            </div></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="feedback-container">
@@ -430,52 +263,34 @@
                     {
                         @foreach (var fb in Model.Feedbacks)
                         {
-                            <div class="feedback-card">
-                                <div class="fb-user-info">
-                                    <div class="fb-avatar">
-                                        @(string.IsNullOrEmpty(fb.Book?.User?.FirstName) ? "U" : fb.Book.User.FirstName.Substring(0, 1).ToUpper())
-                                    </div>
-                                    <div class="fb-details">
-                                        <h6>@fb.Book?.User?.FirstName @fb.Book?.User?.LastName</h6>
-                                        <div class="fb-rating">
-                                            @for (int i = 1; i <= 5; i++)
-                                            {
-                                                <i class="fa-@(i <= fb.Rate ? "solid" : "regular") fa-star"></i>
-                                            }
-                                            <span class="fb-date ms-2">@fb.CreateDate?.ToString("dd/MM/yyyy")</span>
-                                        </div>
+                            <div class="feedback-card shadow-sm">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="fb-avatar">@(string.IsNullOrEmpty(fb.Book?.User?.FirstName) ? "U" : fb.Book.User.FirstName.Substring(0, 1).ToUpper())</div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">@fb.Book?.User?.FirstName @fb.Book?.User?.LastName</h6>
+                                        <small class="text-warning">
+                                            @for (int i = 1; i <= 5; i++) { <i class="fa-@(i <= fb.Rate ? "solid" : "regular") fa-star"></i> }
+                                        </small>
+                                        <small class="text-muted ms-2">@fb.CreateDate?.ToString("dd/MM/yyyy")</small>
                                     </div>
                                 </div>
-                                <div class="fb-content">
-                                    @fb.Content
-                                </div>
-                                @if (!string.IsNullOrEmpty(fb.Image))
-                                {
-                                    <img src="~/@fb.Image" class="fb-image" width="120" />
-                                }
+                                <div class="fb-content">@fb.Content</div>
+                                @if (!string.IsNullOrEmpty(fb.Image)) { <img src="~/@fb.Image" class="rounded mt-2" width="100" /> }
                             </div>
                         }
-                    }
-                    else
-                    {
-                        <div class="alert alert-light border text-center py-4">
-                            <i class="fa-solid fa-comment-slash d-block mb-2 fs-3 text-muted"></i>
-                            Chưa có đánh giá nào cho tour này.
-                        </div>
                     }
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="sticky-sidebar">
-                    <div class="card booking-card">
-                        <h5 class="fw-bold mb-4 text-center">Thông Tin Đặt Tour</h5>
-                        <div class="info-row"><label>Khởi hành:</label><span id="txt-start" class="fw-bold">--</span></div>
+                <div class="sticky-wrapper">
+                    <div class="booking-card">
+                        <h5 class="fw-bold mb-3 text-center text-success border-bottom pb-2">THÔNG TIN ĐẶT TOUR</h5>
+                        <div class="info-row"><label>Khởi hành:</label><span id="txt-start" class="fw-bold text-dark">--</span></div>
                         <div class="info-row"><label>Kết thúc:</label><span id="txt-end">--</span></div>
                         <div class="info-row"><label>Thời gian:</label><span>@Model.Tour.NumberOfDay ngày</span></div>
-                        <div class="info-row"><label>Khởi hành từ:</label><span>@Model.Tour.StartPlace</span></div>
+                        <div class="info-row"><label>Điểm đi:</label><span>@Model.Tour.StartPlace</span></div>
                         <div class="info-row"><label>Điểm đến:</label><span>@Model.Tour.EndPlace</span></div>
-                        <div class="info-row"><label>Tổng số chỗ:</label><span id="txt-total-seat" class="fw-bold">--</span></div>
                         <div class="info-row"><label>Số chỗ còn:</label><span id="txt-seat" class="text-success fw-bold">--</span></div>
                         <div class="info-row"><label>Giá người lớn:</label><span id="txt-adult" class="price-red">--</span></div>
                         <div class="info-row"><label>Giá trẻ em:</label><span id="txt-child" class="price-red">--</span></div>
@@ -485,6 +300,17 @@
                             <input type="hidden" name="departureId" id="hidden-id" />
                             <button type="submit" id="btn-book" class="btn-book-now" disabled>ĐẶT TOUR NGAY</button>
                         </form>
+                    </div>
+
+                    <div class="booking-card agent-card">
+                        <h6 class="fw-bold mb-3 text-center border-bottom pb-2">ĐƠN VỊ LỮ HÀNH</h6>
+                        <div class="text-center mb-3">
+                            <i class="fas fa-id-badge fa-2x text-success mb-2"></i>
+                            <div class="fw-bold">@Model.Tour.TravelAgent?.TravelAgentName</div>
+                        </div>
+                        <div class="small mb-1"><strong>Email:</strong> @Model.Tour.TravelAgent?.TravelAgentEmail</div>
+                        <div class="small mb-1"><strong>Hotline:</strong> <span class="text-danger fw-bold">@Model.Tour.TravelAgent?.HotLine</span></div>
+                        <div class="small"><strong>Địa chỉ:</strong> @Model.Tour.TravelAgent?.TravelAgentAddress</div>
                     </div>
                 </div>
             </div>
@@ -502,53 +328,36 @@
                 slidesToShow: 3,
                 slidesToScroll: 1,
                 arrows: true,
-                dots: false,
-                adaptiveHeight: false,
-                variableWidth: false,
-                rows: 1,
                 responsive: [
-                    {
-                        breakpoint: 992,
-                        settings: {
-                            slidesToShow: 2,
-                            rows: 1
-                        }
-                    },
-                    {
-                        breakpoint: 576,
-                        settings: {
-                            slidesToShow: 1,
-                            rows: 1
-                        }
-                    }
+                    { breakpoint: 992, settings: { slidesToShow: 2 } },
+                    { breakpoint: 576, settings: { slidesToShow: 1 } }
                 ]
             });
-
-            // Tự động chọn ngày đầu tiên
             $('.departure-item').first().click();
         });
 
         function updateBookingCard(el, id, start, end, totalSeat, seat, adult, child, rate) {
-    $('.departure-item').removeClass('active');
-    $(el).addClass('active');
+            $('.departure-item').removeClass('active');
+            $(el).addClass('active');
 
-    document.getElementById('txt-start').innerText = start;
-    document.getElementById('txt-end').innerText = end;
-    document.getElementById('txt-total-seat').innerText = totalSeat;
-    document.getElementById('txt-seat').innerText = seat;
-    document.getElementById('txt-adult').innerText = Number(adult).toLocaleString() + " đ";
-    document.getElementById('txt-child').innerText = Number(child).toLocaleString() + " đ";
-    document.getElementById('txt-rate').innerText = rate + "⭐";
-    document.getElementById('hidden-id').value = id;
-    document.getElementById('btn-book').disabled = (Number(seat) <= 0);
-
-    if (Number(seat) <= 0) {
-        document.getElementById('btn-book').innerText = "HẾT CHỖ";
-        document.getElementById('btn-book').style.backgroundColor = "#ccc";
-    } else {
-        document.getElementById('btn-book').innerText = "ĐẶT TOUR NGAY";
-        document.getElementById('btn-book').style.backgroundColor = "#198754";
-    }
-}
+            document.getElementById('txt-start').innerText = start;
+            document.getElementById('txt-end').innerText = end;
+            document.getElementById('txt-seat').innerText = seat + " chỗ";
+            document.getElementById('txt-adult').innerText = Number(adult).toLocaleString() + " đ";
+            document.getElementById('txt-child').innerText = Number(child).toLocaleString() + " đ";
+            document.getElementById('txt-rate').innerText = rate + " ⭐";
+            document.getElementById('hidden-id').value = id;
+            
+            let btn = document.getElementById('btn-book');
+            if (Number(seat) <= 0) {
+                btn.disabled = true;
+                btn.innerText = "HẾT CHỖ";
+                btn.style.backgroundColor = "#ccc";
+            } else {
+                btn.disabled = false;
+                btn.innerText = "ĐẶT TOUR NGAY";
+                btn.style.backgroundColor = "#198754";
+            }
+        }
     </script>
 }
