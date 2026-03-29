@@ -116,10 +116,13 @@ namespace TravelSystem.Pages.Agents.TourBooked
                     if (v != null)
                     {
                         vouchersHtml += $@"
-                    <div style='margin-top:10px; border-bottom:1px solid #eee; padding-bottom:5px;'>
-                        <span style='font-size:18px; color:#d9534f;'>Mã: <b>{v.VoucherCode}</b></span><br/>
-                        <small style='color:#555;'>Ưu đãi: Giảm {v.PercentDiscount}% cho chuyến đi tiếp theo.</small>
-                    </div>";
+                            <div style='margin-top:10px; border-bottom:1px solid #eee; padding-bottom:5px;'>
+                                <span style='font-size:18px; color:#d9534f;'>Mã: <b>{v.VoucherCode}</b></span><br/>
+                                <div style='color:#555; font-size:14px;'>
+                                    Ưu đãi: <b>Giảm {v.PercentDiscount}%</b> cho chuyến đi tiếp theo.<br/>
+                                    Hạn dùng đến: <b style='color:#333;'>{v.EndDate?.ToString("dd/MM/yyyy")}</b>
+                                </div>
+                            </div>";
 
                         voucherCodesString += v.VoucherCode + ", ";
                     }
