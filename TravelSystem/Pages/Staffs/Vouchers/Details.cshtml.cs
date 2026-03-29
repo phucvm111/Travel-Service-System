@@ -22,20 +22,11 @@ namespace TravelSystem.Pages.Staffs.Vouchers
             if (userId == null)
                 return RedirectToPage("/Auths/Login");
 
-            var staff = await _context.Staff
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.StaffId == userId.Value);
-
-            if (staff == null)
-            {
-                TempData["ErrorMessage"] = "Không tìm thấy thông tin nhân viên.";
-                return RedirectToPage("/Error");
-            }
-
             Voucher = await _context.Vouchers
                 .AsNoTracking()
                 .Include(x => x.User)
-                .FirstOrDefaultAsync(x => x.VoucherId == id && x.UserId == staff.StaffId);
+                .FirstOrDefaultAsync(x => x.VoucherId == id
+                                      && x.UserId == userId.Value);
 
             if (Voucher == null)
             {

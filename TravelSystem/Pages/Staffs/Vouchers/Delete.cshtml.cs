@@ -19,25 +19,17 @@ namespace TravelSystem.Pages.Staffs.Vouchers
         [BindProperty]
         public string? ChangeReason { get; set; }
 
+        
         public async Task<IActionResult> OnGetAsync(int id)
         {
             var userId = HttpContext.Session.GetInt32("UserID");
             if (userId == null)
                 return RedirectToPage("/Auths/Login");
 
-            var staff = await _context.Staff
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.StaffId == userId.Value);
-
-            if (staff == null)
-            {
-                TempData["ErrorMessage"] = "Không tìm thấy thông tin nhân viên.";
-                return RedirectToPage("/Error");
-            }
-
             Voucher = await _context.Vouchers
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.VoucherId == id && x.UserId == staff.StaffId);
+                .FirstOrDefaultAsync(x => x.VoucherId == id
+                                      && x.UserId == userId.Value);
 
             if (Voucher == null)
             {
@@ -54,17 +46,9 @@ namespace TravelSystem.Pages.Staffs.Vouchers
             if (userId == null)
                 return RedirectToPage("/Auths/Login");
 
-            var staff = await _context.Staff
-                .FirstOrDefaultAsync(x => x.StaffId == userId.Value);
-
-            if (staff == null)
-            {
-                TempData["ErrorMessage"] = "Không tìm thấy thông tin nhân viên.";
-                return RedirectToPage("/Error");
-            }
-
             var voucherInDb = await _context.Vouchers
-                .FirstOrDefaultAsync(x => x.VoucherId == id && x.UserId == staff.StaffId);
+                .FirstOrDefaultAsync(x => x.VoucherId == id
+                                      && x.UserId == userId.Value);
 
             if (voucherInDb == null)
             {
