@@ -50,7 +50,16 @@ namespace TravelSystem.Pages.Staffs.Vouchers
 
             if (StatusFilter.HasValue)
             {
-                query = query.Where(x => x.Status == StatusFilter.Value);
+                if (StatusFilter.Value == 1)
+                {
+                    // Hoạt động: gồm cả 1 và 2
+                    query = query.Where(x => x.Status == 1 || x.Status == 2);
+                }
+                else if (StatusFilter.Value == 0)
+                {
+                    // Ngừng hoạt động
+                    query = query.Where(x => x.Status == 0);
+                }
             }
 
             var totalItems = await query.CountAsync();

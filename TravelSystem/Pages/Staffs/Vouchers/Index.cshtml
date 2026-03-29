@@ -1,115 +1,138 @@
 ﻿@page
 @model TravelSystem.Pages.Staffs.Vouchers.IndexModel
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Quản lý thẻ khuyến mãi</h2>
-    <a asp-page="./Create" class="btn btn-success">Thêm thẻ khuyến mãi</a>
-</div>
+@{
+    ViewData["Title"] = "Quản lý voucher";
+}
 
-    <form method="get" class="row g-2 mb-3">
-        <div class="col-md-4">
-            <input asp-for="SearchCode" class="form-control" placeholder="Tìm theo mã voucher..." />
-        </div>
+<div class="container-fluid pe-4">
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h2 class="fw-bold text-uppercase">Quản lý thẻ khuyến mãi</h2>
+        <a asp-page="./Create" class="btn btn-success shadow-sm">
+            <i class="bi bi-plus-lg"></i> Thêm thẻ khuyến mãi
+        </a>
+    </div>
 
-        <div class="col-md-3">
-            <select asp-for="StatusFilter" class="form-select">
-                <option value="">-- Lọc theo trạng thái --</option>
-                <option value="1">Hoạt động</option>
-                <option value="2">Ngừng hoạt động</option>
-            </select>
-        </div>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Tìm kiếm</label>
+                    <input asp-for="SearchCode" class="form-control" placeholder="Tìm theo mã voucher..." />
+                </div>
 
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-            <a asp-page="./Index" class="btn btn-secondary">Xóa lọc</a>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold">Trạng thái</label>
+                    <select asp-for="StatusFilter" class="form-select">
+                        <option value="">-- Tất cả trạng thái --</option>
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Ngừng hoạt động</option>
+                    </select>
+                </div>
+
+                <div class="col-md-auto d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="bi bi-search"></i> Tìm kiếm
+                    </button>
+                    <a asp-page="./Index" class="btn btn-outline-secondary">Xóa lọc</a>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     }
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     }
 
-    <table class="table table-bordered table-striped align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>STT</th>
-                <th>Mã voucher</th>
-                <th>Tên voucher</th>
-                <th>% giảm giá</th>
-                <th>Giảm tối đa</th>
-                <th>Áp dụng tối thiểu</th>
-                <th>Ngày bắt đầu</th>
-                <th>Ngày kết thúc</th>
-                <th>Số lượng</th>
-                <th>Trạng thái</th>
-                <th style="width:180px;">Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int stt = (Model.PageNumber - 1) * Model.PageSize;
-            }
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover table-bordered align-middle bg-white mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center">STT</th>
+                    <th>Mã voucher</th>
+                    <th>Tên voucher</th>
+                    <th class="text-center">% Giảm</th>
+                    <th>Giảm tối đa</th>
+                    <th>Áp dụng tối thiểu</th>
+                    <th class="text-center">Ngày bắt đầu</th>
+                    <th class="text-center">Ngày kết thúc</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th class="text-center" style="min-width: 280px;">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int stt = (Model.PageNumber - 1) * Model.PageSize;
+                }
 
-            @if (Model.Vouchers.Any())
-            {
-                foreach (var item in Model.Vouchers)
+                @if (Model.Vouchers != null && Model.Vouchers.Any())
                 {
-                    stt++;
+                    foreach (var item in Model.Vouchers)
+                    {
+                        stt++;
+                        <tr>
+                            <td class="text-center fw-bold">@stt</td>
+                            <td class="fw-bold text-primary">@item.VoucherCode</td>
+                            <td>@item.VoucherName</td>
+                            <td class="text-center">@(item.PercentDiscount.HasValue? item.PercentDiscount.Value.ToString("0.##") + "%" : "-")</td>
+                            <td>@(item.MaxDiscountAmount.HasValue? item.MaxDiscountAmount.Value.ToString("N0") + " đ" : "-")</td>
+                            <td>@(item.MinDiscountAmount.HasValue? item.MinDiscountAmount.Value.ToString("N0") + " đ" : "-")</td>
+                            <td class="text-center">@(item.StartDate?.ToString("dd/MM/yyyy"))</td>
+                            <td class="text-center">@(item.EndDate?.ToString("dd/MM/yyyy"))</td>
+                            <td class="text-center">@(item.Quantity ?? 0)</td>
+                            <td class="text-center">
+                                @if (item.Status == 1 || item.Status == 2)
+                                {
+                                    <span class="badge bg-success">Hoạt động</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Ngừng hoạt động</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group gap-1">
+                                    <a asp-page="./Details" asp-route-id="@item.VoucherId" class="btn btn-info btn-sm text-white">
+                                        Chi tiết
+                                    </a>
+                                    <a asp-page="./Edit" asp-route-id="@item.VoucherId" class="btn btn-warning btn-sm">
+                                        Sửa
+                                    </a>
+                                    <a asp-page="./Delete" asp-route-id="@item.VoucherId" class="btn btn-danger btn-sm">
+                                        Đổi trạng thái
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
                     <tr>
-                        <td>@stt</td>
-                        <td>@item.VoucherCode</td>
-                        <td>@item.VoucherName</td>
-                        <td>@(item.PercentDiscount.HasValue? item.PercentDiscount.Value.ToString("0.##") + "%" : "Chưa cập nhật")</td>
-                        <td>@(item.MaxDiscountAmount.HasValue? item.MaxDiscountAmount.Value.ToString("N0") : "Chưa cập nhật")</td>
-                        <td>@(item.MinDiscountAmount.HasValue? item.MinDiscountAmount.Value.ToString("N0") : "Chưa cập nhật")</td>
-                        <td>@(item.StartDate?.ToString("dd/MM/yyyy"))</td>
-                        <td>@(item.EndDate?.ToString("dd/MM/yyyy"))</td>
-                        <td>@(item.Quantity.HasValue? item.Quantity.Value.ToString() : "Chưa cập nhật")</td>
-                        <td>
-                            @if (item.Status == 1)
-                            {
-                                <span class="badge bg-success">Hoạt động</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">Ngừng hoạt động</span>
-                            }
-                        </td>
-                    <td>
-                        <div class="d-flex flex-wrap gap-2">
-                            <a asp-page="./Details" asp-route-id="@item.VoucherId" class="btn btn-info btn-sm text-white">
-                                Chi tiết
-                            </a>
-                            <a asp-page="./Edit" asp-route-id="@item.VoucherId" class="btn btn-warning btn-sm">
-                                Chỉnh sửa
-                            </a>
-                            <a asp-page="./Delete" asp-route-id="@item.VoucherId" class="btn btn-danger btn-sm">
-                                Đổi trạng thái
-                            </a>
-                        </div>
-                    </td>
+                        <td colspan="11" class="text-center py-4 text-muted">Không tìm thấy voucher nào phù hợp.</td>
                     </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="11" class="text-center">Không có voucher nào.</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 
     @if (Model.TotalPages > 1)
     {
-        <nav>
-            <ul class="pagination">
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
                 @for (int i = 1; i <= Model.TotalPages; i++)
                 {
                     <li class="page-item @(i == Model.PageNumber ? "active" : "")">
@@ -126,3 +149,22 @@
         </nav>
     }
 </div>
+
+<style>
+    /* Đảm bảo phần nội dung không bị dính vào lề trái (Sidebar) */
+    .container-fluid {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    /* Hiệu ứng hover cho bảng */
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,.03);
+    }
+
+    /* Bo góc cho badge */
+    .badge {
+        padding: 0.5em 0.8em;
+        font-weight: 500;
+    }
+</style>
