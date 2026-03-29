@@ -19,25 +19,37 @@ namespace TravelSystem.Pages.Users.Tours
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Tour = await _context.Tours.FirstOrDefaultAsync(t => t.TourId == id);
+            // 🔥 THÊM Include TravelAgent
+            Tour = await _context.Tours
+                .Include(t => t.TravelAgent)
+                .FirstOrDefaultAsync(t => t.TourId == id);
+
             if (Tour == null) return NotFound();
 
             Departures = await _context.TourDepartures
                 .Where(d => d.TourId == id && d.StartDate >= DateOnly.FromDateTime(DateTime.Today))
-                .OrderBy(d => d.StartDate).ToListAsync();
+                .OrderBy(d => d.StartDate)
+                .ToListAsync();
 
             var serviceIds = await _context.TourServiceDetails
-                .Where(td => td.TourId == id).Select(td => td.ServiceId).ToListAsync();
+                .Where(td => td.TourId == id)
+                .Select(td => td.ServiceId)
+                .ToListAsync();
 
-            var allServices = await _context.Services.Where(s => serviceIds.Contains(s.ServiceId)).ToListAsync();
+            var allServices = await _context.Services
+                .Where(s => serviceIds.Contains(s.ServiceId))
+                .ToListAsync();
+
             RestaurantList = allServices.Where(s => s.ServiceType == 2).ToList();
             EntertainmentList = allServices.Where(s => s.ServiceType == 3).ToList();
             AccommodationList = allServices.Where(s => s.ServiceType == 1).ToList();
 
             Feedbacks = await _context.Feedbacks
-                .Include(f => f.Book).ThenInclude(b => b.User)
+                .Include(f => f.Book)
+                    .ThenInclude(b => b.User)
                 .Where(f => f.Book.TourDeparture.TourId == id)
-                .OrderByDescending(f => f.CreateDate).ToListAsync();
+                .OrderByDescending(f => f.CreateDate)
+                .ToListAsync();
 
             return Page();
         }

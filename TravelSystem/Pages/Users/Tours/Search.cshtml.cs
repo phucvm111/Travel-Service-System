@@ -17,30 +17,33 @@ namespace TravelSystem.Pages.Users.Tours
         public IList<Tour> Tours { get; set; } = new List<Tour>();
         public List<string> StartPlaces { get; set; } = new();
         public List<string> EndPlaces { get; set; } = new();
+        public List<TravelAgent> TravelAgents { get; set; } = new(); // Danh sách đại lý cho dropdown
         public int TotalTours { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; }
         private int PageSize = 5;
 
         // BIND PROPERTIES
-        [BindProperty(SupportsGet = true)] public string? Keyword { get; set; } // Tìm theo tên tour
+        [BindProperty(SupportsGet = true)] public string? Keyword { get; set; }
         [BindProperty(SupportsGet = true)] public string? Budget { get; set; }
-        [BindProperty(SupportsGet = true)] public string? Departure { get; set; } // Điểm đi
-        [BindProperty(SupportsGet = true)] public string? Destination { get; set; } // Điểm đến (Nhận từ trang Index)
+        [BindProperty(SupportsGet = true)] public string? Departure { get; set; }
+        [BindProperty(SupportsGet = true)] public string? Destination { get; set; }
         [BindProperty(SupportsGet = true)] public DateOnly? DepartureDate { get; set; }
+        [BindProperty(SupportsGet = true)] public int? AgentId { get; set; } // Thuộc tính lọc theo Đại lý
         [BindProperty(SupportsGet = true)] public int PageNumber { get; set; } = 1;
 
         public async Task OnGetAsync()
         {
             var query = _context.Tours
                 .Include(t => t.TourDepartures)
+                .Include(t => t.TravelAgent) // Quan trọng: Include để lấy tên đại lý hiển thị
                 .AsQueryable();
 
-            // 1. Lọc theo Tên Tour (Keyword)
+            // 1. Lọc theo Tên Tour
             if (!string.IsNullOrEmpty(Keyword))
                 query = query.Where(t => t.TourName.Contains(Keyword));
 
-            // 2. Lọc theo Điểm đến (Destination) - Hỗ trợ cả nhập tay từ Home và Dropdown
+            // 2. Lọc theo Điểm đến
             if (!string.IsNullOrEmpty(Destination))
                 query = query.Where(t => t.EndPlace.Contains(Destination));
 
@@ -68,7 +71,11 @@ namespace TravelSystem.Pages.Users.Tours
                 }
             }
 
-            // 5. Lọc theo Ngày khởi hành
+            // 5. Lọc theo Đại lý
+            if (AgentId.HasValue)
+                query = query.Where(t => t.TravelAgentId == AgentId.Value);
+
+            // 6. Lọc theo Ngày khởi hành
             var today = DateOnly.FromDateTime(DateTime.Today);
             if (DepartureDate.HasValue)
                 query = query.Where(t => t.TourDepartures.Any(d => d.StartDate >= DepartureDate.Value));
@@ -86,9 +93,10 @@ namespace TravelSystem.Pages.Users.Tours
                 .Take(PageSize)
                 .ToListAsync();
 
-            // Lấy dữ liệu cho Dropdown
+            // Dữ liệu cho Dropdowns
             StartPlaces = await _context.Tours.Select(t => t.StartPlace).Distinct().ToListAsync();
             EndPlaces = await _context.Tours.Select(t => t.EndPlace).Distinct().ToListAsync();
+            TravelAgents = await _context.TravelAgents.OrderBy(a => a.TravelAgentName).ToListAsync();
         }
     }
 }
