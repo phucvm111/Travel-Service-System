@@ -80,13 +80,16 @@
                                         </tr>
 
                                         @* Tìm đến phần Modal trong vòng lặp *@
+                                        @* Tìm đến phần Modal Cancel trong vòng lặp booking *@
                                         <div class="modal fade" id="cancelModal-@b.BookId" tabindex="-1">
                                             <div class="modal-dialog">
                                                 <form method="post" asp-page-handler="Cancel">
+                                                    @* Quan trọng: Gửi kèm BookId *@
                                                     <input type="hidden" name="bookId" value="@b.BookId" />
+
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-danger text-white">
-                                                            <h5 class="modal-title">Hủy chuyến & Tặng quà khách hàng</h5>
+                                                            <h5 class="modal-title"><i class="fas fa-exclamation-triangle me-2"></i>Hủy chuyến & Tặng quà</h5>
                                                         </div>
                                                         <div class="modal-body">
                                                             <p>Hành động này sẽ <b>hoàn tiền 100%</b> cho khách <strong>@b.FirstName @b.LastName</strong></p>
@@ -97,9 +100,29 @@
                                                             </div>
 
                                                             <div class="mb-0">
-                                                                <label class="form-label fw-bold text-success">Mã Voucher tặng kèm (Nếu có):</label>
-                                                                <input type="text" name="voucherCode" class="form-control" placeholder="Ví dụ: SORRY100" />
-                                                                <small class="text-muted">Mã này sẽ được gửi kèm trong Email thông báo hủy.</small>
+                                                                <label class="form-label fw-bold text-success"><i class="fas fa-gift me-2"></i>Chọn Voucher tặng kèm (Có thể chọn nhiều):</label>
+
+                                                                <div class="border rounded p-3 bg-light" style="max-height: 180px; overflow-y: auto;">
+                                                                    @if (Model.AgentVouchers != null && Model.AgentVouchers.Any())
+                                                                    {
+                                                                        @foreach (var v in Model.AgentVouchers)
+                                                                        {
+                                                                            <div class="form-check mb-2">
+                                                                                @* LƯU Ý: name="selectedVouchers" phải khớp với tham số trong C# *@
+                                                                                <input class="form-check-input" type="checkbox" name="selectedVouchers" value="@v.VoucherCode" id="v-@b.BookId-@v.VoucherId">
+                                                                                <label class="form-check-label small" for="v-@b.BookId-@v.VoucherId">
+                                                                                    <span class="fw-bold">@v.VoucherCode</span> (Giảm @v.PercentDiscount%)
+                                                                                    <br /><span class="text-muted" style="font-size: 0.75rem;">HSD: @v.EndDate?.ToString("dd/MM/yyyy")</span>
+                                                                                </label>
+                                                                            </div>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <p class="text-muted small mb-0">Bạn chưa có voucher tặng hoặc mã đã hết hạn.</p>
+                                                                    }
+                                                                </div>
+                                                                <small class="text-muted mt-2 d-block">Mã sẽ được gửi kèm trong mail thông báo hủy.</small>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">

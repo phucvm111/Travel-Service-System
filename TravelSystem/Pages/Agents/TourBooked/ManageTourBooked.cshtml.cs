@@ -26,7 +26,7 @@ namespace TravelSystem.Pages.Agents.TourBooked
 
         [BindProperty(SupportsGet = true)]
         public int? StatusType { get; set; }
-
+        public List<Voucher> AgentVouchers { get; set; }
         public async Task<IActionResult> OnGetAsync(int p = 1)
         {
             // 1. Kiểm tra quyền Agent (RoleId = 3)
@@ -37,6 +37,10 @@ namespace TravelSystem.Pages.Agents.TourBooked
             // 2. Lấy TravelAgentID của User hiện tại
             var agent = await _context.TravelAgents.FirstOrDefaultAsync(a => a.UserId == agentUserId);
             if (agent == null) return NotFound("Thông tin đại lý không tồn tại.");
+
+            AgentVouchers = await _context.Vouchers
+                .Where(v => v.UserId == agentUserId && v.Status == 2 && v.Quantity > 0 && v.EndDate >= DateOnly.FromDateTime(DateTime.Now))
+                .ToListAsync();
 
             CurrentPage = p;
             int pageSize = 5;
@@ -74,9 +78,8 @@ namespace TravelSystem.Pages.Agents.TourBooked
 
             return Page();
         }
-
-        // Action xử lý Đại lý chủ động hủy tour
-        public async Task<IActionResult> OnPostCancelAsync(int bookId, string reason, string? voucherCode)
+        // Action xử lý Đại lý chủ động hủy tour - Nhận mảng string[] selectedVouchers từ checkbox
+        public async Task<IActionResult> OnPostCancelAsync(int bookId, string reason, string[]? selectedVouchers)
         {
             // 1. Load dữ liệu kèm thông tin Đại lý sở hữu Tour
             var booking = await _context.Bookings
@@ -93,36 +96,42 @@ namespace TravelSystem.Pages.Agents.TourBooked
                 return RedirectToPage();
             }
 
-            // 3. --- VALIDATE VOUCHER CỦA ĐẠI LÝ ---
-            string voucherHtml = "";
-            if (!string.IsNullOrEmpty(voucherCode))
+            // 3. --- XỬ LÝ DANH SÁCH VOUCHER ĐÃ CHỌN ---
+            string vouchersHtml = ""; // Dùng để nhúng vào Email
+            string voucherCodesString = ""; // Dùng để lưu vào Note của Booking
+
+            if (selectedVouchers != null && selectedVouchers.Length > 0)
             {
-                // Kiểm tra voucher: Phải đúng mã, Status = 2 (Agent), và thuộc về Agent sở hữu tour này
-                var v = await _context.Vouchers.FirstOrDefaultAsync(x =>
-                    x.VoucherCode == voucherCode &&
-                    x.Status == 2 &&
-                    x.UserId == booking.TourDeparture.Tour.TravelAgent.UserId);
+                vouchersHtml = @"<div style='margin-top:20px; padding:15px; border:2px dashed #28a745; background-color:#f9fff9; border-radius:10px;'>
+                            <p style='color:#28a745; font-weight:bold; margin:0; font-size:16px;'>🎁 Quà tặng tri ân đặc biệt từ Đại lý:</p>";
 
-                if (v == null)
+                foreach (var code in selectedVouchers)
                 {
-                    // Chúng ta không dùng TempData nữa mà truyền trực tiếp vào tham số Redirect
-                    string errorMsg = $"Mã voucher '{voucherCode}' không tồn tại hoặc không thuộc quyền sở hữu của bạn.";
-                    return RedirectToPage(new { cancel = "voucherfalse", msg = errorMsg });
-                }
+                    // Kiểm tra từng mã trong mảng chọn xem có hợp lệ với Agent này không
+                    var v = await _context.Vouchers.FirstOrDefaultAsync(x =>
+                        x.VoucherCode == code &&
+                        x.Status == 2 &&
+                        x.UserId == booking.TourDeparture.Tour.TravelAgent.UserId);
 
-                // Nếu có voucher hợp lệ, chuẩn bị nội dung tặng quà trong Email
-                voucherHtml = $@"
-            <div style='padding:15px; border:2px dashed #28a745; background:#f9fff9; margin-top:15px; border-radius:8px;'>
-                <p style='color:#28a745; font-weight:bold; margin:0; font-size:16px;'>🎁 Quà tặng xin lỗi từ Đại lý:</p>
-                <p style='font-size:22px; margin:10px 0; color:#1a1a1a;'>Mã giảm giá: <b style='color:#d9534f;'>{v.VoucherCode}</b></p>
-                <p style='font-size:14px; color:#555;'>Ưu đãi: <b>Giảm {v.PercentDiscount}%</b> cho lần đặt tour tiếp theo của bạn tại đại lý <b>{booking.TourDeparture.Tour.TravelAgent.TravelAgentName}</b>.</p>
-            </div>";
+                    if (v != null)
+                    {
+                        vouchersHtml += $@"
+                    <div style='margin-top:10px; border-bottom:1px solid #eee; padding-bottom:5px;'>
+                        <span style='font-size:18px; color:#d9534f;'>Mã: <b>{v.VoucherCode}</b></span><br/>
+                        <small style='color:#555;'>Ưu đãi: Giảm {v.PercentDiscount}% cho chuyến đi tiếp theo.</small>
+                    </div>";
+
+                        voucherCodesString += v.VoucherCode + ", ";
+                    }
+                }
+                vouchersHtml += "</div>";
+                voucherCodesString = voucherCodesString.TrimEnd(' ', ',');
             }
 
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 4. Xử lý ví tiền và Log (Nếu đơn đã thanh toán)
+                // 4. Xử lý hoàn tiền (Nếu đã thanh toán)
                 if (booking.Status == 1)
                 {
                     decimal refundAmount = (decimal)(booking.TotalPrice ?? 0);
@@ -157,47 +166,48 @@ namespace TravelSystem.Pages.Agents.TourBooked
                     {
                         BookId = booking.BookId,
                         RequestDate = DateOnly.FromDateTime(DateTime.Now),
-                        Reason = $"[Đại lý hủy]: {reason}" + (string.IsNullOrEmpty(voucherCode) ? "" : $" (Kèm Voucher: {voucherCode})"),
+                        Reason = $"[Đại lý hủy]: {reason}" + (string.IsNullOrEmpty(voucherCodesString) ? "" : $" (Kèm Voucher: {voucherCodesString})"),
                         Status = "FINISHED"
                     });
                 }
 
-                // 5. Cập nhật trạng thái Booking và trả chỗ
+                // 5. Cập nhật trạng thái Booking
                 booking.Status = 3;
-                booking.Note = $"[Agent hủy]: {reason} " + (string.IsNullOrEmpty(voucherCode) ? "" : $"| Voucher tặng: {voucherCode} ") + $"| {booking.Note}";
+                booking.Note = $"[Agent hủy]: {reason} " + (string.IsNullOrEmpty(voucherCodesString) ? "" : $"| Voucher tặng: {voucherCodesString} ") + $"| {booking.Note}";
 
                 int totalPeople = (booking.NumberAdult ?? 0) + (booking.NumberChildren ?? 0);
                 booking.TourDeparture.AvailableSeat += totalPeople;
 
                 await _context.SaveChangesAsync();
 
-                // 6. Gửi Email thông báo (ĐẶT TRONG TRANSACTION)
+                // 6. Gửi Email thông báo
                 string emailBody = $@"
             <div style='font-family:Arial,sans-serif; color:#333; line-height:1.6; max-width:600px; margin:auto; border:1px solid #eee; padding:20px;'>
                 <h2 style='color:#d9534f; border-bottom:2px solid #d9534f; padding-bottom:10px;'>Thông báo hủy chuyến đi</h2>
                 <p>Chào <b>{booking.FirstName} {booking.LastName}</b>,</p>
-                <p>Đại lý <b>{booking.TourDeparture.Tour.TravelAgent.TravelAgentName}</b> rất tiếc phải thông báo rằng tour <b>{booking.TourDeparture.Tour.TourName}</b> của bạn đã bị hủy.</p>
+                <p>Đại lý <b>{booking.TourDeparture.Tour.TravelAgent.TravelAgentName}</b> rất tiếc phải thông báo tour <b>{booking.TourDeparture.Tour.TourName}</b> của bạn đã bị hủy.</p>
                 <p><b>Lý do hủy:</b> <i>{reason}</i></p>
-                <p style='background:#f8f9fa; padding:10px;'>Hệ thống đã hoàn trả <b>100% số tiền ({booking.TotalPrice:N0} VNĐ)</b> vào ví cá nhân của bạn.</p>
-                {voucherHtml}
+                <p style='background:#f8f9fa; padding:10px;'>Hệ thống đã hoàn trả <b>100% số tiền ({booking.TotalPrice:N0} VNĐ)</b> vào ví của bạn.</p>
+                
+                {vouchersHtml}
+
                 <p style='margin-top:25px; border-top:1px solid #eee; padding-top:15px; font-size:13px;'>
-                    Mọi thắc mắc vui lòng liên hệ Hotline: <b>{booking.TourDeparture.Tour.TravelAgent.HotLine}</b><br/>
+                    Hotline hỗ trợ: <b>{booking.TourDeparture.Tour.TravelAgent.HotLine}</b><br/>
                     Trân trọng,<br/><b>Đội ngũ GoViet & {booking.TourDeparture.Tour.TravelAgent.TravelAgentName}</b>
                 </p>
             </div>";
 
                 await _emailService.SendAsync(booking.Gmail, $"[GoViet] Xác nhận hủy chuyến đi #{booking.BookCode}", emailBody, true);
 
-                // Commit mọi thứ
                 await transaction.CommitAsync();
 
-                TempData["Success"] = "Đã hủy đơn, hoàn tiền và tặng voucher thành công.";
+                TempData["Success"] = "Đã hủy đơn, hoàn tiền và gửi Email kèm quà tặng thành công!";
                 return RedirectToPage(new { cancel = "true" });
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                TempData["Error"] = "Có lỗi xảy ra: " + ex.Message;
+                TempData["Error"] = "Lỗi xử lý: " + ex.Message;
                 return RedirectToPage();
             }
         }
